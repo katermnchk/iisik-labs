@@ -1,0 +1,1 @@
+mutation UpdatePrice($scheduleId:ID!,$version:Long!){updateSchedule(input:{id:$scheduleId,basePriceMinor:"71000",expectedVersion:$version}){id version priceVersion price{amountMinor}}}

@@ -48,7 +48,8 @@ public class TravelQueryService {
     List<DirectionPopularity> popularity = List.of();
     OffsetDateTime asOf = null;
     if (sort != null && sort.field() == TourSortField.POPULARITY) {
-      asOf = OffsetDateTime.now(clock);
+      // Popularity is aggregated by complete UTC days, including the last 30 completed days.
+      asOf = LocalDate.now(clock.withZone(ZoneOffset.UTC)).atStartOfDay().atOffset(ZoneOffset.UTC);
       popularity = analytics.popularity(new GetPopularityRequest(asOf.minusDays(30), asOf));
     }
     return tours.tours(new ListToursRequest(filter, sort, page, popularity, asOf));

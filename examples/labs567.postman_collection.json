@@ -1,0 +1,935 @@
+{
+  "info": {
+    "name": "ИИСиК ЛР5–7 — вариант 20",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "description": "ЛР5–7. Запускать сверху вниз в Collection Runner/Newman либо Send. Асинхронные проекции опрашиваются до 20 секунд. Токены и идентификаторы сохраняются в collection variables; пароль задайте в password. Регистрация создаёт нового CLIENT при каждом полном запуске."
+  },
+  "variable": [
+    {
+      "key": "baseUrl",
+      "value": "http://localhost:8180"
+    },
+    {
+      "key": "password",
+      "value": "Lab567-Travel!"
+    }
+  ],
+  "item": [
+    {
+      "name": "Вход client",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "url": "{{baseUrl}}/graphql",
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"query\": \"mutation($i:AuthenticateInput!){authenticate(input:$i){accessToken user{id role{code}}}}\",\n  \"variables\": {\n    \"i\": {\n      \"email\": \"user1@example.test\",\n      \"password\": \"{{password}}\"\n    }\n  }\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        }
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "const a=pm.response.json();pm.test('Вход успешен',()=>pm.expect(a.errors).to.be.undefined);pm.collectionVariables.set('clientToken',a.data.authenticate.accessToken);"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "Вход staff",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "url": "{{baseUrl}}/graphql",
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"query\": \"mutation($i:AuthenticateInput!){authenticate(input:$i){accessToken user{id role{code}}}}\",\n  \"variables\": {\n    \"i\": {\n      \"email\": \"user3@example.test\",\n      \"password\": \"{{password}}\"\n    }\n  }\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        }
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "const a=pm.response.json();pm.test('Вход успешен',()=>pm.expect(a.errors).to.be.undefined);pm.collectionVariables.set('staffToken',a.data.authenticate.accessToken);"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "Вход admin",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "url": "{{baseUrl}}/graphql",
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"query\": \"mutation($i:AuthenticateInput!){authenticate(input:$i){accessToken user{id role{code}}}}\",\n  \"variables\": {\n    \"i\": {\n      \"email\": \"user4@example.test\",\n      \"password\": \"{{password}}\"\n    }\n  }\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        }
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "const a=pm.response.json();pm.test('Вход успешен',()=>pm.expect(a.errors).to.be.undefined);pm.collectionVariables.set('adminToken',a.data.authenticate.accessToken);"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "Без JWT — ожидается отказ",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "url": "{{baseUrl}}/graphql",
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"query\": \"{me{id}}\",\n  \"variables\": {}\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        }
+      }
+    },
+    {
+      "name": "Регистрация нового CLIENT",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "url": "{{baseUrl}}/graphql",
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"query\": \"mutation($i:RegisterInput!){register(input:$i){accessToken user{id role{code}}}}\",\n  \"variables\": {\n    \"i\": {\n      \"email\": \"defense-{{$guid}}@example.test\",\n      \"password\": \"{{password}}\",\n      \"firstName\": \"Елена\",\n      \"lastName\": \"Ременчик\",\n      \"phone\": \"+375291234567\"\n    }\n  }\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        }
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "const a=pm.response.json().data.register;pm.collectionVariables.set('registeredToken',a.accessToken);pm.collectionVariables.set('registeredId',a.user.id);pm.test('Роль нового пользователя CLIENT',()=>pm.expect(a.user.role.code).to.equal('CLIENT'));"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "me зарегистрированного пользователя",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          },
+          {
+            "key": "Authorization",
+            "value": "Bearer {{registeredToken}}"
+          }
+        ],
+        "url": "{{baseUrl}}/graphql",
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"query\": \"{me{id role{code}}}\",\n  \"variables\": {}\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        }
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test('Профиль соответствует регистрации',()=>pm.expect(pm.response.json().data.me.id).to.equal(pm.collectionVariables.get('registeredId')));"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "Кеш направлений: первое чтение",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          },
+          {
+            "key": "Authorization",
+            "value": "Bearer {{clientToken}}"
+          }
+        ],
+        "url": "{{baseUrl}}/graphql",
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"query\": \"{directions{id country city}}\",\n  \"variables\": {}\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        }
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.collectionVariables.set('cachedDirections',JSON.stringify(pm.response.json().data.directions));"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "Кеш направлений: повторное чтение",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          },
+          {
+            "key": "Authorization",
+            "value": "Bearer {{clientToken}}"
+          }
+        ],
+        "url": "{{baseUrl}}/graphql",
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"query\": \"{directions{id country city}}\",\n  \"variables\": {}\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        }
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test('Справочник одинаков',()=>pm.expect(JSON.stringify(pm.response.json().data.directions)).to.equal(pm.collectionVariables.get('cachedDirections')));"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "Продажи до текущего платежа",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          },
+          {
+            "key": "Authorization",
+            "value": "Bearer {{adminToken}}"
+          }
+        ],
+        "url": "{{baseUrl}}/graphql",
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"query\": \"{salesAnalytics(filter:{from:\\\"2026-01-01T00:00:00Z\\\",to:\\\"2031-01-01T00:00:00Z\\\"}){grossSales{amountMinor}}}\",\n  \"variables\": {}\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        }
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.collectionVariables.set('salesBefore',pm.response.json().data.salesAnalytics.grossSales.amountMinor);"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "Направления",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          },
+          {
+            "key": "Authorization",
+            "value": "Bearer {{clientToken}}"
+          }
+        ],
+        "url": "{{baseUrl}}/graphql",
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"query\": \"{directions{id country city}}\",\n  \"variables\": {}\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        }
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.collectionVariables.set('directionId',pm.response.json().data.directions[0].id);"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "Создать тур",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          },
+          {
+            "key": "Authorization",
+            "value": "Bearer {{staffToken}}"
+          }
+        ],
+        "url": "{{baseUrl}}/graphql",
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"query\": \"mutation($i:CreateTourInput!){createTour(input:$i){id version}}\",\n  \"variables\": {\n    \"i\": {\n      \"directionId\": \"{{directionId}}\",\n      \"title\": \"{{tourTitle}}\",\n      \"description\": \"Проверка интеграции\",\n      \"durationDays\": 3\n    }\n  }\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        }
+      },
+      "event": [
+        {
+          "listen": "prerequest",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.collectionVariables.set('tourTitle','Защита '+pm.variables.replaceIn('{{$guid}}'));"
+            ]
+          }
+        },
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.collectionVariables.set('tourId',pm.response.json().data.createTour.id);"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "Создать выезд",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          },
+          {
+            "key": "Authorization",
+            "value": "Bearer {{staffToken}}"
+          }
+        ],
+        "url": "{{baseUrl}}/graphql",
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"query\": \"mutation($i:CreateScheduleInput!){createSchedule(input:$i){id priceVersion}}\",\n  \"variables\": {\n    \"i\": {\n      \"tourId\": \"{{tourId}}\",\n      \"startsAt\": \"2030-06-01T10:00:00Z\",\n      \"endsAt\": \"2030-06-04T10:00:00Z\",\n      \"capacity\": 20,\n      \"basePriceMinor\": \"120000\"\n    }\n  }\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        }
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "const a=pm.response.json().data.createSchedule;pm.collectionVariables.set('scheduleId',a.id);pm.collectionVariables.set('priceVersion',a.priceVersion);"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "Прочитать версию тура",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          },
+          {
+            "key": "Authorization",
+            "value": "Bearer {{staffToken}}"
+          }
+        ],
+        "url": "{{baseUrl}}/graphql",
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"query\": \"query($id:ID!){tour(id:$id){id version status}}\",\n  \"variables\": {\n    \"id\": \"{{tourId}}\"\n  }\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        }
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.collectionVariables.set('tourVersion',pm.response.json().data.tour.version);"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "Опубликовать тур",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          },
+          {
+            "key": "Authorization",
+            "value": "Bearer {{staffToken}}"
+          }
+        ],
+        "url": "{{baseUrl}}/graphql",
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"query\": \"mutation($i:UpdateTourInput!){updateTour(input:$i){id status}}\",\n  \"variables\": {\n    \"i\": {\n      \"id\": \"{{tourId}}\",\n      \"status\": \"PUBLISHED\",\n      \"expectedVersion\": \"{{tourVersion}}\"\n    }\n  }\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        }
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test('Тур опубликован',()=>pm.expect(pm.response.json().data.updateTour.status).to.equal('PUBLISHED'));"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "Создать бронь",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          },
+          {
+            "key": "Authorization",
+            "value": "Bearer {{clientToken}}"
+          }
+        ],
+        "url": "{{baseUrl}}/graphql",
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"query\": \"mutation($i:CreateBookingInput!,$key:String!){createBooking(input:$i,idempotencyKey:$key){id status total{amountMinor}}}\",\n  \"variables\": {\n    \"i\": {\n      \"scheduleId\": \"{{scheduleId}}\",\n      \"travelerCount\": 2,\n      \"expectedPriceVersion\": \"{{priceVersion}}\"\n    },\n    \"key\": \"defense-{{scheduleId}}\"\n  }\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        }
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.collectionVariables.set('bookingId',pm.response.json().data.createBooking.id);"
+            ]
+          }
+        },
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test('Бронь ожидает оплаты',()=>pm.expect(pm.response.json().data.createBooking.status).to.equal('PENDING_PAYMENT'));pm.collectionVariables.set('expectedAmount',pm.response.json().data.createBooking.total.amountMinor);"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "Повторить бронь с тем же ключом",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          },
+          {
+            "key": "Authorization",
+            "value": "Bearer {{clientToken}}"
+          }
+        ],
+        "url": "{{baseUrl}}/graphql",
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"query\": \"mutation($i:CreateBookingInput!,$key:String!){createBooking(input:$i,idempotencyKey:$key){id status}}\",\n  \"variables\": {\n    \"i\": {\n      \"scheduleId\": \"{{scheduleId}}\",\n      \"travelerCount\": 2,\n      \"expectedPriceVersion\": \"{{priceVersion}}\"\n    },\n    \"key\": \"defense-{{scheduleId}}\"\n  }\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        }
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test('Та же бронь',()=>pm.expect(pm.response.json().data.createBooking.id).to.equal(pm.collectionVariables.get('bookingId')));"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "Создать платёж",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          },
+          {
+            "key": "Authorization",
+            "value": "Bearer {{clientToken}}"
+          }
+        ],
+        "url": "{{baseUrl}}/graphql",
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"query\": \"mutation($i:CreatePaymentInput!,$key:String!){createPayment(input:$i,idempotencyKey:$key){id status}}\",\n  \"variables\": {\n    \"i\": {\n      \"bookingId\": \"{{bookingId}}\"\n    },\n    \"key\": \"payment-{{bookingId}}\"\n  }\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        }
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.collectionVariables.set('paymentId',pm.response.json().data.createPayment.id);"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "Подтвердить учебный платёж",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          },
+          {
+            "key": "Authorization",
+            "value": "Bearer {{staffToken}}"
+          }
+        ],
+        "url": "{{baseUrl}}/graphql",
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"query\": \"mutation($id:ID!){confirmPayment(paymentId:$id){id status}}\",\n  \"variables\": {\n    \"id\": \"{{paymentId}}\"\n  }\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        }
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test('Платёж подтверждён',()=>pm.expect(pm.response.json().data.confirmPayment.status).to.equal('SUCCEEDED'));"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "Kafka: дождаться CONFIRMED",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          },
+          {
+            "key": "Authorization",
+            "value": "Bearer {{clientToken}}"
+          }
+        ],
+        "url": "{{baseUrl}}/graphql",
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"query\": \"query($id:ID!){booking(id:$id){id status payments{id status}}}\",\n  \"variables\": {\n    \"id\": \"{{bookingId}}\"\n  }\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        }
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "const started = Date.now();",
+              "const ready = a => !a.errors && (a.data.booking.status==='CONFIRMED' && a.data.booking.payments.some(p=>p.id===pm.collectionVariables.get('paymentId') && p.status==='SUCCEEDED'));",
+              "const projectionRequest = {url: pm.variables.replaceIn(pm.request.url.toString()), method:'POST', header:pm.request.headers.all().map(h=>({key:h.key,value:pm.variables.replaceIn(h.value)})), body:{mode:'raw',raw:pm.variables.replaceIn(pm.request.body.raw)}};",
+              "function inspect(a) {",
+              " if (ready(a)) { pm.test('Бронь подтверждена Kafka',()=>pm.expect(ready(a)).to.equal(true)); return; }",
+              " if (Date.now()-started >= 20000) { pm.test('Бронь подтверждена Kafka за 20 секунд',()=>pm.expect(JSON.stringify(a),'Асинхронная проекция не обновилась').to.equal('READY')); return; }",
+              " setTimeout(()=>pm.sendRequest(projectionRequest,(error,response)=> { if(error) {pm.test('Повторный запрос доступен',()=>pm.expect(error).to.equal(null));return;} inspect(response.json());}),500);",
+              "}",
+              "inspect(pm.response.json());"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "Уведомления",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          },
+          {
+            "key": "Authorization",
+            "value": "Bearer {{clientToken}}"
+          }
+        ],
+        "url": "{{baseUrl}}/graphql",
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"query\": \"{notifications(page:{page:0,size:100}){totalCount items{id title body}}}\",\n  \"variables\": {}\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        }
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "const started = Date.now();",
+              "const ready = a => !a.errors && (a.data.notifications.items.some(n=>n.body===pm.collectionVariables.get('tourTitle') && n.title.includes('CONFIRMED')));",
+              "const projectionRequest = {url: pm.variables.replaceIn(pm.request.url.toString()), method:'POST', header:pm.request.headers.all().map(h=>({key:h.key,value:pm.variables.replaceIn(h.value)})), body:{mode:'raw',raw:pm.variables.replaceIn(pm.request.body.raw)}};",
+              "function inspect(a) {",
+              " if (ready(a)) { pm.test('Уведомление текущей брони создано',()=>pm.expect(ready(a)).to.equal(true)); return; }",
+              " if (Date.now()-started >= 20000) { pm.test('Уведомление текущей брони создано за 20 секунд',()=>pm.expect(JSON.stringify(a),'Асинхронная проекция не обновилась').to.equal('READY')); return; }",
+              " setTimeout(()=>pm.sendRequest(projectionRequest,(error,response)=> { if(error) {pm.test('Повторный запрос доступен',()=>pm.expect(error).to.equal(null));return;} inspect(response.json());}),500);",
+              "}",
+              "inspect(pm.response.json());"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "Аналитика администратора",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          },
+          {
+            "key": "Authorization",
+            "value": "Bearer {{adminToken}}"
+          }
+        ],
+        "url": "{{baseUrl}}/graphql",
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"query\": \"{salesAnalytics(filter:{from:\\\"2026-01-01T00:00:00Z\\\",to:\\\"2031-01-01T00:00:00Z\\\"}){grossSales{amountMinor}occupancy}}\",\n  \"variables\": {}\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        }
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "const started = Date.now();",
+              "const ready = a => !a.errors && (BigInt(a.data.salesAnalytics.grossSales.amountMinor)>=BigInt(pm.collectionVariables.get('salesBefore'))+BigInt(pm.collectionVariables.get('expectedAmount')));",
+              "const projectionRequest = {url: pm.variables.replaceIn(pm.request.url.toString()), method:'POST', header:pm.request.headers.all().map(h=>({key:h.key,value:pm.variables.replaceIn(h.value)})), body:{mode:'raw',raw:pm.variables.replaceIn(pm.request.body.raw)}};",
+              "function inspect(a) {",
+              " if (ready(a)) { pm.test('Оплата включена в продажи',()=>pm.expect(ready(a)).to.equal(true)); return; }",
+              " if (Date.now()-started >= 20000) { pm.test('Оплата включена в продажи за 20 секунд',()=>pm.expect(JSON.stringify(a),'Асинхронная проекция не обновилась').to.equal('READY')); return; }",
+              " setTimeout(()=>pm.sendRequest(projectionRequest,(error,response)=> { if(error) {pm.test('Повторный запрос доступен',()=>pm.expect(error).to.equal(null));return;} inspect(response.json());}),500);",
+              "}",
+              "inspect(pm.response.json());"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "Аналитика клиента — ожидается запрет",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          },
+          {
+            "key": "Authorization",
+            "value": "Bearer {{clientToken}}"
+          }
+        ],
+        "url": "{{baseUrl}}/graphql",
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"query\": \"{salesAnalytics(filter:{from:\\\"2026-01-01T00:00:00Z\\\",to:\\\"2031-01-01T00:00:00Z\\\"}){occupancy}}\",\n  \"variables\": {}\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        }
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test('FORBIDDEN',()=>pm.expect(pm.response.json().errors[0].extensions.code).to.equal('FORBIDDEN'));"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "Выйти",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          },
+          {
+            "key": "Authorization",
+            "value": "Bearer {{clientToken}}"
+          }
+        ],
+        "url": "{{baseUrl}}/graphql",
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"query\": \"mutation{logout}\",\n  \"variables\": {}\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        }
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test('Сессия отозвана',()=>pm.expect(pm.response.json().data.logout).to.equal(true));"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "Прежний JWT после выхода — ожидается отказ",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          },
+          {
+            "key": "Authorization",
+            "value": "Bearer {{clientToken}}"
+          }
+        ],
+        "url": "{{baseUrl}}/graphql",
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"query\": \"{me{id}}\",\n  \"variables\": {}\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        }
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test('UNAUTHENTICATED',()=>pm.expect(pm.response.json().errors[0].extensions.code).to.equal('UNAUTHENTICATED'));"
+            ]
+          }
+        }
+      ]
+    }
+  ],
+  "event": [
+    {
+      "listen": "test",
+      "script": {
+        "type": "text/javascript",
+        "exec": [
+          "pm.test('HTTP 200',()=>pm.response.to.have.status(200));",
+          "const response=pm.response.json();",
+          "const expected=pm.info.requestName.includes('ожидается запрет')?'FORBIDDEN':pm.info.requestName.includes('ожидается отказ')?'UNAUTHENTICATED':null;",
+          "pm.test(expected || 'GraphQL без ошибок',()=> {if(expected)pm.expect(response.errors[0].extensions.code).to.equal(expected);else pm.expect(response.errors).to.be.undefined;});"
+        ]
+      }
+    }
+  ],
+  "auth": {
+    "type": "noauth"
+  }
+}

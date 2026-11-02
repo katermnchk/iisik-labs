@@ -1,0 +1,1523 @@
+{
+  "date": "2026-11-02",
+  "count": 63,
+  "allPassed": true,
+  "ids": {
+    "tourId": "1e0f0105-fec3-40fc-85f2-11a6b927a05f",
+    "scheduleId": "dc47c836-337f-48e5-b642-5441f45e7b22",
+    "cancelledBookingId": "4d89b2af-2220-3950-b9b2-124fb33624ef",
+    "completedBookingId": "886ab0c1-b2b0-354c-97d2-988534a1bbbd",
+    "paymentId": "e9124d09-3740-3980-8682-81ed5ef2ca23",
+    "employeeId": "ce8c4e92-fb50-466d-8703-b42ad75a6225"
+  },
+  "results": [
+    {
+      "name": "nullable directions default",
+      "ok": true,
+      "request": {
+        "query": "{directions(activeOnly:null){id}}",
+        "variables": {},
+        "role": "client"
+      },
+      "response": {
+        "data": {
+          "directions": [
+            {
+              "id": "00000000-0000-0000-0000-000000000101"
+            },
+            {
+              "id": "00000000-0000-0000-0000-000000000102"
+            }
+          ]
+        }
+      }
+    },
+    {
+      "name": "read directions",
+      "ok": true,
+      "request": {
+        "query": "{directions{id}}",
+        "variables": {},
+        "role": "client"
+      },
+      "response": {
+        "data": {
+          "directions": [
+            {
+              "id": "00000000-0000-0000-0000-000000000101"
+            },
+            {
+              "id": "00000000-0000-0000-0000-000000000102"
+            }
+          ]
+        }
+      }
+    },
+    {
+      "name": "client cannot create tour",
+      "ok": true,
+      "request": {
+        "query": "mutation($i:CreateTourInput!){createTour(input:$i){id status version}}",
+        "variables": {
+          "i": {
+            "directionId": "00000000-0000-0000-0000-000000000101",
+            "title": "ЛР4 c36169d2",
+            "description": "Проверка бизнес-операций",
+            "durationDays": 3
+          }
+        },
+        "role": "client"
+      },
+      "response": {
+        "errors": [
+          {
+            "message": "Operation is not permitted for this role",
+            "locations": [
+              {
+                "line": 1,
+                "column": 31
+              }
+            ],
+            "path": [
+              "createTour"
+            ],
+            "extensions": {
+              "code": "FORBIDDEN",
+              "classification": "DataFetchingException"
+            }
+          }
+        ],
+        "data": null
+      }
+    },
+    {
+      "name": "create DRAFT tour",
+      "ok": true,
+      "request": {
+        "query": "mutation($i:CreateTourInput!){createTour(input:$i){id status version}}",
+        "variables": {
+          "i": {
+            "directionId": "00000000-0000-0000-0000-000000000101",
+            "title": "ЛР4 c36169d2",
+            "description": "Проверка бизнес-операций",
+            "durationDays": 3
+          }
+        },
+        "role": "staff"
+      },
+      "response": {
+        "data": {
+          "createTour": {
+            "id": "1e0f0105-fec3-40fc-85f2-11a6b927a05f",
+            "status": "DRAFT",
+            "version": "1"
+          }
+        }
+      }
+    },
+    {
+      "name": "client cannot see draft",
+      "ok": true,
+      "request": {
+        "query": "query($id:ID!){tour(id:$id){id status version title schedules{id version priceVersion availableSeats price{amountMinor}}}}",
+        "variables": {
+          "id": "1e0f0105-fec3-40fc-85f2-11a6b927a05f"
+        },
+        "role": "client"
+      },
+      "response": {
+        "errors": [
+          {
+            "message": "Object not found",
+            "locations": [
+              {
+                "line": 1,
+                "column": 16
+              }
+            ],
+            "path": [
+              "tour"
+            ],
+            "extensions": {
+              "code": "NOT_FOUND",
+              "classification": "DataFetchingException"
+            }
+          }
+        ],
+        "data": {
+          "tour": null
+        }
+      }
+    },
+    {
+      "name": "cannot publish without future schedule",
+      "ok": true,
+      "request": {
+        "query": "mutation($i:UpdateTourInput!){updateTour(input:$i){id status version}}",
+        "variables": {
+          "i": {
+            "id": "1e0f0105-fec3-40fc-85f2-11a6b927a05f",
+            "status": "PUBLISHED",
+            "expectedVersion": "1"
+          }
+        },
+        "role": "staff"
+      },
+      "response": {
+        "errors": [
+          {
+            "message": "Publication requires an open future schedule",
+            "locations": [
+              {
+                "line": 1,
+                "column": 31
+              }
+            ],
+            "path": [
+              "updateTour"
+            ],
+            "extensions": {
+              "code": "INVALID_STATE",
+              "classification": "DataFetchingException"
+            }
+          }
+        ],
+        "data": null
+      }
+    },
+    {
+      "name": "negative schedule price rejected",
+      "ok": true,
+      "request": {
+        "query": "mutation($i:CreateScheduleInput!){createSchedule(input:$i){id version priceVersion}}",
+        "variables": {
+          "i": {
+            "tourId": "1e0f0105-fec3-40fc-85f2-11a6b927a05f",
+            "startsAt": "2030-06-01T10:00:00Z",
+            "endsAt": "2030-06-04T10:00:00Z",
+            "capacity": 6,
+            "basePriceMinor": "-1"
+          }
+        },
+        "role": "staff"
+      },
+      "response": {
+        "errors": [
+          {
+            "message": "Capacity must be positive and price non-negative",
+            "locations": [
+              {
+                "line": 1,
+                "column": 35
+              }
+            ],
+            "path": [
+              "createSchedule"
+            ],
+            "extensions": {
+              "code": "BAD_REQUEST",
+              "classification": "DataFetchingException"
+            }
+          }
+        ],
+        "data": null
+      }
+    },
+    {
+      "name": "create schedule",
+      "ok": true,
+      "request": {
+        "query": "mutation($i:CreateScheduleInput!){createSchedule(input:$i){id version priceVersion}}",
+        "variables": {
+          "i": {
+            "tourId": "1e0f0105-fec3-40fc-85f2-11a6b927a05f",
+            "startsAt": "2030-06-01T10:00:00Z",
+            "endsAt": "2030-06-04T10:00:00Z",
+            "capacity": 6,
+            "basePriceMinor": "10000"
+          }
+        },
+        "role": "staff"
+      },
+      "response": {
+        "data": {
+          "createSchedule": {
+            "id": "dc47c836-337f-48e5-b642-5441f45e7b22",
+            "version": "1",
+            "priceVersion": "1"
+          }
+        }
+      }
+    },
+    {
+      "name": "update schedule price and version",
+      "ok": true,
+      "request": {
+        "query": "mutation($i:UpdateScheduleInput!){updateSchedule(input:$i){id version priceVersion price{amountMinor}}}",
+        "variables": {
+          "i": {
+            "id": "dc47c836-337f-48e5-b642-5441f45e7b22",
+            "expectedVersion": "1",
+            "basePriceMinor": "12000"
+          }
+        },
+        "role": "staff"
+      },
+      "response": {
+        "data": {
+          "updateSchedule": {
+            "id": "dc47c836-337f-48e5-b642-5441f45e7b22",
+            "version": "2",
+            "priceVersion": "2",
+            "price": {
+              "amountMinor": "12000"
+            }
+          }
+        }
+      }
+    },
+    {
+      "name": "priceVersion incremented",
+      "ok": true
+    },
+    {
+      "name": "stale schedule version rejected",
+      "ok": true,
+      "request": {
+        "query": "mutation($i:UpdateScheduleInput!){updateSchedule(input:$i){id version priceVersion price{amountMinor}}}",
+        "variables": {
+          "i": {
+            "id": "dc47c836-337f-48e5-b642-5441f45e7b22",
+            "expectedVersion": "1",
+            "capacity": 8
+          }
+        },
+        "role": "staff"
+      },
+      "response": {
+        "errors": [
+          {
+            "message": "Version has changed; reload object",
+            "locations": [
+              {
+                "line": 1,
+                "column": 35
+              }
+            ],
+            "path": [
+              "updateSchedule"
+            ],
+            "extensions": {
+              "code": "CONFLICT",
+              "classification": "DataFetchingException"
+            }
+          }
+        ],
+        "data": null
+      }
+    },
+    {
+      "name": "read tour after schedule update",
+      "ok": true,
+      "request": {
+        "query": "query($id:ID!){tour(id:$id){id status version title schedules{id version priceVersion availableSeats price{amountMinor}}}}",
+        "variables": {
+          "id": "1e0f0105-fec3-40fc-85f2-11a6b927a05f"
+        },
+        "role": "staff"
+      },
+      "response": {
+        "data": {
+          "tour": {
+            "id": "1e0f0105-fec3-40fc-85f2-11a6b927a05f",
+            "status": "DRAFT",
+            "version": "3",
+            "title": "ЛР4 c36169d2",
+            "schedules": [
+              {
+                "id": "dc47c836-337f-48e5-b642-5441f45e7b22",
+                "version": "2",
+                "priceVersion": "2",
+                "availableSeats": 6,
+                "price": {
+                  "amountMinor": "12000"
+                }
+              }
+            ]
+          }
+        }
+      }
+    },
+    {
+      "name": "stale tour version rejected",
+      "ok": true,
+      "request": {
+        "query": "mutation($i:UpdateTourInput!){updateTour(input:$i){id status version}}",
+        "variables": {
+          "i": {
+            "id": "1e0f0105-fec3-40fc-85f2-11a6b927a05f",
+            "expectedVersion": "1",
+            "title": "stale"
+          }
+        },
+        "role": "staff"
+      },
+      "response": {
+        "errors": [
+          {
+            "message": "Version has changed; reload object",
+            "locations": [
+              {
+                "line": 1,
+                "column": 31
+              }
+            ],
+            "path": [
+              "updateTour"
+            ],
+            "extensions": {
+              "code": "CONFLICT",
+              "classification": "DataFetchingException"
+            }
+          }
+        ],
+        "data": null
+      }
+    },
+    {
+      "name": "publish tour",
+      "ok": true,
+      "request": {
+        "query": "mutation($i:UpdateTourInput!){updateTour(input:$i){id status version}}",
+        "variables": {
+          "i": {
+            "id": "1e0f0105-fec3-40fc-85f2-11a6b927a05f",
+            "expectedVersion": "3",
+            "status": "PUBLISHED"
+          }
+        },
+        "role": "staff"
+      },
+      "response": {
+        "data": {
+          "updateTour": {
+            "id": "1e0f0105-fec3-40fc-85f2-11a6b927a05f",
+            "status": "PUBLISHED",
+            "version": "4"
+          }
+        }
+      }
+    },
+    {
+      "name": "stale price rejected",
+      "ok": true,
+      "request": {
+        "query": "mutation($i:CreateBookingInput!,$key:String!){createBooking(input:$i,idempotencyKey:$key){id status version total{amountMinor} unitPrice{amountMinor}}}",
+        "variables": {
+          "i": {
+            "scheduleId": "dc47c836-337f-48e5-b642-5441f45e7b22",
+            "travelerCount": 2,
+            "expectedPriceVersion": "1"
+          },
+          "key": "3bc3140a-65a5-4676-9b1c-be9185849bcb"
+        },
+        "role": "client"
+      },
+      "response": {
+        "errors": [
+          {
+            "message": "Price has changed",
+            "locations": [
+              {
+                "line": 1,
+                "column": 47
+              }
+            ],
+            "path": [
+              "createBooking"
+            ],
+            "extensions": {
+              "code": "PRICE_CHANGED",
+              "classification": "DataFetchingException"
+            }
+          }
+        ],
+        "data": null
+      }
+    },
+    {
+      "name": "create booking",
+      "ok": true,
+      "request": {
+        "query": "mutation($i:CreateBookingInput!,$key:String!){createBooking(input:$i,idempotencyKey:$key){id status version total{amountMinor} unitPrice{amountMinor}}}",
+        "variables": {
+          "i": {
+            "scheduleId": "dc47c836-337f-48e5-b642-5441f45e7b22",
+            "travelerCount": 2,
+            "expectedPriceVersion": "2"
+          },
+          "key": "1cb71d25-7782-4922-9e0b-7d8c1885398a"
+        },
+        "role": "client"
+      },
+      "response": {
+        "data": {
+          "createBooking": {
+            "id": "4d89b2af-2220-3950-b9b2-124fb33624ef",
+            "status": "PENDING_PAYMENT",
+            "version": "1",
+            "total": {
+              "amountMinor": "24000"
+            },
+            "unitPrice": {
+              "amountMinor": "12000"
+            }
+          }
+        }
+      }
+    },
+    {
+      "name": "money snapshot exact",
+      "ok": true
+    },
+    {
+      "name": "booking persisted",
+      "ok": true
+    },
+    {
+      "name": "tour seats reserved in own DB",
+      "ok": true
+    },
+    {
+      "name": "repeat same booking",
+      "ok": true,
+      "request": {
+        "query": "mutation($i:CreateBookingInput!,$key:String!){createBooking(input:$i,idempotencyKey:$key){id status version total{amountMinor} unitPrice{amountMinor}}}",
+        "variables": {
+          "i": {
+            "scheduleId": "dc47c836-337f-48e5-b642-5441f45e7b22",
+            "travelerCount": 2,
+            "expectedPriceVersion": "2"
+          },
+          "key": "1cb71d25-7782-4922-9e0b-7d8c1885398a"
+        },
+        "role": "client"
+      },
+      "response": {
+        "data": {
+          "createBooking": {
+            "id": "4d89b2af-2220-3950-b9b2-124fb33624ef",
+            "status": "PENDING_PAYMENT",
+            "version": "1",
+            "total": {
+              "amountMinor": "24000"
+            },
+            "unitPrice": {
+              "amountMinor": "12000"
+            }
+          }
+        }
+      }
+    },
+    {
+      "name": "same key returns same booking",
+      "ok": true
+    },
+    {
+      "name": "key different payload rejected",
+      "ok": true,
+      "request": {
+        "query": "mutation($i:CreateBookingInput!,$key:String!){createBooking(input:$i,idempotencyKey:$key){id status version total{amountMinor} unitPrice{amountMinor}}}",
+        "variables": {
+          "i": {
+            "scheduleId": "dc47c836-337f-48e5-b642-5441f45e7b22",
+            "travelerCount": 1,
+            "expectedPriceVersion": "2"
+          },
+          "key": "1cb71d25-7782-4922-9e0b-7d8c1885398a"
+        },
+        "role": "client"
+      },
+      "response": {
+        "errors": [
+          {
+            "message": "Idempotency key reused with different input",
+            "locations": [
+              {
+                "line": 1,
+                "column": 47
+              }
+            ],
+            "path": [
+              "createBooking"
+            ],
+            "extensions": {
+              "code": "CONFLICT",
+              "classification": "DataFetchingException"
+            }
+          }
+        ],
+        "data": null
+      }
+    },
+    {
+      "name": "insufficient seats rejected",
+      "ok": true,
+      "request": {
+        "query": "mutation($i:CreateBookingInput!,$key:String!){createBooking(input:$i,idempotencyKey:$key){id status version total{amountMinor} unitPrice{amountMinor}}}",
+        "variables": {
+          "i": {
+            "scheduleId": "dc47c836-337f-48e5-b642-5441f45e7b22",
+            "travelerCount": 5,
+            "expectedPriceVersion": "2"
+          },
+          "key": "9fa1b0fb-4bfb-440b-a973-29c4df094999"
+        },
+        "role": "client"
+      },
+      "response": {
+        "errors": [
+          {
+            "message": "Not enough seats",
+            "locations": [
+              {
+                "line": 1,
+                "column": 47
+              }
+            ],
+            "path": [
+              "createBooking"
+            ],
+            "extensions": {
+              "code": "INSUFFICIENT_SEATS",
+              "classification": "DataFetchingException"
+            }
+          }
+        ],
+        "data": null
+      }
+    },
+    {
+      "name": "read reservation version",
+      "ok": true,
+      "request": {
+        "query": "query($id:ID!){tour(id:$id){id status version title schedules{id version priceVersion availableSeats price{amountMinor}}}}",
+        "variables": {
+          "id": "1e0f0105-fec3-40fc-85f2-11a6b927a05f"
+        },
+        "role": "staff"
+      },
+      "response": {
+        "data": {
+          "tour": {
+            "id": "1e0f0105-fec3-40fc-85f2-11a6b927a05f",
+            "status": "PUBLISHED",
+            "version": "4",
+            "title": "ЛР4 c36169d2",
+            "schedules": [
+              {
+                "id": "dc47c836-337f-48e5-b642-5441f45e7b22",
+                "version": "3",
+                "priceVersion": "2",
+                "availableSeats": 4,
+                "price": {
+                  "amountMinor": "12000"
+                }
+              }
+            ]
+          }
+        }
+      }
+    },
+    {
+      "name": "capacity cannot drop below reserved",
+      "ok": true,
+      "request": {
+        "query": "mutation($i:UpdateScheduleInput!){updateSchedule(input:$i){id version priceVersion price{amountMinor}}}",
+        "variables": {
+          "i": {
+            "id": "dc47c836-337f-48e5-b642-5441f45e7b22",
+            "expectedVersion": "3",
+            "capacity": 1
+          }
+        },
+        "role": "staff"
+      },
+      "response": {
+        "errors": [
+          {
+            "message": "Capacity is below reserved seats",
+            "locations": [
+              {
+                "line": 1,
+                "column": 35
+              }
+            ],
+            "path": [
+              "updateSchedule"
+            ],
+            "extensions": {
+              "code": "CONFLICT",
+              "classification": "DataFetchingException"
+            }
+          }
+        ],
+        "data": null
+      }
+    },
+    {
+      "name": "filter sort and aggregate",
+      "ok": true,
+      "request": {
+        "query": "{myBookings(page:{page:0,size:100},filter:{status:PENDING_PAYMENT},sort:{field:TOTAL,direction:DESC}){totalCount items{id status total{amountMinor}}} bookingSummary(filter:{status:PENDING_PAYMENT}){count pending confirmed cancelled total{amountMinor}}}",
+        "variables": {},
+        "role": "client"
+      },
+      "response": {
+        "data": {
+          "myBookings": {
+            "totalCount": 2,
+            "items": [
+              {
+                "id": "4d89b2af-2220-3950-b9b2-124fb33624ef",
+                "status": "PENDING_PAYMENT",
+                "total": {
+                  "amountMinor": "24000"
+                }
+              },
+              {
+                "id": "fca4b213-a29a-31cf-b8a4-160de8baead7",
+                "status": "PENDING_PAYMENT",
+                "total": {
+                  "amountMinor": "12000"
+                }
+              }
+            ]
+          },
+          "bookingSummary": {
+            "count": 2,
+            "pending": 2,
+            "confirmed": 0,
+            "cancelled": 0,
+            "total": {
+              "amountMinor": "36000"
+            }
+          }
+        }
+      }
+    },
+    {
+      "name": "summary same filter before pagination",
+      "ok": true
+    },
+    {
+      "name": "booking totals sorted DESC",
+      "ok": true
+    },
+    {
+      "name": "foreign cancellation forbidden",
+      "ok": true,
+      "request": {
+        "query": "mutation($i:CancelBookingInput!,$key:String!){cancelBooking(input:$i,idempotencyKey:$key){id status version}}",
+        "variables": {
+          "i": {
+            "bookingId": "4d89b2af-2220-3950-b9b2-124fb33624ef",
+            "reason": "Отмена проверки"
+          },
+          "key": "281577e4-db09-42f6-b21b-7931d5e1ff06"
+        },
+        "role": "other"
+      },
+      "response": {
+        "errors": [
+          {
+            "message": "Booking belongs to another client",
+            "locations": [
+              {
+                "line": 1,
+                "column": 47
+              }
+            ],
+            "path": [
+              "cancelBooking"
+            ],
+            "extensions": {
+              "code": "FORBIDDEN",
+              "classification": "DataFetchingException"
+            }
+          }
+        ],
+        "data": null
+      }
+    },
+    {
+      "name": "cancel pending booking",
+      "ok": true,
+      "request": {
+        "query": "mutation($i:CancelBookingInput!,$key:String!){cancelBooking(input:$i,idempotencyKey:$key){id status version}}",
+        "variables": {
+          "i": {
+            "bookingId": "4d89b2af-2220-3950-b9b2-124fb33624ef",
+            "reason": "Отмена проверки"
+          },
+          "key": "281577e4-db09-42f6-b21b-7931d5e1ff06"
+        },
+        "role": "client"
+      },
+      "response": {
+        "data": {
+          "cancelBooking": {
+            "id": "4d89b2af-2220-3950-b9b2-124fb33624ef",
+            "status": "CANCELLED",
+            "version": "3"
+          }
+        }
+      }
+    },
+    {
+      "name": "cancel booking",
+      "ok": true
+    },
+    {
+      "name": "repeat cancellation",
+      "ok": true,
+      "request": {
+        "query": "mutation($i:CancelBookingInput!,$key:String!){cancelBooking(input:$i,idempotencyKey:$key){id status version}}",
+        "variables": {
+          "i": {
+            "bookingId": "4d89b2af-2220-3950-b9b2-124fb33624ef",
+            "reason": "Отмена проверки"
+          },
+          "key": "281577e4-db09-42f6-b21b-7931d5e1ff06"
+        },
+        "role": "client"
+      },
+      "response": {
+        "data": {
+          "cancelBooking": {
+            "id": "4d89b2af-2220-3950-b9b2-124fb33624ef",
+            "status": "CANCELLED",
+            "version": "3"
+          }
+        }
+      }
+    },
+    {
+      "name": "cancel replay stable",
+      "ok": true
+    },
+    {
+      "name": "seats released exactly once",
+      "ok": true
+    },
+    {
+      "name": "booking for payment",
+      "ok": true,
+      "request": {
+        "query": "mutation($i:CreateBookingInput!,$key:String!){createBooking(input:$i,idempotencyKey:$key){id status version total{amountMinor} unitPrice{amountMinor}}}",
+        "variables": {
+          "i": {
+            "scheduleId": "dc47c836-337f-48e5-b642-5441f45e7b22",
+            "travelerCount": 2,
+            "expectedPriceVersion": "2"
+          },
+          "key": "2650bcea-baf1-4e0c-85b5-bc6132d074ee"
+        },
+        "role": "client"
+      },
+      "response": {
+        "data": {
+          "createBooking": {
+            "id": "886ab0c1-b2b0-354c-97d2-988534a1bbbd",
+            "status": "PENDING_PAYMENT",
+            "version": "1",
+            "total": {
+              "amountMinor": "24000"
+            },
+            "unitPrice": {
+              "amountMinor": "12000"
+            }
+          }
+        }
+      }
+    },
+    {
+      "name": "foreign payment forbidden",
+      "ok": true,
+      "request": {
+        "query": "mutation($i:CreatePaymentInput!,$key:String!){createPayment(input:$i,idempotencyKey:$key){id status amount{amountMinor} paymentUrl}}",
+        "variables": {
+          "i": {
+            "bookingId": "886ab0c1-b2b0-354c-97d2-988534a1bbbd"
+          },
+          "key": "6e15eecb-145f-45bf-8a49-5ac304504074"
+        },
+        "role": "other"
+      },
+      "response": {
+        "errors": [
+          {
+            "message": "Booking belongs to another client",
+            "locations": [
+              {
+                "line": 1,
+                "column": 47
+              }
+            ],
+            "path": [
+              "createPayment"
+            ],
+            "extensions": {
+              "code": "FORBIDDEN",
+              "classification": "DataFetchingException"
+            }
+          }
+        ],
+        "data": null
+      }
+    },
+    {
+      "name": "create pending payment",
+      "ok": true,
+      "request": {
+        "query": "mutation($i:CreatePaymentInput!,$key:String!){createPayment(input:$i,idempotencyKey:$key){id status amount{amountMinor} paymentUrl}}",
+        "variables": {
+          "i": {
+            "bookingId": "886ab0c1-b2b0-354c-97d2-988534a1bbbd"
+          },
+          "key": "6e15eecb-145f-45bf-8a49-5ac304504074"
+        },
+        "role": "client"
+      },
+      "response": {
+        "data": {
+          "createPayment": {
+            "id": "e9124d09-3740-3980-8682-81ed5ef2ca23",
+            "status": "PENDING",
+            "amount": {
+              "amountMinor": "24000"
+            },
+            "paymentUrl": "https://payments.example.invalid/demo/e9124d09-3740-3980-8682-81ed5ef2ca23"
+          }
+        }
+      }
+    },
+    {
+      "name": "pending is not settlement",
+      "ok": true
+    },
+    {
+      "name": "repeat payment",
+      "ok": true,
+      "request": {
+        "query": "mutation($i:CreatePaymentInput!,$key:String!){createPayment(input:$i,idempotencyKey:$key){id status amount{amountMinor} paymentUrl}}",
+        "variables": {
+          "i": {
+            "bookingId": "886ab0c1-b2b0-354c-97d2-988534a1bbbd"
+          },
+          "key": "6e15eecb-145f-45bf-8a49-5ac304504074"
+        },
+        "role": "client"
+      },
+      "response": {
+        "data": {
+          "createPayment": {
+            "id": "e9124d09-3740-3980-8682-81ed5ef2ca23",
+            "status": "PENDING",
+            "amount": {
+              "amountMinor": "24000"
+            },
+            "paymentUrl": "https://payments.example.invalid/demo/e9124d09-3740-3980-8682-81ed5ef2ca23"
+          }
+        }
+      }
+    },
+    {
+      "name": "payment retry same id",
+      "ok": true
+    },
+    {
+      "name": "second active payment rejected",
+      "ok": true,
+      "request": {
+        "query": "mutation($i:CreatePaymentInput!,$key:String!){createPayment(input:$i,idempotencyKey:$key){id status amount{amountMinor} paymentUrl}}",
+        "variables": {
+          "i": {
+            "bookingId": "886ab0c1-b2b0-354c-97d2-988534a1bbbd"
+          },
+          "key": "b7149a10-992c-4443-a466-5ea2917949fe"
+        },
+        "role": "client"
+      },
+      "response": {
+        "errors": [
+          {
+            "message": "Active payment already exists",
+            "locations": [
+              {
+                "line": 1,
+                "column": 47
+              }
+            ],
+            "path": [
+              "createPayment"
+            ],
+            "extensions": {
+              "code": "CONFLICT",
+              "classification": "DataFetchingException"
+            }
+          }
+        ],
+        "data": null
+      }
+    },
+    {
+      "name": "cancel with active payment rejected",
+      "ok": true,
+      "request": {
+        "query": "mutation($i:CancelBookingInput!,$key:String!){cancelBooking(input:$i,idempotencyKey:$key){id status version}}",
+        "variables": {
+          "i": {
+            "bookingId": "886ab0c1-b2b0-354c-97d2-988534a1bbbd",
+            "reason": "Cannot cancel"
+          },
+          "key": "1b5a7b4c-be96-42fa-bd5f-08311218ef1b"
+        },
+        "role": "client"
+      },
+      "response": {
+        "errors": [
+          {
+            "message": "Booking has an admitted payment",
+            "locations": [
+              {
+                "line": 1,
+                "column": 47
+              }
+            ],
+            "path": [
+              "cancelBooking"
+            ],
+            "extensions": {
+              "code": "CONFLICT",
+              "classification": "DataFetchingException"
+            }
+          }
+        ],
+        "data": null
+      }
+    },
+    {
+      "name": "training settlement",
+      "ok": true,
+      "request": {
+        "query": "mutation($id:ID!){confirmPayment(paymentId:$id){id status}}",
+        "variables": {
+          "id": "e9124d09-3740-3980-8682-81ed5ef2ca23"
+        },
+        "role": "staff"
+      },
+      "response": {
+        "data": {
+          "confirmPayment": {
+            "id": "e9124d09-3740-3980-8682-81ed5ef2ca23",
+            "status": "SUCCEEDED"
+          }
+        }
+      }
+    },
+    {
+      "name": "payment event confirms booking",
+      "ok": true,
+      "request": {
+        "query": "query($id:ID!){booking(id:$id){id status version}}",
+        "variables": {
+          "id": "886ab0c1-b2b0-354c-97d2-988534a1bbbd"
+        },
+        "role": "client"
+      },
+      "response": {
+        "data": {
+          "booking": {
+            "id": "886ab0c1-b2b0-354c-97d2-988534a1bbbd",
+            "status": "CONFIRMED",
+            "version": "2"
+          }
+        }
+      }
+    },
+    {
+      "name": "future trip cannot be completed",
+      "ok": true,
+      "request": {
+        "query": "mutation($i:ChangeBookingStatusInput!){changeBookingStatus(input:$i){id status version}}",
+        "variables": {
+          "i": {
+            "bookingId": "886ab0c1-b2b0-354c-97d2-988534a1bbbd",
+            "targetStatus": "COMPLETED",
+            "reason": "Завершение поездки",
+            "expectedVersion": "2"
+          }
+        },
+        "role": "staff"
+      },
+      "response": {
+        "errors": [
+          {
+            "message": "Only a started confirmed booking can be completed",
+            "locations": [
+              {
+                "line": 1,
+                "column": 40
+              }
+            ],
+            "path": [
+              "changeBookingStatus"
+            ],
+            "extensions": {
+              "code": "INVALID_STATE",
+              "classification": "DataFetchingException"
+            }
+          }
+        ],
+        "data": null
+      }
+    },
+    {
+      "name": "time fixture for started trip",
+      "ok": true,
+      "bookingId": "886ab0c1-b2b0-354c-97d2-988534a1bbbd",
+      "fixture": "starts_at_snapshot=now()-2 days; isolated booking only"
+    },
+    {
+      "name": "changeBookingStatus COMPLETED",
+      "ok": true,
+      "request": {
+        "query": "mutation($i:ChangeBookingStatusInput!){changeBookingStatus(input:$i){id status version}}",
+        "variables": {
+          "i": {
+            "bookingId": "886ab0c1-b2b0-354c-97d2-988534a1bbbd",
+            "targetStatus": "COMPLETED",
+            "reason": "Завершение поездки",
+            "expectedVersion": "2"
+          }
+        },
+        "role": "staff"
+      },
+      "response": {
+        "data": {
+          "changeBookingStatus": {
+            "id": "886ab0c1-b2b0-354c-97d2-988534a1bbbd",
+            "status": "COMPLETED",
+            "version": "3"
+          }
+        }
+      }
+    },
+    {
+      "name": "complete started confirmed trip",
+      "ok": true
+    },
+    {
+      "name": "stale booking version rejected",
+      "ok": true,
+      "request": {
+        "query": "mutation($i:ChangeBookingStatusInput!){changeBookingStatus(input:$i){id status version}}",
+        "variables": {
+          "i": {
+            "bookingId": "886ab0c1-b2b0-354c-97d2-988534a1bbbd",
+            "targetStatus": "COMPLETED",
+            "reason": "Завершение поездки",
+            "expectedVersion": "2"
+          }
+        },
+        "role": "staff"
+      },
+      "response": {
+        "errors": [
+          {
+            "message": "Version has changed; reload object",
+            "locations": [
+              {
+                "line": 1,
+                "column": 40
+              }
+            ],
+            "path": [
+              "changeBookingStatus"
+            ],
+            "extensions": {
+              "code": "CONFLICT",
+              "classification": "DataFetchingException"
+            }
+          }
+        ],
+        "data": null
+      }
+    },
+    {
+      "name": "employee role needs position",
+      "ok": true,
+      "request": {
+        "query": "mutation($i:UpdateUserInput!){updateUser(input:$i){id role{code} employeeProfile{userId position}}}",
+        "variables": {
+          "i": {
+            "userId": "ce8c4e92-fb50-466d-8703-b42ad75a6225",
+            "role": "EMPLOYEE"
+          }
+        },
+        "role": "admin"
+      },
+      "response": {
+        "errors": [
+          {
+            "message": "Employee position is required",
+            "locations": [
+              {
+                "line": 1,
+                "column": 31
+              }
+            ],
+            "path": [
+              "updateUser"
+            ],
+            "extensions": {
+              "code": "BAD_REQUEST",
+              "classification": "DataFetchingException"
+            }
+          }
+        ],
+        "data": null
+      }
+    },
+    {
+      "name": "updateUser creates employee profile",
+      "ok": true,
+      "request": {
+        "query": "mutation($i:UpdateUserInput!){updateUser(input:$i){id role{code} employeeProfile{userId position}}}",
+        "variables": {
+          "i": {
+            "userId": "ce8c4e92-fb50-466d-8703-b42ad75a6225",
+            "role": "EMPLOYEE",
+            "position": "Менеджер проверки"
+          }
+        },
+        "role": "admin"
+      },
+      "response": {
+        "data": {
+          "updateUser": {
+            "id": "ce8c4e92-fb50-466d-8703-b42ad75a6225",
+            "role": {
+              "code": "EMPLOYEE"
+            },
+            "employeeProfile": {
+              "userId": "ce8c4e92-fb50-466d-8703-b42ad75a6225",
+              "position": "Менеджер проверки"
+            }
+          }
+        }
+      }
+    },
+    {
+      "name": "employee profile shares identity",
+      "ok": true
+    },
+    {
+      "name": "client cannot update users",
+      "ok": true,
+      "request": {
+        "query": "mutation($i:UpdateUserInput!){updateUser(input:$i){id role{code} employeeProfile{userId position}}}",
+        "variables": {
+          "i": {
+            "userId": "ce8c4e92-fb50-466d-8703-b42ad75a6225",
+            "firstName": "Forbidden"
+          }
+        },
+        "role": "client"
+      },
+      "response": {
+        "errors": [
+          {
+            "message": "Operation is not permitted for this role",
+            "locations": [
+              {
+                "line": 1,
+                "column": 31
+              }
+            ],
+            "path": [
+              "updateUser"
+            ],
+            "extensions": {
+              "code": "FORBIDDEN",
+              "classification": "DataFetchingException"
+            }
+          }
+        ],
+        "data": null
+      }
+    },
+    {
+      "name": "last active admin protected",
+      "ok": true,
+      "request": {
+        "query": "mutation($i:UpdateUserInput!){updateUser(input:$i){id role{code} employeeProfile{userId position}}}",
+        "variables": {
+          "i": {
+            "userId": "00000000-0000-0000-0000-000000000004",
+            "status": "BLOCKED"
+          }
+        },
+        "role": "admin"
+      },
+      "response": {
+        "errors": [
+          {
+            "message": "Cannot remove the last active administrator",
+            "locations": [
+              {
+                "line": 1,
+                "column": 31
+              }
+            ],
+            "path": [
+              "updateUser"
+            ],
+            "extensions": {
+              "code": "CONFLICT",
+              "classification": "DataFetchingException"
+            }
+          }
+        ],
+        "data": null
+      }
+    },
+    {
+      "name": "cancellation recovery booking A",
+      "ok": true,
+      "request": {
+        "query": "mutation($i:CreateBookingInput!,$key:String!){createBooking(input:$i,idempotencyKey:$key){id status version total{amountMinor} unitPrice{amountMinor}}}",
+        "variables": {
+          "i": {
+            "scheduleId": "dc47c836-337f-48e5-b642-5441f45e7b22",
+            "travelerCount": 1,
+            "expectedPriceVersion": "2"
+          },
+          "key": "826bfe01-a2d7-4807-96fd-84fb93e1f1e3"
+        },
+        "role": "client"
+      },
+      "response": {
+        "data": {
+          "createBooking": {
+            "id": "9d4ea6f4-a25c-3628-93ff-dc3d5c128abd",
+            "status": "PENDING_PAYMENT",
+            "version": "1",
+            "total": {
+              "amountMinor": "12000"
+            },
+            "unitPrice": {
+              "amountMinor": "12000"
+            }
+          }
+        }
+      }
+    },
+    {
+      "name": "cancellation recovery booking B",
+      "ok": true,
+      "request": {
+        "query": "mutation($i:CreateBookingInput!,$key:String!){createBooking(input:$i,idempotencyKey:$key){id status version total{amountMinor} unitPrice{amountMinor}}}",
+        "variables": {
+          "i": {
+            "scheduleId": "dc47c836-337f-48e5-b642-5441f45e7b22",
+            "travelerCount": 1,
+            "expectedPriceVersion": "2"
+          },
+          "key": "868e0417-e189-44de-9da8-af5efb06c1af"
+        },
+        "role": "client"
+      },
+      "response": {
+        "data": {
+          "createBooking": {
+            "id": "b7652ac2-f683-34ba-971b-9c994949b300",
+            "status": "PENDING_PAYMENT",
+            "version": "1",
+            "total": {
+              "amountMinor": "12000"
+            },
+            "unitPrice": {
+              "amountMinor": "12000"
+            }
+          }
+        }
+      }
+    },
+    {
+      "name": "cancel A while Tour offline",
+      "ok": true,
+      "request": {
+        "query": "mutation($i:CancelBookingInput!,$key:String!){cancelBooking(input:$i,idempotencyKey:$key){id status version}}",
+        "variables": {
+          "i": {
+            "bookingId": "9d4ea6f4-a25c-3628-93ff-dc3d5c128abd",
+            "reason": "Original"
+          },
+          "key": "4d5d4e6c-3723-40e4-baba-1e2f0a186370"
+        },
+        "role": "client"
+      },
+      "response": {
+        "errors": [
+          {
+            "message": "Dependent service unavailable",
+            "locations": [
+              {
+                "line": 1,
+                "column": 47
+              }
+            ],
+            "path": [
+              "cancelBooking"
+            ],
+            "extensions": {
+              "code": "SERVICE_UNAVAILABLE",
+              "classification": "DataFetchingException"
+            }
+          }
+        ],
+        "data": null
+      }
+    },
+    {
+      "name": "same key cannot cancel B after failure",
+      "ok": true,
+      "request": {
+        "query": "mutation($i:CancelBookingInput!,$key:String!){cancelBooking(input:$i,idempotencyKey:$key){id status version}}",
+        "variables": {
+          "i": {
+            "bookingId": "b7652ac2-f683-34ba-971b-9c994949b300",
+            "reason": "Original"
+          },
+          "key": "4d5d4e6c-3723-40e4-baba-1e2f0a186370"
+        },
+        "role": "client"
+      },
+      "response": {
+        "errors": [
+          {
+            "message": "Idempotency key reused with different input",
+            "locations": [
+              {
+                "line": 1,
+                "column": 47
+              }
+            ],
+            "path": [
+              "cancelBooking"
+            ],
+            "extensions": {
+              "code": "CONFLICT",
+              "classification": "DataFetchingException"
+            }
+          }
+        ],
+        "data": null
+      }
+    },
+    {
+      "name": "same key cannot change reason after failure",
+      "ok": true,
+      "request": {
+        "query": "mutation($i:CancelBookingInput!,$key:String!){cancelBooking(input:$i,idempotencyKey:$key){id status version}}",
+        "variables": {
+          "i": {
+            "bookingId": "9d4ea6f4-a25c-3628-93ff-dc3d5c128abd",
+            "reason": "Changed"
+          },
+          "key": "4d5d4e6c-3723-40e4-baba-1e2f0a186370"
+        },
+        "role": "client"
+      },
+      "response": {
+        "errors": [
+          {
+            "message": "Idempotency key reused with different input",
+            "locations": [
+              {
+                "line": 1,
+                "column": 47
+              }
+            ],
+            "path": [
+              "cancelBooking"
+            ],
+            "extensions": {
+              "code": "CONFLICT",
+              "classification": "DataFetchingException"
+            }
+          }
+        ],
+        "data": null
+      }
+    },
+    {
+      "name": "retry original interrupted cancellation",
+      "ok": true,
+      "request": {
+        "query": "mutation($i:CancelBookingInput!,$key:String!){cancelBooking(input:$i,idempotencyKey:$key){id status version}}",
+        "variables": {
+          "i": {
+            "bookingId": "9d4ea6f4-a25c-3628-93ff-dc3d5c128abd",
+            "reason": "Original"
+          },
+          "key": "4d5d4e6c-3723-40e4-baba-1e2f0a186370"
+        },
+        "role": "client"
+      },
+      "response": {
+        "data": {
+          "cancelBooking": {
+            "id": "9d4ea6f4-a25c-3628-93ff-dc3d5c128abd",
+            "status": "CANCELLED",
+            "version": "3"
+          }
+        }
+      }
+    },
+    {
+      "name": "original cancellation resumes",
+      "ok": true
+    },
+    {
+      "name": "B untouched by reused key",
+      "ok": true
+    },
+    {
+      "name": "cancel recovery fixture B",
+      "ok": true,
+      "request": {
+        "query": "mutation($i:CancelBookingInput!,$key:String!){cancelBooking(input:$i,idempotencyKey:$key){id status version}}",
+        "variables": {
+          "i": {
+            "bookingId": "b7652ac2-f683-34ba-971b-9c994949b300",
+            "reason": "Cleanup"
+          },
+          "key": "a841bd75-c9da-4d43-acbc-d07181766398"
+        },
+        "role": "client"
+      },
+      "response": {
+        "data": {
+          "cancelBooking": {
+            "id": "b7652ac2-f683-34ba-971b-9c994949b300",
+            "status": "CANCELLED",
+            "version": "3"
+          }
+        }
+      }
+    }
+  ]
+}

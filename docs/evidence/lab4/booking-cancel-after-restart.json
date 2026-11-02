@@ -1,0 +1,36 @@
+{
+  "request": {
+    "port": 8093,
+    "path": "/internal/v1/commands/cancelBooking",
+    "body": {
+      "bookingId": "070965f1-a9f3-47e5-b310-ff04525e9e4d",
+      "reason": "Изменение планов"
+    },
+    "demoToken": "demo-client",
+    "idempotencyKey": "db-cancel-1"
+  },
+  "httpStatus": 200,
+  "response": {
+    "id": "070965f1-a9f3-47e5-b310-ff04525e9e4d",
+    "clientId": "00000000-0000-0000-0000-000000000001",
+    "scheduleId": "00000000-0000-0000-0000-000000000301",
+    "directionId": "00000000-0000-0000-0000-000000000101",
+    "tourTitle": "История Бреста",
+    "directionName": "Беларусь, Брест",
+    "startsAt": "2026-12-01T05:00:00Z",
+    "travelerCount": 2,
+    "unitPrice": {
+      "amountMinor": 90000,
+      "currency": "BYN"
+    },
+    "total": {
+      "amountMinor": 180000,
+      "currency": "BYN"
+    },
+    "status": "CANCELLED",
+    "holdExpiresAt": null,
+    "createdAt": "2026-10-05T00:00:00Z",
+    "version": 2,
+    "payments": []
+  }
+}

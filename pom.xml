@@ -17,6 +17,10 @@
   </properties>
   <modules>
     <module>contracts</module>
+    <module>business-core</module>
+    <module>business-persistence</module>
+    <module>transport</module>
+    <module>auth-service</module>
     <module>graphql-api</module>
     <module>user-service</module>
     <module>tour-service</module>

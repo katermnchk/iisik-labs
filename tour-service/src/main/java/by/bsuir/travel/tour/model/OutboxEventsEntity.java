@@ -3,6 +3,8 @@ package by.bsuir.travel.tour.model;
 import jakarta.persistence.*;
 import java.time.*;
 import java.util.UUID;
+import org.hibernate.annotations.JdbcTypeCode;
+import org.hibernate.type.SqlTypes;
 
 @Entity
 @Table(name = "outbox_events")
@@ -28,7 +30,7 @@ public class OutboxEventsEntity {
   @Column(name = "correlation_id")
   private UUID correlationId;
 
-  @org.hibernate.annotations.JdbcTypeCode(org.hibernate.type.SqlTypes.JSON)
+  @JdbcTypeCode(SqlTypes.JSON)
   @Column(name = "payload", columnDefinition = "jsonb")
   private String payload;
 

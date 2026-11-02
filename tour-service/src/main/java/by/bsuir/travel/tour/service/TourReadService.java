@@ -32,6 +32,10 @@ public class TourReadService implements TourClient {
     this.transports = transports;
   }
 
+  public List<Tour> all() {
+    return tours.findAll().stream().map(this::map).toList();
+  }
+
   private Tour map(ToursEntity x) {
     var d = directions.findById(x.getDirectionId()).orElseThrow();
     return new Tour(
@@ -108,9 +112,12 @@ public class TourReadService implements TourClient {
     return ReadSupport.found(
         tours
             .findById(UUID.fromString(r.tourId()))
-            .filter(t -> t.getStatus().equals("PUBLISHED"))
             .map(this::map)
-            .filter(t -> t.direction().isActive()));
+            .filter(
+                t ->
+                    r.viewerRole() == RoleCode.EMPLOYEE
+                        || r.viewerRole() == RoleCode.ADMIN
+                        || (t.status() == TourStatus.PUBLISHED && t.direction().isActive())));
   }
 
   public List<Direction> directions(ListDirectionsRequest r) {

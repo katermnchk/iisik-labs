@@ -1,3 +1,7 @@
+# Исторические HTTP контракты ЛР3
+
+> Архив проектирования ЛР3. Этот документ не описывает текущий стенд ЛР5–7: demo-токены удалены, внутренние HTTP endpoints закрыты, обращения выполняются через типизированный gRPC. Актуальные контракты: `grpc-methods.md`, `events.md`, схема `graphql-api/src/main/resources/graphql/schema.graphqls` и `README.md`. Защищённые GraphQL-поля возвращают прикладные ошибки в `errors[].extensions.code`; проверяйте JSON, а не только HTTP-статус.
+
 # Исполняемые контракты ЛР3
 
 ## Внешний API
@@ -52,3 +56,23 @@ Tour REST не принимает POPULARITY: для неё нужен внеш�
 Пути вида /travel.v1.UserService/GetUser определены protobuf service/method. Полный набор 34 методов закреплён travel.proto; request/response не являются произвольным JSON. Схема скомпилирована protoc 3.25.5. Отсутствующие scalar-фильтры min_price/max_price/only_available имеют optional presence; отсутствие only_available трактуется как true при будущей реализации.
 
 Сетевые gRPC серверы и клиенты сейчас не исполняются. Будущие статусы и источники полей описаны в grpc-methods.md.
+
+
+# Дополнение ЛР4
+
+Исполняемые Mutation и входные типы описаны в graphql-api/src/main/resources/graphql/schema.graphqls и Commands.java. Командные интерфейсы подключены к сервисам business-core. GraphQL принимает input и idempotencyKey (для createBooking/cancelBooking/createPayment); внутренний диагностический API принимает input напрямую и Idempotency-Key в заголовке. Путь: POST /internal/v1/commands/<название операции>.
+
+Внутренние команды: User/updateUser; Tour/createTour/updateTour/createSchedule/updateSchedule; Booking/createBooking/cancelBooking/changeBookingStatus; Payment/createPayment. Authorization: Bearer demo-client/demo-client2/demo-employee/demo-admin. Токен разрешается в локального Principal, клиент не присылает роль в теле запроса.
+
+Диагностический REST: BAD_REQUEST 400, UNAUTHENTICATED 401, FORBIDDEN 403, NOT_FOUND 404, CONFLICT/INVALID_STATE/PRICE_CHANGED/INSUFFICIENT_SEATS 409. SQL-конфликты возвращают безопасное сообщение без текста запроса. GraphQL execution errors возвращаются в errors при HTTP 200.
+
+myBookings: page!, filter{status,from,to}, sort{field:CREATED_AT|TOTAL|STARTS_AT,direction:ASC|DESC}. Период [from,to), totalCount до разбиения на страницы. bookingSummary(filter) использует те же правила отбора без пагинации; total — сумма стоимости выбранных броней всех отобранных статусов.
+
+
+## Уточнения после независимого ревью ЛР4
+
+Обязательная basePriceMinor в CreateScheduleInput имеет nullable Long с проверкой наличия, поэтому пропуск/null не становятся бесплатным выездом. Нулевая цена разрешена при явном указании. Обязательные версии положительны. Во внутренних JSON-контрактах отключено усечение дробных чисел в целые, запрещены null для primitive и неизвестные поля; необязательные поля UpdateTour/UpdateSchedule/UpdateUser остаются необязательными.
+
+bookingSummary при переполнении Long возвращает errors.extensions.code=AMOUNT_OVERFLOW. Даты занятых выездов сравниваются как момент времени, поэтому UTC и эквивалентный offset не считаются переносом.
+
+Для завершения на чистых данных: changeBookingStatus(bookingId=...606,targetStatus=COMPLETED,reason,expectedVersion=1), EMPLOYEE/ADMIN. Для Payment Service: createPayment(bookingId=...607) с demo-client2 и новым Idempotency-Key. Это положительные сценарии без SQL-изменений статусов перед запросом.

@@ -1,0 +1,1 @@
+mutation CreateBooking { createBooking(input:{scheduleId:"00000000-0000-0000-0000-000000000301",travelerCount:2,expectedPriceVersion:"1"},idempotencyKey:"defense-create-1"){id status version total{amountMinor currency}} }

@@ -2,6 +2,12 @@ server:
   port: ${PORT:8094}
   address: ${SERVER_ADDRESS:127.0.0.1}
 spring:
+  data:
+    redis:
+      host: ${REDIS_HOST:localhost}
+      port: ${REDIS_PORT:6391}
+      timeout: 1s
+      connect-timeout: 1s
   application:
     name: payment-service
   datasource:
@@ -21,3 +27,5 @@ management:
     web:
       exposure:
         include: health,info
+
+  # transport configuration is read from the shared EventConfig

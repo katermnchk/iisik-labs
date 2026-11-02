@@ -1,0 +1,10 @@
+{
+  "check": "settled payment fences hold expiry while Kafka is down",
+  "ok": true,
+  "bookingId": "7be40f7b-d6b0-3626-934f-09462e605906",
+  "paymentId": "15e3d026-adcd-31f1-8f03-29bf01b67bc9",
+  "observedStateDuringOutage": "PENDING_PAYMENT + SUCCEEDED + HELD",
+  "finalBookingState": "CONFIRMED",
+  "cancellationHistoryRows": 0,
+  "expirySweepsCovered": 1
+}

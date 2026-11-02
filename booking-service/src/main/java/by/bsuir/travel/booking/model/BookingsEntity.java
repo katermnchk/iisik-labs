@@ -3,6 +3,8 @@ package by.bsuir.travel.booking.model;
 import jakarta.persistence.*;
 import java.time.*;
 import java.util.UUID;
+import org.hibernate.annotations.JdbcTypeCode;
+import org.hibernate.type.SqlTypes;
 
 @Entity
 @Table(name = "bookings")
@@ -40,7 +42,7 @@ public class BookingsEntity {
   @Column(name = "total_amount_minor")
   private Long totalAmountMinor;
 
-  @org.hibernate.annotations.JdbcTypeCode(org.hibernate.type.SqlTypes.CHAR)
+  @JdbcTypeCode(SqlTypes.CHAR)
   @Column(name = "currency", length = 3)
   private String currency;
 

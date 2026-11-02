@@ -1,0 +1,30 @@
+{
+  "grossSales": {
+    "amountMinor": "280000",
+    "currency": "BYN"
+  },
+  "refunded": {
+    "amountMinor": "100000",
+    "currency": "BYN"
+  },
+  "netSales": {
+    "amountMinor": "180000",
+    "currency": "BYN"
+  },
+  "occupancy": 0.2,
+  "directions": [
+    {
+      "directionId": "00000000-0000-0000-0000-000000000101",
+      "directionName": "Беларусь, Брест",
+      "confirmedTourists": 2,
+      "rank": 1
+    },
+    {
+      "directionId": "00000000-0000-0000-0000-000000000102",
+      "directionName": "Турция, Анталья",
+      "confirmedTourists": 0,
+      "rank": 2
+    }
+  ],
+  "asOf": "2026-10-05T00:00:00.000Z"
+}

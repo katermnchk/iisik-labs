@@ -1,0 +1,29 @@
+[
+  {
+    "lab": 5,
+    "pages": 5,
+    "docx": "/Users/katar/Desktop/7sem-bsuir/iisik/lab5/ИИСиК-lab5-remenchik.docx",
+    "pdf": "/Users/katar/Desktop/7sem-bsuir/iisik/lab5/ИИСиК-lab5-remenchik.pdf",
+    "visualReview": "every final page inspected at readable resolution; no clipping, overlap, broken glyphs or blank pages",
+    "textParity": true,
+    "verifiedAtUtc": "2026-11-02T09:20:35.805697+00:00"
+  },
+  {
+    "lab": 6,
+    "pages": 7,
+    "docx": "/Users/katar/Desktop/7sem-bsuir/iisik/lab6/ИИСиК-lab6-remenchik.docx",
+    "pdf": "/Users/katar/Desktop/7sem-bsuir/iisik/lab6/ИИСиК-lab6-remenchik.pdf",
+    "visualReview": "every final page inspected at readable resolution; no clipping, overlap, broken glyphs or blank pages",
+    "textParity": true,
+    "verifiedAtUtc": "2026-11-02T09:20:35.805770+00:00"
+  },
+  {
+    "lab": 7,
+    "pages": 6,
+    "docx": "/Users/katar/Desktop/7sem-bsuir/iisik/lab7/ИИСиК-lab7-remenchik.docx",
+    "pdf": "/Users/katar/Desktop/7sem-bsuir/iisik/lab7/ИИСиК-lab7-remenchik.pdf",
+    "visualReview": "every final page inspected at readable resolution; no clipping, overlap, broken glyphs or blank pages",
+    "textParity": true,
+    "verifiedAtUtc": "2026-11-02T09:20:35.805771+00:00"
+  }
+]

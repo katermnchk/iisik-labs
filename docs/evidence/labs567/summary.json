@@ -1,0 +1,53 @@
+{
+  "date": "2026-11-02",
+  "maven": {
+    "tests": 66,
+    "failures": 0,
+    "errors": 0,
+    "skipped": 0
+  },
+  "integrationChecks": 41,
+  "securityChecks": 9,
+  "postman": {
+    "collectionSteps": 24,
+    "runner": "Newman",
+    "version": "6.2.3",
+    "httpRequests": 25,
+    "assertions": 64,
+    "failures": 0
+  },
+  "kafka": {
+    "domainTopics": 4,
+    "partitionsPerTopic": 3,
+    "subscriberDlts": 6
+  },
+  "additionalEvidence": [
+    "kafka-topology.json",
+    "kafka-errors.json",
+    "hold-expiry.json",
+    "paid-expiry-fence.json",
+    "analytics-cache.json",
+    "roles.json",
+    "recovery.json",
+    "scenario-trace.json",
+    "secret-boundary.json",
+    "report-qa.json"
+  ],
+  "reports": {
+    "5": {
+      "pages": 5,
+      "docxPdfTextParity": true,
+      "allPagesVisuallyReviewed": true
+    },
+    "6": {
+      "pages": 7,
+      "docxPdfTextParity": true,
+      "allPagesVisuallyReviewed": true
+    },
+    "7": {
+      "pages": 6,
+      "docxPdfTextParity": true,
+      "allPagesVisuallyReviewed": true
+    }
+  }
+}

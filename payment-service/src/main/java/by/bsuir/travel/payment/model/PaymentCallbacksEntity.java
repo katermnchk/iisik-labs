@@ -3,6 +3,8 @@ package by.bsuir.travel.payment.model;
 import jakarta.persistence.*;
 import java.time.*;
 import java.util.UUID;
+import org.hibernate.annotations.JdbcTypeCode;
+import org.hibernate.type.SqlTypes;
 
 @Entity
 @Table(name = "payment_callbacks")
@@ -19,7 +21,7 @@ public class PaymentCallbacksEntity {
   @Column(name = "provider_event_id", length = 120)
   private String providerEventId;
 
-  @org.hibernate.annotations.JdbcTypeCode(org.hibernate.type.SqlTypes.JSON)
+  @JdbcTypeCode(SqlTypes.JSON)
   @Column(name = "payload", columnDefinition = "jsonb")
   private String payload;
 

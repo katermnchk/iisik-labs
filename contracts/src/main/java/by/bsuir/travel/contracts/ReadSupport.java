@@ -1,7 +1,9 @@
 package by.bsuir.travel.contracts;
 
 import by.bsuir.travel.contracts.Model.*;
+import java.time.LocalTime;
 import java.time.OffsetDateTime;
+import java.time.ZoneOffset;
 import java.util.*;
 
 public final class ReadSupport {
@@ -41,14 +43,8 @@ public final class ReadSupport {
   public static void period(AnalyticsFilter f) {
     if (f == null || f.from() == null || f.to() == null || !f.from().isBefore(f.to()))
       throw new DomainException("BAD_REQUEST", "Expected from < to");
-    if (!f.from()
-            .withOffsetSameInstant(java.time.ZoneOffset.UTC)
-            .toLocalTime()
-            .equals(java.time.LocalTime.MIDNIGHT)
-        || !f.to()
-            .withOffsetSameInstant(java.time.ZoneOffset.UTC)
-            .toLocalTime()
-            .equals(java.time.LocalTime.MIDNIGHT))
+    if (!f.from().withOffsetSameInstant(ZoneOffset.UTC).toLocalTime().equals(LocalTime.MIDNIGHT)
+        || !f.to().withOffsetSameInstant(ZoneOffset.UTC).toLocalTime().equals(LocalTime.MIDNIGHT))
       throw new DomainException("BAD_REQUEST", "Analytics period must use complete UTC days");
   }
 }

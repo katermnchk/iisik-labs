@@ -1,0 +1,1 @@
+mutation PublishTour($tourId:ID!,$version:Long!) { updateTour(input:{id:$tourId,status:PUBLISHED,expectedVersion:$version}){id status version schedules{id availableSeats}} }

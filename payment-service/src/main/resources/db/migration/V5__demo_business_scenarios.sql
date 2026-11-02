@@ -1,0 +1,2 @@
+-- Additional clean demo scenarios: 606 can be completed, 607 can start payment.
+INSERT INTO payments (id,booking_id,schedule_id,direction_id,amount_minor,currency,status,payment_url,provider,provider_payment_id,external_key,created_at,updated_at) VALUES ('00000000-0000-0000-0000-000000000708','00000000-0000-0000-0000-000000000606','00000000-0000-0000-0000-000000000307','00000000-0000-0000-0000-000000000101',180000,'BYN','SUCCEEDED',NULL,'DEMO','demo-708','demo-708','2026-09-01T12:01:00Z','2026-09-01T12:01:00Z');

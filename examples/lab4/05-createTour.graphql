@@ -1,0 +1,1 @@
+mutation CreateTour { createTour(input:{directionId:"00000000-0000-0000-0000-000000000101",title:"Выходные в Бресте",description:"Поездка по музеям",durationDays:2}){id status version} }

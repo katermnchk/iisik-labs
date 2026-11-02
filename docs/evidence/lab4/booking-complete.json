@@ -1,0 +1,38 @@
+{
+  "request": {
+    "port": 8093,
+    "path": "/internal/v1/commands/changeBookingStatus",
+    "body": {
+      "bookingId": "00000000-0000-0000-0000-000000000606",
+      "targetStatus": "COMPLETED",
+      "reason": "Поездка завершена",
+      "expectedVersion": 1
+    },
+    "demoToken": "demo-employee",
+    "idempotencyKey": null
+  },
+  "httpStatus": 200,
+  "response": {
+    "id": "00000000-0000-0000-0000-000000000606",
+    "clientId": "00000000-0000-0000-0000-000000000002",
+    "scheduleId": "00000000-0000-0000-0000-000000000307",
+    "directionId": "00000000-0000-0000-0000-000000000101",
+    "tourTitle": "История Бреста — октябрьская поездка",
+    "directionName": "Беларусь, Брест",
+    "startsAt": "2026-10-01T05:00:00Z",
+    "travelerCount": 2,
+    "unitPrice": {
+      "amountMinor": 90000,
+      "currency": "BYN"
+    },
+    "total": {
+      "amountMinor": 180000,
+      "currency": "BYN"
+    },
+    "status": "COMPLETED",
+    "holdExpiresAt": null,
+    "createdAt": "2026-09-01T12:00:00Z",
+    "version": 2,
+    "payments": []
+  }
+}

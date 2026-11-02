@@ -1,0 +1,40 @@
+{
+  "request": {
+    "port": 8080,
+    "path": "/graphql",
+    "body": {
+      "query": "{myBookings(page:{page:0,size:20},filter:{status:PENDING_PAYMENT},sort:{field:TOTAL,direction:DESC}){totalCount items{id total{amountMinor}}} bookingSummary(filter:{status:PENDING_PAYMENT}){count pending total{amountMinor}}}"
+    },
+    "demoToken": "demo-client",
+    "idempotencyKey": null
+  },
+  "httpStatus": 200,
+  "response": {
+    "data": {
+      "myBookings": {
+        "totalCount": 2,
+        "items": [
+          {
+            "id": "a804dbc8-64f0-4a0e-b80c-44e57fd1e4d7",
+            "total": {
+              "amountMinor": "180000"
+            }
+          },
+          {
+            "id": "00000000-0000-0000-0000-000000000604",
+            "total": {
+              "amountMinor": "90000"
+            }
+          }
+        ]
+      },
+      "bookingSummary": {
+        "count": 2,
+        "pending": 2,
+        "total": {
+          "amountMinor": "270000"
+        }
+      }
+    }
+  }
+}

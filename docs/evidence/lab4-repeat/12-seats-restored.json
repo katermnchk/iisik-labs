@@ -1,0 +1,14 @@
+{
+  "query": "{tour(id:\"30861528-1869-4955-8593-1e3c21eb8213\"){schedules{availableSeats}}}",
+  "response": {
+    "data": {
+      "tour": {
+        "schedules": [
+          {
+            "availableSeats": 2
+          }
+        ]
+      }
+    }
+  }
+}

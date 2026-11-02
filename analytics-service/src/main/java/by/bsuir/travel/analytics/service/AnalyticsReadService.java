@@ -14,6 +14,7 @@ import org.springframework.transaction.annotation.Transactional;
 @Transactional(readOnly = true)
 public class AnalyticsReadService implements AnalyticsClient {
   private final SalesFactsEntityRepository salesfacts;
+  private final org.springframework.jdbc.core.JdbcTemplate jdbc;
   private final ScheduleLoadFactsEntityRepository scheduleloadfacts;
   private final DirectionPopularityDailyEntityRepository directionpopularitydaily;
   private final DirectionCatalogProjectionEntityRepository directioncatalogprojection;
@@ -22,7 +23,9 @@ public class AnalyticsReadService implements AnalyticsClient {
       SalesFactsEntityRepository salesfacts,
       ScheduleLoadFactsEntityRepository scheduleloadfacts,
       DirectionPopularityDailyEntityRepository directionpopularitydaily,
-      DirectionCatalogProjectionEntityRepository directioncatalogprojection) {
+      DirectionCatalogProjectionEntityRepository directioncatalogprojection,
+      org.springframework.jdbc.core.JdbcTemplate jdbc) {
+    this.jdbc = jdbc;
     this.salesfacts = salesfacts;
     this.scheduleloadfacts = scheduleloadfacts;
     this.directionpopularitydaily = directionpopularitydaily;
@@ -47,8 +50,13 @@ public class AnalyticsReadService implements AnalyticsClient {
                         f.getFactType(),
                         f.getOccurredAt()))
             .toList();
+    var includedIds =
+        jdbc.queryForList(
+            "select schedule_id from schedule_load_facts where included=true",
+            java.util.UUID.class);
     List<ScheduleLoad> loads =
         scheduleloadfacts.findAll().stream()
+            .filter(l -> includedIds.contains(l.getScheduleId()))
             .map(
                 l ->
                     new ScheduleLoad(
@@ -81,7 +89,11 @@ public class AnalyticsReadService implements AnalyticsClient {
 
   public SalesAnalytics analytics(GetAnalyticsRequest r) {
     return AnalyticsCalculation.calculate(
-        data(), r.filter(), OffsetDateTime.parse("2026-10-05T00:00:00Z"));
+        data(),
+        r.filter(),
+        jdbc.queryForObject(
+            "select snapshot_at from analytics_projection_state where id=true",
+            OffsetDateTime.class));
   }
 
   public List<DirectionPopularity> popularity(GetPopularityRequest r) {

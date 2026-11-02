@@ -1,0 +1,34 @@
+{
+  "capturedAt": "2026-10-19T05:27:40.059152+00:00",
+  "request": {
+    "method": "GET",
+    "url": "http://127.0.0.1:8091/internal/v1/users/00000000-0000-0000-0000-000000000003",
+    "headers": {},
+    "body": null
+  },
+  "response": {
+    "status": 200,
+    "headers": {
+      "Content-Type": "application/json",
+      "Transfer-Encoding": "chunked",
+      "Date": "Mon, 19 Oct 2026 05:27:40 GMT",
+      "Connection": "close"
+    },
+    "body": {
+      "id": "00000000-0000-0000-0000-000000000003",
+      "role": {
+        "code": "EMPLOYEE",
+        "name": "Сотрудник"
+      },
+      "email": "user3@example.test",
+      "firstName": "Мария",
+      "lastName": "Петрова",
+      "status": "ACTIVE",
+      "clientProfile": null,
+      "employeeProfile": {
+        "userId": "00000000-0000-0000-0000-000000000003",
+        "position": "Менеджер туров"
+      }
+    }
+  }
+}

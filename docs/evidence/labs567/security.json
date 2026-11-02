@@ -1,0 +1,214 @@
+[
+  {
+    "check": "anonymous query rejected",
+    "ok": true,
+    "response": {
+      "errors": [
+        {
+          "message": "Authentication required",
+          "locations": [
+            {
+              "line": 1,
+              "column": 3
+            }
+          ],
+          "path": [
+            "me"
+          ],
+          "extensions": {
+            "code": "UNAUTHENTICATED",
+            "classification": "DataFetchingException"
+          }
+        }
+      ],
+      "data": null
+    }
+  },
+  {
+    "check": "demo token rejected",
+    "ok": true,
+    "response": {
+      "errors": [
+        {
+          "message": "Invalid or expired JWT",
+          "locations": [
+            {
+              "line": 1,
+              "column": 3
+            }
+          ],
+          "path": [
+            "me"
+          ],
+          "extensions": {
+            "code": "UNAUTHENTICATED",
+            "classification": "DataFetchingException"
+          }
+        }
+      ],
+      "data": null
+    }
+  },
+  {
+    "check": "registered principal persisted",
+    "ok": true,
+    "response": {
+      "data": {
+        "me": {
+          "id": "cde710a5-2233-478e-af0c-8bb2510546aa",
+          "email": "lab-072538e0ce95442b9a56e18c1688ce2b@example.test",
+          "role": {
+            "code": "CLIENT"
+          }
+        }
+      }
+    }
+  },
+  {
+    "check": "wrong password rejected",
+    "ok": true,
+    "response": {
+      "errors": [
+        {
+          "message": "Invalid credentials",
+          "locations": [
+            {
+              "line": 1,
+              "column": 33
+            }
+          ],
+          "path": [
+            "authenticate"
+          ],
+          "extensions": {
+            "code": "UNAUTHENTICATED",
+            "classification": "DataFetchingException"
+          }
+        }
+      ],
+      "data": null
+    }
+  },
+  {
+    "check": "client analytics forbidden",
+    "ok": true,
+    "response": {
+      "errors": [
+        {
+          "message": "Operation is not permitted for this role",
+          "locations": [
+            {
+              "line": 1,
+              "column": 3
+            }
+          ],
+          "path": [
+            "salesAnalytics"
+          ],
+          "extensions": {
+            "code": "FORBIDDEN",
+            "classification": "DataFetchingException"
+          }
+        }
+      ],
+      "data": null
+    }
+  },
+  {
+    "check": "tampered signature rejected",
+    "ok": true,
+    "response": {
+      "errors": [
+        {
+          "message": "Invalid or expired JWT",
+          "locations": [
+            {
+              "line": 1,
+              "column": 2
+            }
+          ],
+          "path": [
+            "me"
+          ],
+          "extensions": {
+            "code": "UNAUTHENTICATED",
+            "classification": "DataFetchingException"
+          }
+        }
+      ],
+      "data": null
+    }
+  },
+  {
+    "check": "catalog via grpc",
+    "ok": true,
+    "response": {
+      "data": {
+        "tours": {
+          "totalCount": 9,
+          "items": [
+            {
+              "id": "00000000-0000-0000-0000-000000000201"
+            },
+            {
+              "id": "00000000-0000-0000-0000-000000000202"
+            },
+            {
+              "id": "453c0fc1-5479-4e69-bf34-544181472ee1"
+            },
+            {
+              "id": "866a1fc1-5386-42c8-a6e3-6b3dad55f2b7"
+            },
+            {
+              "id": "aaeba5d6-9999-45b3-b5ee-b16e8a151608"
+            }
+          ]
+        },
+        "directions": [
+          {
+            "id": "00000000-0000-0000-0000-000000000101",
+            "country": "Беларусь"
+          },
+          {
+            "id": "00000000-0000-0000-0000-000000000102",
+            "country": "Турция"
+          }
+        ]
+      }
+    }
+  },
+  {
+    "check": "logout removes session",
+    "ok": true,
+    "response": {
+      "data": {
+        "logout": true
+      }
+    }
+  },
+  {
+    "check": "revoked token rejected",
+    "ok": true,
+    "response": {
+      "errors": [
+        {
+          "message": "Session expired; authenticate again",
+          "locations": [
+            {
+              "line": 1,
+              "column": 2
+            }
+          ],
+          "path": [
+            "me"
+          ],
+          "extensions": {
+            "code": "UNAUTHENTICATED",
+            "classification": "DataFetchingException"
+          }
+        }
+      ],
+      "data": null
+    }
+  }
+]

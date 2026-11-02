@@ -22,3 +22,8 @@ CREATE USER analytics_app WITH PASSWORD 'analytics_demo';
 CREATE DATABASE analytics_db OWNER analytics_app;
 REVOKE CONNECT ON DATABASE analytics_db FROM PUBLIC;
 GRANT CONNECT ON DATABASE analytics_db TO analytics_app;
+
+CREATE USER auth_app WITH PASSWORD 'auth_demo';
+CREATE DATABASE auth_db OWNER auth_app;
+REVOKE CONNECT ON DATABASE auth_db FROM PUBLIC;
+GRANT CONNECT ON DATABASE auth_db TO auth_app;

@@ -1,0 +1,104 @@
+{
+  "correlationId": "bb1ed2b3-57bd-4224-91ca-edf37d4b9db9",
+  "paymentOutbox": {
+    "eventId": "26b40252-4ee4-4bdc-b04a-2d513ccdecf1",
+    "topic": "payment.events.v1",
+    "eventType": "PaymentSucceeded",
+    "aggregateId": "81fa1ae4-058a-39b5-a4a3-0f7b1005fd39",
+    "aggregateVersion": 1,
+    "correlationId": "bb1ed2b3-57bd-4224-91ca-edf37d4b9db9",
+    "occurredAt": "2026-11-02T09:12:14.660182+00:00",
+    "publishedAt": "2026-11-02T09:12:14.694984+00:00",
+    "payload": {
+      "booking": {
+        "id": "b2d434e9-ee56-3cb5-a334-8851dd11d712",
+        "total": {
+          "currency": "BYN",
+          "amountMinor": 240000
+        },
+        "status": "PENDING_PAYMENT",
+        "version": 1,
+        "clientId": "00000000-0000-0000-0000-000000000001",
+        "payments": [],
+        "startsAt": "2030-06-01T10:00:00Z",
+        "createdAt": "2026-11-02T09:12:14.498331Z",
+        "tourTitle": "Защита 77bcdf01-805a-447b-9300-9f209a3bee45",
+        "unitPrice": {
+          "currency": "BYN",
+          "amountMinor": 120000
+        },
+        "scheduleId": "07dba622-a7ab-4760-92e1-a023758735b7",
+        "directionId": "00000000-0000-0000-0000-000000000101",
+        "directionName": "Беларусь, Брест",
+        "holdExpiresAt": "2026-11-02T09:27:14.498331Z",
+        "travelerCount": 2
+      },
+      "payment": {
+        "id": "81fa1ae4-058a-39b5-a4a3-0f7b1005fd39",
+        "amount": {
+          "currency": "BYN",
+          "amountMinor": 240000
+        },
+        "status": "SUCCEEDED",
+        "bookingId": "b2d434e9-ee56-3cb5-a334-8851dd11d712",
+        "createdAt": "2026-11-02T09:12:14.619864Z",
+        "paymentUrl": "https://payments.example.invalid/demo/81fa1ae4-058a-39b5-a4a3-0f7b1005fd39"
+      }
+    }
+  },
+  "booking": {
+    "id": "b2d434e9-ee56-3cb5-a334-8851dd11d712",
+    "status": "CONFIRMED",
+    "version": 2,
+    "hold_expires_at": null
+  },
+  "history": [
+    {
+      "from_status": null,
+      "to_status": "PENDING_PAYMENT",
+      "reason": "Создание бронирования",
+      "changed_at": "2026-11-02T09:12:14.499934+00:00"
+    },
+    {
+      "from_status": "PENDING_PAYMENT",
+      "to_status": "CONFIRMED",
+      "reason": "PaymentSucceeded via Kafka",
+      "changed_at": "2026-11-02T09:12:14.660182+00:00"
+    }
+  ],
+  "inbox": {
+    "booking": 1,
+    "analytics": 1,
+    "notification": 1
+  },
+  "salesFact": {
+    "payment_id": "81fa1ae4-058a-39b5-a4a3-0f7b1005fd39",
+    "booking_id": "b2d434e9-ee56-3cb5-a334-8851dd11d712",
+    "source_event_id": "26b40252-4ee4-4bdc-b04a-2d513ccdecf1",
+    "amount_minor": 240000,
+    "occurred_at": "2026-11-02T09:12:14.660182+00:00"
+  },
+  "notifications": [
+    {
+      "id": "26b40252-4ee4-4bdc-b04a-2d513ccdecf1",
+      "kind": "PAYMENT_STATUS",
+      "title": "Платёж SUCCEEDED",
+      "status": "SENT",
+      "channel": "IN_APP"
+    },
+    {
+      "id": "e8d29668-bd45-4aac-946d-0d3a41af3d1d",
+      "kind": "BOOKING_STATUS",
+      "title": "Бронирование PENDING_PAYMENT",
+      "status": "SENT",
+      "channel": "IN_APP"
+    },
+    {
+      "id": "d938bd07-5ca7-4ed7-b5a4-5537178d005b",
+      "kind": "BOOKING_STATUS",
+      "title": "Бронирование CONFIRMED",
+      "status": "SENT",
+      "channel": "IN_APP"
+    }
+  ]
+}

@@ -1,7 +1,9 @@
 package by.bsuir.travel.tour.service;
 
+import by.bsuir.travel.contracts.DomainException;
 import by.bsuir.travel.contracts.Model.*;
 import by.bsuir.travel.contracts.ReadSupport;
+import java.time.ZoneOffset;
 import java.util.*;
 import java.util.stream.*;
 
@@ -13,17 +15,18 @@ public final class TourSearch {
     if (f != null) {
       if (f.directionId() != null) ReadSupport.id(f.directionId());
       if (f.from() != null && f.to() != null && f.from().isAfter(f.to()))
-        throw new by.bsuir.travel.contracts.DomainException("BAD_REQUEST", "Invalid date range");
+        throw new DomainException("BAD_REQUEST", "Invalid date range");
       if ((f.minPrice() != null && f.minPrice() < 0)
           || (f.maxPrice() != null && f.maxPrice() < 0)
           || (f.minPrice() != null && f.maxPrice() != null && f.minPrice() > f.maxPrice()))
-        throw new by.bsuir.travel.contracts.DomainException("BAD_REQUEST", "Invalid price range");
+        throw new DomainException("BAD_REQUEST", "Invalid price range");
     }
     List<Tour> items = new ArrayList<>();
     for (Tour t : source) {
       if (t.status() != TourStatus.PUBLISHED || !t.direction().isActive()) continue;
-      if (f != null && f.directionId() != null && !ReadSupport.sameId(t.direction().id(), f.directionId()))
-        continue;
+      if (f != null
+          && f.directionId() != null
+          && !ReadSupport.sameId(t.direction().id(), f.directionId())) continue;
       List<TourSchedule> schedules =
           t.schedules().stream()
               .filter(s -> matches(s, f))
@@ -77,7 +80,7 @@ public final class TourSearch {
     if ((f == null || !Boolean.FALSE.equals(f.onlyAvailable())) && s.availableSeats() <= 0)
       return false;
     if (f == null) return true;
-    var day = s.startsAt().withOffsetSameInstant(java.time.ZoneOffset.UTC).toLocalDate();
+    var day = s.startsAt().withOffsetSameInstant(ZoneOffset.UTC).toLocalDate();
     return (f.from() == null || !day.isBefore(f.from()))
         && (f.to() == null || !day.isAfter(f.to()))
         && (f.minPrice() == null || s.price().amountMinor() >= f.minPrice())

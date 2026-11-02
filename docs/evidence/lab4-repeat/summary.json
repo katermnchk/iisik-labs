@@ -1,0 +1,54 @@
+{
+  "passed": 12,
+  "total": 12,
+  "checks": [
+    {
+      "name": "01-create-draft",
+      "result": "PASS"
+    },
+    {
+      "name": "02-client-cannot-see-draft",
+      "result": "PASS"
+    },
+    {
+      "name": "03-create-schedule",
+      "result": "PASS"
+    },
+    {
+      "name": "04-read-draft-version",
+      "result": "PASS"
+    },
+    {
+      "name": "05-publish",
+      "result": "PASS"
+    },
+    {
+      "name": "06-create-booking",
+      "result": "PASS"
+    },
+    {
+      "name": "07-idempotent-retry",
+      "result": "PASS"
+    },
+    {
+      "name": "08-key-payload-conflict",
+      "result": "PASS"
+    },
+    {
+      "name": "09-insufficient-seats",
+      "result": "PASS"
+    },
+    {
+      "name": "10-read-filter-sort-summary",
+      "result": "PASS"
+    },
+    {
+      "name": "11-cancel",
+      "result": "PASS"
+    },
+    {
+      "name": "12-seats-restored",
+      "result": "PASS"
+    }
+  ]
+}

@@ -1,0 +1,18 @@
+{
+  "request": {
+    "port": 8092,
+    "path": "/internal/v1/commands/updateTour",
+    "body": {
+      "id": "648b7531-954a-435f-8e39-ce4ebe561c47",
+      "status": "PUBLISHED",
+      "expectedVersion": 1
+    },
+    "demoToken": "demo-employee",
+    "idempotencyKey": null
+  },
+  "httpStatus": 409,
+  "response": {
+    "code": "INVALID_STATE",
+    "message": "Publication requires an open future schedule"
+  }
+}

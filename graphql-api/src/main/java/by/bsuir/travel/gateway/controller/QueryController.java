@@ -1,6 +1,9 @@
 package by.bsuir.travel.gateway.controller;
 
+import by.bsuir.travel.contracts.Commands.*;
+import by.bsuir.travel.contracts.Identity.BookingQueries;
 import by.bsuir.travel.contracts.Model.*;
+import by.bsuir.travel.contracts.ReadSupport;
 import by.bsuir.travel.gateway.service.TravelQueryService;
 import java.util.*;
 import org.springframework.graphql.data.method.annotation.*;
@@ -9,8 +12,10 @@ import org.springframework.stereotype.Controller;
 @Controller
 public class QueryController {
   private final TravelQueryService service;
+  private final BookingQueries bookings;
 
-  public QueryController(TravelQueryService service) {
+  public QueryController(TravelQueryService service, BookingQueries bookings) {
+    this.bookings = bookings;
     this.service = service;
   }
 
@@ -39,8 +44,12 @@ public class QueryController {
   }
 
   @QueryMapping
-  public Page<Booking> myBookings(@Argument PageInput page, @ContextValue Principal principal) {
-    return service.myBookings(page, principal);
+  public Page<Booking> myBookings(
+      @Argument PageInput page,
+      @Argument BookingFilter filter,
+      @Argument BookingSort sort,
+      @ContextValue Principal principal) {
+    return ReadSupport.page(bookings.filtered(principal, filter, sort), page);
   }
 
   @QueryMapping
@@ -59,6 +68,12 @@ public class QueryController {
   public SalesAnalytics salesAnalytics(
       @Argument AnalyticsFilter filter, @ContextValue Principal principal) {
     return service.salesAnalytics(filter, principal);
+  }
+
+  @QueryMapping
+  public BookingSummary bookingSummary(
+      @Argument BookingFilter filter, @ContextValue Principal principal) {
+    return bookings.summary(principal, filter);
   }
 
   @BatchMapping(typeName = "Booking", field = "payments")

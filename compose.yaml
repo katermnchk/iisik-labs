@@ -1,124 +1,270 @@
+name: iisik-labs567
 services:
   postgres:
     image: postgres:16.15
     environment:
       POSTGRES_USER: postgres
       POSTGRES_PASSWORD: local_demo_admin
-    ports:
-      - "${POSTGRES_PORT:-6543}:5432"
+    ports: ["127.0.0.1:6543:5432"]
     volumes:
       - travel_postgres:/var/lib/postgresql/data
       - ./docker/init:/docker-entrypoint-initdb.d:ro
     healthcheck:
       test: ["CMD-SHELL", "pg_isready -U postgres"]
-      interval: 5s
+      interval: 3s
       timeout: 3s
-      retries: 20
+      retries: 30
+  redis:
+    image: redis:7.2.4
+    ports: ["127.0.0.1:6391:6379"]
+    command: ["redis-server", "--appendonly", "yes"]
+    volumes: ["travel_redis:/data"]
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 3s
+      timeout: 2s
+      retries: 30
+  kafka:
+    image: apache/kafka:3.7.0
+    ports: ["127.0.0.1:9192:9192"]
+    environment:
+      KAFKA_HEAP_OPTS: "-Xms128m -Xmx256m"
+      KAFKA_NODE_ID: 1
+      KAFKA_PROCESS_ROLES: broker,controller
+      KAFKA_LISTENERS: PLAINTEXT://:9092,CONTROLLER://:9093,EXTERNAL://:9192
+      KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://kafka:9092,EXTERNAL://localhost:9192
+      KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: CONTROLLER:PLAINTEXT,PLAINTEXT:PLAINTEXT,EXTERNAL:PLAINTEXT
+      KAFKA_CONTROLLER_LISTENER_NAMES: CONTROLLER
+      KAFKA_INTER_BROKER_LISTENER_NAME: PLAINTEXT
+      KAFKA_CONTROLLER_QUORUM_VOTERS: 1@kafka:9093
+      KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 1
+      KAFKA_TRANSACTION_STATE_LOG_REPLICATION_FACTOR: 1
+      KAFKA_TRANSACTION_STATE_LOG_MIN_ISR: 1
+      KAFKA_GROUP_INITIAL_REBALANCE_DELAY_MS: 0
+      KAFKA_AUTO_CREATE_TOPICS_ENABLE: "false"
+      KAFKA_LOG_DIRS: /var/lib/kafka/data
+    volumes: ["travel_kafka:/var/lib/kafka/data"]
+    healthcheck:
+      test: ["CMD-SHELL", "/opt/kafka/bin/kafka-topics.sh --bootstrap-server localhost:9092 --list >/dev/null 2>&1"]
+      interval: 5s
+      timeout: 5s
+      retries: 30
   user-service:
-    build:
-      context: .
-      args:
-        MODULE: user-service
+    image: eclipse-temurin:17-jre
     profiles: [full]
+    working_dir: /app
+    command: ["java", "-Xmx192m", "-jar", "/app/app.jar"]
+    volumes: ["./user-service/target/user-service-1.0.0.jar:/app/app.jar:ro"]
+    ports: ["127.0.0.1:8091:8091", "127.0.0.1:9091:9091"]
     environment:
       SERVER_ADDRESS: 0.0.0.0
+      SERVICE_KEY: ${SERVICE_KEY:?Run python3 scripts/prepare-env.py}
+      REDIS_HOST: redis
+      REDIS_PORT: 6379
+      KAFKA_BOOTSTRAP: kafka:9092
+      USER_RPC: user-service:9091
+      TOUR_RPC: tour-service:9092
+      BOOKING_RPC: booking-service:9093
+      PAYMENT_RPC: payment-service:9094
+      NOTIFICATION_RPC: notification-service:9095
+      ANALYTICS_RPC: analytics-service:9096
+      AUTH_URL: http://auth-service:8190
       DB_URL: jdbc:postgresql://postgres:5432/user_db
       DB_USER: user_app
       DB_PASSWORD: user_demo
-    ports:
-      - "8091:8091"
     depends_on:
-      postgres:
-        condition: service_healthy
+      postgres: {condition: service_healthy}
+      redis: {condition: service_healthy}
+      kafka: {condition: service_healthy}
   tour-service:
-    build:
-      context: .
-      args:
-        MODULE: tour-service
+    image: eclipse-temurin:17-jre
     profiles: [full]
+    working_dir: /app
+    command: ["java", "-Xmx192m", "-jar", "/app/app.jar"]
+    volumes: ["./tour-service/target/tour-service-1.0.0.jar:/app/app.jar:ro"]
+    ports: ["127.0.0.1:8092:8092", "127.0.0.1:9092:9092"]
     environment:
       SERVER_ADDRESS: 0.0.0.0
+      SERVICE_KEY: ${SERVICE_KEY:?Run python3 scripts/prepare-env.py}
+      REDIS_HOST: redis
+      REDIS_PORT: 6379
+      KAFKA_BOOTSTRAP: kafka:9092
+      USER_RPC: user-service:9091
+      TOUR_RPC: tour-service:9092
+      BOOKING_RPC: booking-service:9093
+      PAYMENT_RPC: payment-service:9094
+      NOTIFICATION_RPC: notification-service:9095
+      ANALYTICS_RPC: analytics-service:9096
+      AUTH_URL: http://auth-service:8190
       DB_URL: jdbc:postgresql://postgres:5432/tour_db
       DB_USER: tour_app
       DB_PASSWORD: tour_demo
-    ports:
-      - "8092:8092"
     depends_on:
-      postgres:
-        condition: service_healthy
+      postgres: {condition: service_healthy}
+      redis: {condition: service_healthy}
+      kafka: {condition: service_healthy}
   booking-service:
-    build:
-      context: .
-      args:
-        MODULE: booking-service
+    image: eclipse-temurin:17-jre
     profiles: [full]
+    working_dir: /app
+    command: ["java", "-Xmx192m", "-jar", "/app/app.jar"]
+    volumes: ["./booking-service/target/booking-service-1.0.0.jar:/app/app.jar:ro"]
+    ports: ["127.0.0.1:8093:8093", "127.0.0.1:9093:9093"]
     environment:
       SERVER_ADDRESS: 0.0.0.0
+      SERVICE_KEY: ${SERVICE_KEY:?Run python3 scripts/prepare-env.py}
+      REDIS_HOST: redis
+      REDIS_PORT: 6379
+      KAFKA_BOOTSTRAP: kafka:9092
+      USER_RPC: user-service:9091
+      TOUR_RPC: tour-service:9092
+      BOOKING_RPC: booking-service:9093
+      PAYMENT_RPC: payment-service:9094
+      NOTIFICATION_RPC: notification-service:9095
+      ANALYTICS_RPC: analytics-service:9096
+      AUTH_URL: http://auth-service:8190
       DB_URL: jdbc:postgresql://postgres:5432/booking_db
       DB_USER: booking_app
       DB_PASSWORD: booking_demo
-    ports:
-      - "8093:8093"
     depends_on:
-      postgres:
-        condition: service_healthy
+      postgres: {condition: service_healthy}
+      redis: {condition: service_healthy}
+      kafka: {condition: service_healthy}
   payment-service:
-    build:
-      context: .
-      args:
-        MODULE: payment-service
+    image: eclipse-temurin:17-jre
     profiles: [full]
+    working_dir: /app
+    command: ["java", "-Xmx192m", "-jar", "/app/app.jar"]
+    volumes: ["./payment-service/target/payment-service-1.0.0.jar:/app/app.jar:ro"]
+    ports: ["127.0.0.1:8094:8094", "127.0.0.1:9094:9094"]
     environment:
       SERVER_ADDRESS: 0.0.0.0
+      SERVICE_KEY: ${SERVICE_KEY:?Run python3 scripts/prepare-env.py}
+      REDIS_HOST: redis
+      REDIS_PORT: 6379
+      KAFKA_BOOTSTRAP: kafka:9092
+      USER_RPC: user-service:9091
+      TOUR_RPC: tour-service:9092
+      BOOKING_RPC: booking-service:9093
+      PAYMENT_RPC: payment-service:9094
+      NOTIFICATION_RPC: notification-service:9095
+      ANALYTICS_RPC: analytics-service:9096
+      AUTH_URL: http://auth-service:8190
       DB_URL: jdbc:postgresql://postgres:5432/payment_db
       DB_USER: payment_app
       DB_PASSWORD: payment_demo
-    ports:
-      - "8094:8094"
     depends_on:
-      postgres:
-        condition: service_healthy
+      postgres: {condition: service_healthy}
+      redis: {condition: service_healthy}
+      kafka: {condition: service_healthy}
   notification-service:
-    build:
-      context: .
-      args:
-        MODULE: notification-service
+    image: eclipse-temurin:17-jre
     profiles: [full]
+    working_dir: /app
+    command: ["java", "-Xmx192m", "-jar", "/app/app.jar"]
+    volumes: ["./notification-service/target/notification-service-1.0.0.jar:/app/app.jar:ro"]
+    ports: ["127.0.0.1:8095:8095", "127.0.0.1:9095:9095"]
     environment:
       SERVER_ADDRESS: 0.0.0.0
+      SERVICE_KEY: ${SERVICE_KEY:?Run python3 scripts/prepare-env.py}
+      REDIS_HOST: redis
+      REDIS_PORT: 6379
+      KAFKA_BOOTSTRAP: kafka:9092
+      USER_RPC: user-service:9091
+      TOUR_RPC: tour-service:9092
+      BOOKING_RPC: booking-service:9093
+      PAYMENT_RPC: payment-service:9094
+      NOTIFICATION_RPC: notification-service:9095
+      ANALYTICS_RPC: analytics-service:9096
+      AUTH_URL: http://auth-service:8190
       DB_URL: jdbc:postgresql://postgres:5432/notification_db
       DB_USER: notification_app
       DB_PASSWORD: notification_demo
-    ports:
-      - "8095:8095"
     depends_on:
-      postgres:
-        condition: service_healthy
+      postgres: {condition: service_healthy}
+      redis: {condition: service_healthy}
+      kafka: {condition: service_healthy}
   analytics-service:
-    build:
-      context: .
-      args:
-        MODULE: analytics-service
+    image: eclipse-temurin:17-jre
     profiles: [full]
+    working_dir: /app
+    command: ["java", "-Xmx192m", "-jar", "/app/app.jar"]
+    volumes: ["./analytics-service/target/analytics-service-1.0.0.jar:/app/app.jar:ro"]
+    ports: ["127.0.0.1:8096:8096", "127.0.0.1:9096:9096"]
     environment:
       SERVER_ADDRESS: 0.0.0.0
+      SERVICE_KEY: ${SERVICE_KEY:?Run python3 scripts/prepare-env.py}
+      REDIS_HOST: redis
+      REDIS_PORT: 6379
+      KAFKA_BOOTSTRAP: kafka:9092
+      USER_RPC: user-service:9091
+      TOUR_RPC: tour-service:9092
+      BOOKING_RPC: booking-service:9093
+      PAYMENT_RPC: payment-service:9094
+      NOTIFICATION_RPC: notification-service:9095
+      ANALYTICS_RPC: analytics-service:9096
+      AUTH_URL: http://auth-service:8190
       DB_URL: jdbc:postgresql://postgres:5432/analytics_db
       DB_USER: analytics_app
       DB_PASSWORD: analytics_demo
-    ports:
-      - "8096:8096"
     depends_on:
-      postgres:
-        condition: service_healthy
-  graphql-api:
-    build:
-      context: .
-      args:
-        MODULE: graphql-api
+      postgres: {condition: service_healthy}
+      redis: {condition: service_healthy}
+      kafka: {condition: service_healthy}
+  auth-service:
+    image: eclipse-temurin:17-jre
     profiles: [full]
+    working_dir: /app
+    command: ["java", "-Xmx192m", "-jar", "/app/app.jar"]
+    volumes: ["./auth-service/target/auth-service-1.0.0.jar:/app/app.jar:ro"]
+    ports: ["127.0.0.1:8190:8190"]
     environment:
       SERVER_ADDRESS: 0.0.0.0
-    ports:
-      - "8080:8080"
+      SERVICE_KEY: ${SERVICE_KEY:?Run python3 scripts/prepare-env.py}
+      JWT_SECRET: ${JWT_SECRET:?Run python3 scripts/prepare-env.py}
+      LAB_PASSWORD: ${LAB_PASSWORD:-Lab567-Travel!}
+      REDIS_HOST: redis
+      REDIS_PORT: 6379
+      KAFKA_BOOTSTRAP: kafka:9092
+      USER_RPC: user-service:9091
+      TOUR_RPC: tour-service:9092
+      BOOKING_RPC: booking-service:9093
+      PAYMENT_RPC: payment-service:9094
+      NOTIFICATION_RPC: notification-service:9095
+      ANALYTICS_RPC: analytics-service:9096
+      AUTH_URL: http://auth-service:8190
+      DB_URL: jdbc:postgresql://postgres:5432/auth_db
+      DB_USER: auth_app
+      DB_PASSWORD: auth_demo
+    depends_on:
+      postgres: {condition: service_healthy}
+      redis: {condition: service_healthy}
+      kafka: {condition: service_healthy}
+  graphql-api:
+    image: eclipse-temurin:17-jre
+    profiles: [full]
+    working_dir: /app
+    command: ["java", "-Xmx192m", "-jar", "/app/app.jar"]
+    volumes: ["./graphql-api/target/graphql-api-1.0.0.jar:/app/app.jar:ro"]
+    ports: ["127.0.0.1:8180:8080"]
+    environment:
+      SERVER_ADDRESS: 0.0.0.0
+      SERVICE_KEY: ${SERVICE_KEY:?Run python3 scripts/prepare-env.py}
+      REDIS_HOST: redis
+      REDIS_PORT: 6379
+      KAFKA_BOOTSTRAP: kafka:9092
+      USER_RPC: user-service:9091
+      TOUR_RPC: tour-service:9092
+      BOOKING_RPC: booking-service:9093
+      PAYMENT_RPC: payment-service:9094
+      NOTIFICATION_RPC: notification-service:9095
+      ANALYTICS_RPC: analytics-service:9096
+      AUTH_URL: http://auth-service:8190
+    depends_on:
+      postgres: {condition: service_healthy}
+      redis: {condition: service_healthy}
+      kafka: {condition: service_healthy}
 volumes:
   travel_postgres:
+  travel_redis:
+  travel_kafka:

@@ -1,0 +1,18 @@
+[
+  {
+    "check": "popularity sort uses a valid whole-day period",
+    "ok": true
+  },
+  {
+    "check": "expired hold without payment",
+    "ok": true,
+    "bookingId": "ba36dd1f-8509-34f8-b328-27316dd90f93",
+    "paymentId": null
+  },
+  {
+    "check": "expired hold with pending payment",
+    "ok": true,
+    "bookingId": "5124b810-4da2-33f8-9aff-95cf41ef3e85",
+    "paymentId": "3f893c79-1d03-358c-be77-9ed2773d34c4"
+  }
+]

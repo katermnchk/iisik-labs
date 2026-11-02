@@ -1,0 +1,34 @@
+{
+  "request": {
+    "port": 8092,
+    "path": "/internal/v1/commands/createSchedule",
+    "body": {
+      "tourId": "648b7531-954a-435f-8e39-ce4ebe561c47",
+      "startsAt": "2026-12-10T06:00:00Z",
+      "endsAt": "2026-12-12T06:00:00Z",
+      "capacity": 12,
+      "basePriceMinor": 70000
+    },
+    "demoToken": "demo-employee",
+    "idempotencyKey": null
+  },
+  "httpStatus": 200,
+  "response": {
+    "id": "cecfb5e8-1091-413b-b1ed-1c4db43cca8e",
+    "tourId": "648b7531-954a-435f-8e39-ce4ebe561c47",
+    "startsAt": "2026-12-10T06:00:00Z",
+    "endsAt": "2026-12-12T06:00:00Z",
+    "capacity": 12,
+    "reservedSeats": 0,
+    "availableSeats": 12,
+    "price": {
+      "amountMinor": 70000,
+      "currency": "BYN"
+    },
+    "priceVersion": 1,
+    "version": 1,
+    "status": "OPEN",
+    "accommodations": [],
+    "transports": []
+  }
+}

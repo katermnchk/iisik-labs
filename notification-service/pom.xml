@@ -9,6 +9,7 @@
   </parent>
   <artifactId>notification-service</artifactId>
   <dependencies>
+<dependency><groupId>by.bsuir</groupId><artifactId>transport</artifactId><version>${project.version}</version></dependency>
     <dependency>
       <groupId>org.springframework.boot</groupId>
       <artifactId>spring-boot-starter-test</artifactId>

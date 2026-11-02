@@ -1,0 +1,24 @@
+{
+  "query": "mutation{createBooking(input:{scheduleId:\"2a3b5d05-8da8-4c91-88ba-21b8fbc9a37b\",travelerCount:1,expectedPriceVersion:\"1\"},idempotencyKey:\"24a1e4bd-69d9-477d-ad6a-20d8b87043e7\" ){id status total{amountMinor}}}",
+  "response": {
+    "errors": [
+      {
+        "message": "Idempotency key reused with different input",
+        "locations": [
+          {
+            "line": 1,
+            "column": 10
+          }
+        ],
+        "path": [
+          "createBooking"
+        ],
+        "extensions": {
+          "code": "CONFLICT",
+          "classification": "DataFetchingException"
+        }
+      }
+    ],
+    "data": null
+  }
+}

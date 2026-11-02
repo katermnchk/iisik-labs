@@ -1,0 +1,1 @@
+query MyBookings { myBookings(page:{page:0,size:20},filter:{status:PENDING_PAYMENT},sort:{field:TOTAL,direction:DESC}){totalCount items{id status total{amountMinor}}} bookingSummary(filter:{status:PENDING_PAYMENT}){count pending confirmed cancelled total{amountMinor currency}} }

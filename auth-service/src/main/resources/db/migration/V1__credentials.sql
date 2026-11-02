@@ -1,0 +1,1 @@
+CREATE TABLE credentials(user_id uuid PRIMARY KEY,email varchar(254) NOT NULL UNIQUE,password_hash varchar(255) NOT NULL,role varchar(20) NOT NULL CHECK(role IN ('CLIENT','EMPLOYEE','ADMIN')),created_at timestamptz NOT NULL DEFAULT now());

@@ -1,0 +1,62 @@
+{
+  "request": {
+    "port": 8092,
+    "path": "/internal/v1/commands/updateSchedule",
+    "body": {
+      "id": "00000000-0000-0000-0000-000000000301",
+      "startsAt": "2026-12-01T08:00:00+03:00",
+      "endsAt": "2026-12-03T08:00:00+03:00",
+      "expectedVersion": 1
+    },
+    "demoToken": "demo-employee",
+    "idempotencyKey": null
+  },
+  "httpStatus": 200,
+  "response": {
+    "id": "00000000-0000-0000-0000-000000000301",
+    "tourId": "00000000-0000-0000-0000-000000000201",
+    "startsAt": "2026-12-01T05:00:00Z",
+    "endsAt": "2026-12-03T05:00:00Z",
+    "capacity": 10,
+    "reservedSeats": 3,
+    "availableSeats": 7,
+    "price": {
+      "amountMinor": 90000,
+      "currency": "BYN"
+    },
+    "priceVersion": 1,
+    "version": 2,
+    "status": "OPEN",
+    "accommodations": [
+      {
+        "id": "00000000-0000-0000-0000-000000000401",
+        "scheduleId": "00000000-0000-0000-0000-000000000301",
+        "name": "Отель Буг",
+        "address": "Центральная улица, 10",
+        "checkInAt": "2026-12-01T12:00:00Z",
+        "checkOutAt": "2026-12-03T10:00:00Z",
+        "roomType": "STANDARD"
+      },
+      {
+        "id": "00000000-0000-0000-0000-000000000402",
+        "scheduleId": "00000000-0000-0000-0000-000000000301",
+        "name": "Гостевой дом",
+        "address": "Центральная улица, 10",
+        "checkInAt": "2026-12-01T12:00:00Z",
+        "checkOutAt": "2026-12-03T10:00:00Z",
+        "roomType": "STANDARD"
+      }
+    ],
+    "transports": [
+      {
+        "id": "00000000-0000-0000-0000-000000000501",
+        "scheduleId": "00000000-0000-0000-0000-000000000301",
+        "kind": "BUS",
+        "carrier": "TravelBus",
+        "routeNumber": "TR-20",
+        "departureAt": "2026-12-01T05:00:00Z",
+        "arrivalAt": "2026-12-01T09:00:00Z"
+      }
+    ]
+  }
+}

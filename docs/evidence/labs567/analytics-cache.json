@@ -1,0 +1,31 @@
+[
+  {
+    "check": "new empty schedule is included in occupancy denominator",
+    "ok": true,
+    "scheduleId": "d9934772-4aa6-43ce-8394-df87cd958b8a",
+    "capacity": 10,
+    "confirmedSeats": 0
+  },
+  {
+    "check": "capacity updates without a sale; late older snapshot cannot roll back projection",
+    "ok": true,
+    "projectedCapacity": 20,
+    "staleAggregateVersion": 4
+  },
+  {
+    "check": "delayed payment belongs to event UTC day, not consumer day",
+    "ok": true,
+    "fixture": "controlled outbox occurred_at before UTC midnight",
+    "eventOccurredAt": "2026-11-01T23:59:59.876544+00:00",
+    "saleDate": "2026-11-01",
+    "projectionAsOf": "2026-11-02T09:08:26.509Z",
+    "paymentId": "64749a48-83a3-319e-bf88-dd27fbead9ff"
+  },
+  {
+    "check": "cache miss-hit-expiry-refresh avoids redundant Tour RPC",
+    "ok": true,
+    "externalQueries": 3,
+    "tourRpcCalls": 2,
+    "ttlSeconds": 30
+  }
+]

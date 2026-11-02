@@ -1,0 +1,21 @@
+server:
+  port: ${PORT:8190}
+  address: ${SERVER_ADDRESS:127.0.0.1}
+spring:
+  application:
+    name: auth-service
+  datasource:
+    url: ${DB_URL:jdbc:postgresql://localhost:6543/auth_db}
+    username: ${DB_USER:auth_app}
+    password: ${DB_PASSWORD:auth_demo}
+  data:
+    redis:
+      host: ${REDIS_HOST:localhost}
+      port: ${REDIS_PORT:6391}
+      timeout: 1s
+      connect-timeout: 1s
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health

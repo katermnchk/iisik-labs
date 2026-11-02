@@ -1,0 +1,20 @@
+{
+  "request": {
+    "port": 8092,
+    "path": "/internal/v1/commands/createSchedule",
+    "body": {
+      "tourId": "648b7531-954a-435f-8e39-ce4ebe561c47",
+      "startsAt": "2026-12-10T06:00:00Z",
+      "endsAt": "2026-12-12T06:00:00Z",
+      "capacity": 12,
+      "basePriceMinor": null
+    },
+    "demoToken": "demo-employee",
+    "idempotencyKey": null
+  },
+  "httpStatus": 400,
+  "response": {
+    "code": "BAD_REQUEST",
+    "message": "Invalid input"
+  }
+}

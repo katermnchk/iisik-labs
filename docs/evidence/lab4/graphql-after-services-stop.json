@@ -1,0 +1,22 @@
+{
+  "request": {
+    "port": 8080,
+    "path": "/graphql",
+    "body": {
+      "query": "{booking(id:\"a804dbc8-64f0-4a0e-b80c-44e57fd1e4d7\"){status total{amountMinor}}}"
+    },
+    "demoToken": "demo-client",
+    "idempotencyKey": null
+  },
+  "httpStatus": 200,
+  "response": {
+    "data": {
+      "booking": {
+        "status": "PENDING_PAYMENT",
+        "total": {
+          "amountMinor": "180000"
+        }
+      }
+    }
+  }
+}

@@ -1,0 +1,12 @@
+{
+  "query": "mutation{createTour(input:{directionId:\"00000000-0000-0000-0000-000000000101\",title:\"Проверка ЛР4\",description:\"Проверка бизнес-операций\",durationDays:2}){id version status}}",
+  "response": {
+    "data": {
+      "createTour": {
+        "id": "30861528-1869-4955-8593-1e3c21eb8213",
+        "version": "1",
+        "status": "DRAFT"
+      }
+    }
+  }
+}

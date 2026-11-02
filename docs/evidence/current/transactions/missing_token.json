@@ -1,5 +1,5 @@
 {
-  "capturedAt": "2026-10-05T17:09:17.046746+00:00",
+  "capturedAt": "2026-10-19T05:27:39.765375+00:00",
   "request": {
     "method": "POST",
     "url": "http://127.0.0.1:8080/graphql",
@@ -15,7 +15,7 @@
     "headers": {
       "Content-Type": "application/json",
       "Content-Length": "96",
-      "Date": "Mon, 05 Oct 2026 17:09:17 GMT",
+      "Date": "Mon, 19 Oct 2026 05:27:39 GMT",
       "Connection": "close"
     },
     "body": {

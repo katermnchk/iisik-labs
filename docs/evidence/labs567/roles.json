@@ -1,0 +1,7 @@
+{
+  "check": "current role overrides previous JWT role claim",
+  "ok": true,
+  "oldJwtRole": "CLIENT",
+  "currentRole": "EMPLOYEE",
+  "clientOnlyOperation": "FORBIDDEN"
+}

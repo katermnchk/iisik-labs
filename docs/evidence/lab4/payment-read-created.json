@@ -1,0 +1,23 @@
+{
+  "request": {
+    "port": 8094,
+    "path": "/internal/v1/payments?bookingIds=00000000-0000-0000-0000-000000000607",
+    "body": null,
+    "demoToken": "demo-client2",
+    "idempotencyKey": null
+  },
+  "httpStatus": 200,
+  "response": [
+    {
+      "id": "fa5ec6bc-9015-487f-8550-7c2c7d87d7d4",
+      "bookingId": "00000000-0000-0000-0000-000000000607",
+      "amount": {
+        "amountMinor": 50000,
+        "currency": "BYN"
+      },
+      "status": "PENDING",
+      "paymentUrl": "https://payments.example.invalid/demo/fa5ec6bc-9015-487f-8550-7c2c7d87d7d4",
+      "createdAt": "2026-10-05T00:00:00Z"
+    }
+  ]
+}

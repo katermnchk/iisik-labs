@@ -58,24 +58,6 @@ public class UserReadService implements UserClient {
   }
 
   public Principal principal(GetPrincipalRequest r) {
-    int n =
-        switch (r.accessToken() == null ? "" : r.accessToken()) {
-          case "demo-client" -> 1;
-          case "demo-client2" -> 2;
-          case "demo-employee" -> 3;
-          case "demo-admin" -> 4;
-          case "demo-blocked" -> 5;
-          default -> 0;
-        };
-    if (n == 0) throw new DomainException("UNAUTHENTICATED", "Unknown demo token");
-    User u = user(new GetUserRequest(String.format("00000000-0000-0000-0000-%012d", n)));
-    if (u.status() == UserStatus.BLOCKED) throw new DomainException("FORBIDDEN", "User is blocked");
-    return new Principal(
-        u.id(),
-        u.role().code(),
-        u.status(),
-        u.email(),
-        u.role().code() == RoleCode.CLIENT ? u.id() : null,
-        u.role().code() == RoleCode.EMPLOYEE ? u.id() : null);
+    throw new DomainException("UNAUTHENTICATED", "Use Auth Service JWT validation");
   }
 }

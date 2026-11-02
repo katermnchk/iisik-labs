@@ -2,6 +2,8 @@ package by.bsuir.travel.booking.model;
 
 import jakarta.persistence.*;
 import java.time.*;
+import org.hibernate.annotations.JdbcTypeCode;
+import org.hibernate.type.SqlTypes;
 
 @Entity
 @Table(name = "idempotency_keys")
@@ -17,11 +19,11 @@ public class IdempotencyKeysEntity {
   @Column(name = "key", length = 100)
   private String key;
 
-  @org.hibernate.annotations.JdbcTypeCode(org.hibernate.type.SqlTypes.CHAR)
+  @JdbcTypeCode(SqlTypes.CHAR)
   @Column(name = "request_hash", length = 64)
   private String requestHash;
 
-  @org.hibernate.annotations.JdbcTypeCode(org.hibernate.type.SqlTypes.JSON)
+  @JdbcTypeCode(SqlTypes.JSON)
   @Column(name = "response_json", columnDefinition = "jsonb")
   private String responseJson;
 

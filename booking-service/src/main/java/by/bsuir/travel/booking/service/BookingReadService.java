@@ -19,6 +19,10 @@ public class BookingReadService implements BookingClient {
     this.bookings = bookings;
   }
 
+  public List<Booking> all() {
+    return bookings.findAll().stream().map(this::map).toList();
+  }
+
   private Booking map(BookingsEntity b) {
     return new Booking(
         b.getId().toString(),

@@ -1,0 +1,20 @@
+{
+  "request": {
+    "port": 8093,
+    "path": "/internal/v1/commands/createBooking",
+    "body": {
+      "scheduleId": "00000000-0000-0000-0000-000000000301",
+      "travelerCount": 1.9,
+      "expectedPriceVersion": 1
+    },
+    "demoToken": "demo-client",
+    "idempotencyKey": "fractional-count"
+  },
+  "httpStatus": 400,
+  "response": {
+    "timestamp": "2026-10-19T05:27:44.789+00:00",
+    "status": 400,
+    "error": "Bad Request",
+    "path": "/internal/v1/commands/createBooking"
+  }
+}

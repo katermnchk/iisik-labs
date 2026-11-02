@@ -2,6 +2,14 @@ server:
   port: ${PORT:8080}
   address: ${SERVER_ADDRESS:127.0.0.1}
 spring:
+  autoconfigure:
+    exclude: org.springframework.boot.autoconfigure.jdbc.DataSourceAutoConfiguration
+  data:
+    redis:
+      host: ${REDIS_HOST:localhost}
+      port: ${REDIS_PORT:6391}
+      timeout: 1s
+      connect-timeout: 1s
   application:
     name: graphql-api
   graphql:

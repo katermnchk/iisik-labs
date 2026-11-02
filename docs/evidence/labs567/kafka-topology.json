@@ -1,0 +1,34 @@
+{
+  "domainTopics": [
+    "booking.events.v1",
+    "payment.events.v1",
+    "tour.events.v1",
+    "user.events.v1"
+  ],
+  "partitionsPerTopic": 3,
+  "consumerAssignments": {
+    "booking": {
+      "topics": [
+        "payment.events.v1"
+      ],
+      "members": "\nGROUP             CONSUMER-ID                                                       HOST            CLIENT-ID                    #PARTITIONS     ASSIGNMENT\ntravel-booking-v1 consumer-travel-booking-v1-3-3b1da35d-e185-4aad-9e83-c7922cc0af93 /172.28.0.5     consumer-travel-booking-v1-3 1               payment.events.v1(2)\ntravel-booking-v1 consumer-travel-booking-v1-2-6c1d90f7-cde3-4457-9da2-648738a385c9 /172.28.0.5     consumer-travel-booking-v1-2 1               payment.events.v1(1)\ntravel-booking-v1 consumer-travel-booking-v1-1-a2344100-fe61-4b89-807a-94ddb4c3fd71 /172.28.0.5     consumer-travel-booking-v1-1 1               payment.events.v1(0)\n"
+    },
+    "analytics": {
+      "topics": [
+        "payment.events.v1",
+        "tour.events.v1"
+      ],
+      "members": "\nGROUP               CONSUMER-ID                                                         HOST            CLIENT-ID                      #PARTITIONS     ASSIGNMENT\ntravel-analytics-v1 consumer-travel-analytics-v1-1-8809aed7-50d1-4ba4-a330-74c1109ea22a /172.28.0.12    consumer-travel-analytics-v1-1 2               payment.events.v1(0), tour.events.v1(0)\ntravel-analytics-v1 consumer-travel-analytics-v1-2-88dc9b1c-b889-458c-abcd-2c7a1df5acb5 /172.28.0.12    consumer-travel-analytics-v1-2 2               payment.events.v1(1), tour.events.v1(1)\ntravel-analytics-v1 consumer-travel-analytics-v1-3-4a39f95d-e01d-42fc-a5f4-0db9626b9df5 /172.28.0.12    consumer-travel-analytics-v1-3 2               payment.events.v1(2), tour.events.v1(2)\n"
+    },
+    "notification": {
+      "topics": [
+        "booking.events.v1",
+        "payment.events.v1",
+        "user.events.v1"
+      ],
+      "members": "\nGROUP                  CONSUMER-ID                                                            HOST            CLIENT-ID                         #PARTITIONS     ASSIGNMENT\ntravel-notification-v1 consumer-travel-notification-v1-2-11a131a6-7f7d-4f70-8496-e6f10f62894e /172.28.0.10    consumer-travel-notification-v1-2 3               booking.events.v1(1), payment.events.v1(1), user.events.v1(1)\ntravel-notification-v1 consumer-travel-notification-v1-1-d65dc5c3-8402-434a-ba41-99cd34db8cb4 /172.28.0.10    consumer-travel-notification-v1-1 3               booking.events.v1(0), payment.events.v1(0), user.events.v1(0)\ntravel-notification-v1 consumer-travel-notification-v1-3-32971d14-e8ef-419b-93f7-72be318079a4 /172.28.0.10    consumer-travel-notification-v1-3 3               booking.events.v1(2), payment.events.v1(2), user.events.v1(2)\n"
+    }
+  },
+  "topicDescriptions": "Topic: payment.events.v1.booking.dlt\tTopicId: nkqcKk-6S1eMKJp_rW1c5g\tPartitionCount: 3\tReplicationFactor: 1\tConfigs: retention.ms=1209600000\n\tTopic: payment.events.v1.booking.dlt\tPartition: 0\tLeader: 1\tReplicas: 1\tIsr: 1\n\tTopic: payment.events.v1.booking.dlt\tPartition: 1\tLeader: 1\tReplicas: 1\tIsr: 1\n\tTopic: payment.events.v1.booking.dlt\tPartition: 2\tLeader: 1\tReplicas: 1\tIsr: 1\nTopic: tour.events.v1.analytics.dlt\tTopicId: BNZoP8cxRxKjNLLeXmgCJA\tPartitionCount: 3\tReplicationFactor: 1\tConfigs: retention.ms=1209600000\n\tTopic: tour.events.v1.analytics.dlt\tPartition: 0\tLeader: 1\tReplicas: 1\tIsr: 1\n\tTopic: tour.events.v1.analytics.dlt\tPartition: 1\tLeader: 1\tReplicas: 1\tIsr: 1\n\tTopic: tour.events.v1.analytics.dlt\tPartition: 2\tLeader: 1\tReplicas: 1\tIsr: 1\nTopic: user.events.v1.notification.dlt\tTopicId: ljpdV7CQRryzQqoXX4lG6w\tPartitionCount: 3\tReplicationFactor: 1\tConfigs: retention.ms=1209600000\n\tTopic: user.events.v1.notification.dlt\tPartition: 0\tLeader: 1\tReplicas: 1\tIsr: 1\n\tTopic: user.events.v1.notification.dlt\tPartition: 1\tLeader: 1\tReplicas: 1\tIsr: 1\n\tTopic: user.events.v1.notification.dlt\tPartition: 2\tLeader: 1\tReplicas: 1\tIsr: 1\nTopic: payment.events.v1.analytics.dlt\tTopicId: ii9vTcKYSKuzMC_eUVYdWg\tPartitionCount: 3\tReplicationFactor: 1\tConfigs: retention.ms=1209600000\n\tTopic: payment.events.v1.analytics.dlt\tPartition: 0\tLeader: 1\tReplicas: 1\tIsr: 1\n\tTopic: payment.events.v1.analytics.dlt\tPartition: 1\tLeader: 1\tReplicas: 1\tIsr: 1\n\tTopic: payment.events.v1.analytics.dlt\tPartition: 2\tLeader: 1\tReplicas: 1\tIsr: 1\nTopic: payment.events.v1\tTopicId: M4bOJvY_Q9OfN3Gz7a5inQ\tPartitionCount: 3\tReplicationFactor: 1\tConfigs: retention.ms=604800000\n\tTopic: payment.events.v1\tPartition: 0\tLeader: 1\tReplicas: 1\tIsr: 1\n\tTopic: payment.events.v1\tPartition: 1\tLeader: 1\tReplicas: 1\tIsr: 1\n\tTopic: payment.events.v1\tPartition: 2\tLeader: 1\tReplicas: 1\tIsr: 1\nTopic: user.events.v1\tTopicId: nuoVmK5wSta-DloMCxtJeg\tPartitionCount: 3\tReplicationFactor: 1\tConfigs: retention.ms=604800000\n\tTopic: user.events.v1\tPartition: 0\tLeader: 1\tReplicas: 1\tIsr: 1\n\tTopic: user.events.v1\tPartition: 1\tLeader: 1\tReplicas: 1\tIsr: 1\n\tTopic: user.events.v1\tPartition: 2\tLeader: 1\tReplicas: 1\tIsr: 1\nTopic: booking.events.v1\tTopicId: RkwflBnzTqu--3L9UssZCQ\tPartitionCount: 3\tReplicationFactor: 1\tConfigs: retention.ms=604800000\n\tTopic: booking.events.v1\tPartition: 0\tLeader: 1\tReplicas: 1\tIsr: 1\n\tTopic: booking.events.v1\tPartition: 1\tLeader: 1\tReplicas: 1\tIsr: 1\n\tTopic: booking.events.v1\tPartition: 2\tLeader: 1\tReplicas: 1\tIsr: 1\nTopic: booking.events.v1.notification.dlt\tTopicId: HQdPgu9-QX-rlesIz_j9Zg\tPartitionCount: 3\tReplicationFactor: 1\tConfigs: retention.ms=1209600000\n\tTopic: booking.events.v1.notification.dlt\tPartition: 0\tLeader: 1\tReplicas: 1\tIsr: 1\n\tTopic: booking.events.v1.notification.dlt\tPartition: 1\tLeader: 1\tReplicas: 1\tIsr: 1\n\tTopic: booking.events.v1.notification.dlt\tPartition: 2\tLeader: 1\tReplicas: 1\tIsr: 1\nTopic: payment.events.v1.notification.dlt\tTopicId: m95Aam-2SwKjktJXPk8aCg\tPartitionCount: 3\tReplicationFactor: 1\tConfigs: retention.ms=1209600000\n\tTopic: payment.events.v1.notification.dlt\tPartition: 0\tLeader: 1\tReplicas: 1\tIsr: 1\n\tTopic: payment.events.v1.notification.dlt\tPartition: 1\tLeader: 1\tReplicas: 1\tIsr: 1\n\tTopic: payment.events.v1.notification.dlt\tPartition: 2\tLeader: 1\tReplicas: 1\tIsr: 1\nTopic: tour.events.v1\tTopicId: VZ00EiHeSU--TIUbp2YeUw\tPartitionCount: 3\tReplicationFactor: 1\tConfigs: retention.ms=604800000\n\tTopic: tour.events.v1\tPartition: 0\tLeader: 1\tReplicas: 1\tIsr: 1\n\tTopic: tour.events.v1\tPartition: 1\tLeader: 1\tReplicas: 1\tIsr: 1\n\tTopic: tour.events.v1\tPartition: 2\tLeader: 1\tReplicas: 1\tIsr: 1\n",
+  "sharedTopicActivelyConsumed": false
+}

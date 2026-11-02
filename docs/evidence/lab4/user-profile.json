@@ -1,0 +1,33 @@
+{
+  "request": {
+    "port": 8091,
+    "path": "/internal/v1/commands/updateUser",
+    "body": {
+      "userId": "00000000-0000-0000-0000-000000000002",
+      "role": "EMPLOYEE",
+      "position": "Менеджер ЛР4"
+    },
+    "demoToken": "demo-admin",
+    "idempotencyKey": null
+  },
+  "httpStatus": 200,
+  "response": {
+    "id": "00000000-0000-0000-0000-000000000002",
+    "role": {
+      "code": "EMPLOYEE",
+      "name": "EMPLOYEE"
+    },
+    "email": "user2@example.test",
+    "firstName": "Анна",
+    "lastName": "Иванова",
+    "status": "ACTIVE",
+    "clientProfile": {
+      "userId": "00000000-0000-0000-0000-000000000002",
+      "phone": "+375290000002"
+    },
+    "employeeProfile": {
+      "userId": "00000000-0000-0000-0000-000000000002",
+      "position": "Менеджер ЛР4"
+    }
+  }
+}

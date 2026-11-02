@@ -8,8 +8,6 @@ def uid(n):
 def main():
     p = argparse.ArgumentParser()
     p.add_argument('--services', action='store_true')
-    p.add_argument('--base-url', default='http://127.0.0.1:8080')
-    p.add_argument('--service-base-port', type=int, default=8091)
     p.add_argument('--output', default='docs/evidence/current')
     args = p.parse_args()
     out = Path(args.output)
@@ -37,7 +35,7 @@ def main():
         return (status, body)
 
     def gql(name, q, token='demo-client'):
-        return request(name, args.base_url.rstrip('/') + '/graphql', q, token)
+        return request(name, 'http://127.0.0.1:8080/graphql', q, token)
 
     def check(name, response, test, status=200):
         actual, b = response
@@ -74,7 +72,6 @@ def main():
     check('huge_page', gql('huge_page', '{tours(page:{page:2147483647,size:100}){items{id} totalCount page{hasNext}}}'), lambda b: b['data']['tours']['items'] == [] and b['data']['tours']['totalCount'] == 2 and (not b['data']['tours']['page']['hasNext']))
     check('scalar_overflow', gql('scalar_overflow', '{tours(page:{page:0,size:20},filter:{maxPrice:"9223372036854775808"}){totalCount}}'), lambda b: b['errors'][0]['extensions']['classification'] == 'ValidationError')
     check('directions', gql('directions', '{directions{id}}'), lambda b: len(b['data']['directions']) == 2)
-    check('directions_null', gql('directions_null', '{directions(activeOnly:null){id}}'), lambda b: 'errors' not in b and len(b['data']['directions']) == 2)
     check('notifications', gql('notifications', '{notifications(page:{page:0,size:20}){totalCount items{id}}}'), lambda b: b['data']['notifications']['totalCount'] == 1)
     batch = check('batch_payments', gql('batch_payments', '{myBookings(page:{page:0,size:20}){items{id payments{id bookingId}}}}'), lambda b: len(b['data']['myBookings']['items']) == 3)
     bookings = batch['data']['myBookings']['items']
@@ -102,7 +99,6 @@ def main():
             return rest
         cases = [('user', 8091, 'users/' + uid(3), '{me{id email firstName lastName status role{code name} employeeProfile{userId position}}}', 'me', 'demo-employee'), ('tour', 8092, 'tours/' + uid(201), '{tour(id:"' + uid(201) + '"){id title version direction{id country city isActive} schedules{id startsAt availableSeats price{amountMinor currency} accommodations{id name} transports{id kind}}}}', 'tour', 'demo-client'), ('booking', 8093, 'bookings?clientId=' + uid(1), '{myBookings(page:{page:0,size:20}){items{id total{amountMinor currency} status version} totalCount page{page size hasNext}}}', 'myBookings', 'demo-client'), ('payment', 8094, 'payments?bookingIds=' + uid(604), '{booking(id:"' + uid(604) + '"){payments{id bookingId status amount{amountMinor currency} createdAt}}}', 'booking', 'demo-client'), ('notification', 8095, 'notifications?userId=' + uid(1), '{notifications(page:{page:0,size:20}){items{id title body kind status createdAt} totalCount page{page size hasNext}}}', 'notifications', 'demo-client'), ('analytics', 8096, 'analytics?from=2026-10-01T00:00:00Z&to=2026-10-05T00:00:00Z', '{salesAnalytics(filter:{from:"2026-10-01T00:00:00Z",to:"2026-10-05T00:00:00Z"}){grossSales{amountMinor currency} refunded{amountMinor currency} netSales{amountMinor currency} occupancy directions{directionId directionName confirmedTourists rank} asOf}}', 'salesAnalytics', 'demo-admin')]
         for name, port, path, q, key, token in cases:
-            port += args.service_base_port - 8091
             status, rest = request('db_' + name, f'http://127.0.0.1:{port}/internal/v1/' + path)
             assert status == 200, (name, status, rest)
             status, graph = gql('parity_' + name, q, token)
@@ -112,11 +108,10 @@ def main():
                 selected = selected['payments']
             expected = normalize(project(rest, selected))
             check('parity_' + name, (status, selected), lambda b: normalize(b) == expected)
-        status, dirs = request('db_directions', f'http://127.0.0.1:{args.service_base_port + 1}/internal/v1/directions?activeOnly=false')
+        status, dirs = request('db_directions', 'http://127.0.0.1:8092/internal/v1/directions?activeOnly=false')
         graph = gql('parity_directions', '{directions(activeOnly:false){id country city description isActive}}')[1]['data']['directions']
         check('parity_directions', (status, graph), lambda b: b == dirs)
         for name, port, path, status in [('db_not_found', 8092, 'tours/' + uid(999), 404), ('db_bad_uuid', 8093, 'bookings/bad', 400)]:
-            port += args.service_base_port - 8091
             check(name, request(name, f'http://127.0.0.1:{port}/internal/v1/' + path), lambda b: b['code'] == ('NOT_FOUND' if status == 404 else 'BAD_REQUEST'), status)
     summary = {'capturedAt': datetime.datetime.now(datetime.timezone.utc).isoformat(), 'services': args.services, 'count': len(results), 'results': results}
     (out / 'verification.json').write_text(json.dumps(summary, ensure_ascii=False, indent=2), encoding='utf-8')

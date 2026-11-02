@@ -1,0 +1,23 @@
+{
+  "request": {
+    "port": 8080,
+    "path": "/graphql",
+    "body": {
+      "query": "mutation{createBooking(input:{scheduleId:\"00000000-0000-0000-0000-000000000301\",travelerCount:2,expectedPriceVersion:\"1\"},idempotencyKey:\"http-book\"){id status total{amountMinor}}}"
+    },
+    "demoToken": "demo-client",
+    "idempotencyKey": null
+  },
+  "httpStatus": 200,
+  "response": {
+    "data": {
+      "createBooking": {
+        "id": "a804dbc8-64f0-4a0e-b80c-44e57fd1e4d7",
+        "status": "PENDING_PAYMENT",
+        "total": {
+          "amountMinor": "180000"
+        }
+      }
+    }
+  }
+}

@@ -1,0 +1,4 @@
+-- Additional clean demo scenarios: 606 can be completed, 607 can start payment.
+INSERT INTO sales_facts (fact_id,source_event_id,source_operation_id,payment_id,booking_id,schedule_id,direction_id,amount_minor,currency,fact_type,occurred_at) VALUES ('00000000-0000-0000-0000-000000000906','00000000-0000-0000-0000-000000000916','00000000-0000-0000-0000-000000000708','00000000-0000-0000-0000-000000000708','00000000-0000-0000-0000-000000000606','00000000-0000-0000-0000-000000000307','00000000-0000-0000-0000-000000000101',180000,'BYN','SALE','2026-09-01T12:01:00Z');
+INSERT INTO schedule_load_facts (schedule_id,direction_id,starts_at,capacity,confirmed_seats,updated_at) VALUES ('00000000-0000-0000-0000-000000000307','00000000-0000-0000-0000-000000000101','2026-10-01T05:00:00Z',10,2,'2026-10-05T00:00:00Z');
+INSERT INTO direction_popularity_daily (day,direction_id,confirmed_tourists) VALUES ('2026-09-01','00000000-0000-0000-0000-000000000101',2);

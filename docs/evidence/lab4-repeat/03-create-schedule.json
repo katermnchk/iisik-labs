@@ -1,0 +1,10 @@
+{
+  "query": "mutation{createSchedule(input:{tourId:\"30861528-1869-4955-8593-1e3c21eb8213\",startsAt:\"2026-12-10T06:00:00Z\",endsAt:\"2026-12-12T06:00:00Z\",capacity:2,basePriceMinor:\"10000\"}){id}}",
+  "response": {
+    "data": {
+      "createSchedule": {
+        "id": "2a3b5d05-8da8-4c91-88ba-21b8fbc9a37b"
+      }
+    }
+  }
+}

@@ -3,6 +3,8 @@ package by.bsuir.travel.analytics.model;
 import jakarta.persistence.*;
 import java.time.*;
 import java.util.UUID;
+import org.hibernate.annotations.JdbcTypeCode;
+import org.hibernate.type.SqlTypes;
 
 @Entity
 @Table(name = "sales_facts")
@@ -34,7 +36,7 @@ public class SalesFactsEntity {
   @Column(name = "amount_minor")
   private Long amountMinor;
 
-  @org.hibernate.annotations.JdbcTypeCode(org.hibernate.type.SqlTypes.CHAR)
+  @JdbcTypeCode(SqlTypes.CHAR)
   @Column(name = "currency", length = 3)
   private String currency;
 

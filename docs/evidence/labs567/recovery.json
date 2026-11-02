@@ -1,0 +1,9 @@
+{
+  "check": "orphan reservation after Booking crash is compensated",
+  "ok": true,
+  "reservationId": "fdac3378-89a9-41f0-bf34-d8c0e8494927",
+  "baselineSeats": 3,
+  "injectedSeats": 4,
+  "recoveredSeats": 3,
+  "reservationStatus": "RELEASED"
+}

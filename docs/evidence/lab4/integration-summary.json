@@ -1,0 +1,668 @@
+{
+  "checks": [
+    {
+      "check": "user-service starts",
+      "passed": true,
+      "detail": "/actuator/health UP"
+    },
+    {
+      "check": "tour-service starts",
+      "passed": true,
+      "detail": "/actuator/health UP"
+    },
+    {
+      "check": "booking-service starts",
+      "passed": true,
+      "detail": "/actuator/health UP"
+    },
+    {
+      "check": "payment-service starts",
+      "passed": true,
+      "detail": "/actuator/health UP"
+    },
+    {
+      "check": "notification-service starts",
+      "passed": true,
+      "detail": "/actuator/health UP"
+    },
+    {
+      "check": "analytics-service starts",
+      "passed": true,
+      "detail": "/actuator/health UP"
+    },
+    {
+      "check": "graphql-api starts",
+      "passed": true,
+      "detail": "/actuator/health UP"
+    },
+    {
+      "check": "V5 upgrades an existing local stub",
+      "passed": true,
+      "detail": {
+        "reserved302": 1,
+        "addedBookings": 2
+      }
+    },
+    {
+      "check": "Lab3 read regression",
+      "passed": true,
+      "detail": "dden_analytics_demo-client\nPASS forbidden_analytics_demo-employee\nPASS missing_token\nPASS unknown_token\nPASS blocked_token\nPASS invalid_size_0\nPASS invalid_size_101\nPASS invalid_uuid\nPASS invalid_price_range\nPASS huge_page\nPASS scalar_overflow\nPASS directions\nPASS notifications\nPASS batch_payments\nPASS parity_user\nPASS parity_tour\nPASS parity_booking\nPASS parity_payment\nPASS parity_notification\nPASS parity_analytics\nPASS parity_directions\nPASS db_not_found\nPASS db_bad_uuid\n33 HTTP checks passed\n"
+    },
+    {
+      "check": "User writes employee profile",
+      "passed": true,
+      "detail": {
+        "id": "00000000-0000-0000-0000-000000000002",
+        "role": {
+          "code": "EMPLOYEE",
+          "name": "EMPLOYEE"
+        },
+        "email": "user2@example.test",
+        "firstName": "Анна",
+        "lastName": "Иванова",
+        "status": "ACTIVE",
+        "clientProfile": {
+          "userId": "00000000-0000-0000-0000-000000000002",
+          "phone": "+375290000002"
+        },
+        "employeeProfile": {
+          "userId": "00000000-0000-0000-0000-000000000002",
+          "position": "Менеджер ЛР4"
+        }
+      }
+    },
+    {
+      "check": "Employee is stored in user_db",
+      "passed": true,
+      "detail": "employee + role in one transaction"
+    },
+    {
+      "check": "Create draft tour",
+      "passed": true,
+      "detail": {
+        "id": "648b7531-954a-435f-8e39-ce4ebe561c47",
+        "direction": {
+          "id": "00000000-0000-0000-0000-000000000101",
+          "country": "Беларусь",
+          "city": "Брест",
+          "description": "Культурные поездки по Беларуси",
+          "isActive": true
+        },
+        "title": "ЛР4: выходные в Бресте",
+        "description": "Демонстрационный тур",
+        "durationDays": 2,
+        "status": "DRAFT",
+        "version": 1,
+        "createdByEmployeeId": "00000000-0000-0000-0000-000000000003",
+        "schedules": []
+      }
+    },
+    {
+      "check": "Publication requires schedule",
+      "passed": true,
+      "detail": {
+        "code": "INVALID_STATE",
+        "message": "Publication requires an open future schedule"
+      }
+    },
+    {
+      "check": "REST rejects missing-price",
+      "passed": true,
+      "detail": {
+        "code": "BAD_REQUEST",
+        "message": "Invalid input"
+      }
+    },
+    {
+      "check": "REST rejects null-price",
+      "passed": true,
+      "detail": {
+        "code": "BAD_REQUEST",
+        "message": "Invalid input"
+      }
+    },
+    {
+      "check": "REST rejects fractional-price",
+      "passed": true,
+      "detail": {
+        "timestamp": "2026-10-19T05:27:44.730+00:00",
+        "status": 400,
+        "error": "Bad Request",
+        "path": "/internal/v1/commands/createSchedule"
+      }
+    },
+    {
+      "check": "REST rejects fractional travelers",
+      "passed": true,
+      "detail": {
+        "timestamp": "2026-10-19T05:27:44.789+00:00",
+        "status": 400,
+        "error": "Bad Request",
+        "path": "/internal/v1/commands/createBooking"
+      }
+    },
+    {
+      "check": "REST rejects fractional version",
+      "passed": true,
+      "detail": {
+        "timestamp": "2026-10-19T05:27:44.802+00:00",
+        "status": 400,
+        "error": "Bad Request",
+        "path": "/internal/v1/commands/updateTour"
+      }
+    },
+    {
+      "check": "REST requires expected version",
+      "passed": true,
+      "detail": {
+        "timestamp": "2026-10-19T05:27:44.809+00:00",
+        "status": 400,
+        "error": "Bad Request",
+        "path": "/internal/v1/commands/updateTour"
+      }
+    },
+    {
+      "check": "Create schedule",
+      "passed": true,
+      "detail": {
+        "id": "cecfb5e8-1091-413b-b1ed-1c4db43cca8e",
+        "tourId": "648b7531-954a-435f-8e39-ce4ebe561c47",
+        "startsAt": "2026-12-10T06:00:00Z",
+        "endsAt": "2026-12-12T06:00:00Z",
+        "capacity": 12,
+        "reservedSeats": 0,
+        "availableSeats": 12,
+        "price": {
+          "amountMinor": 70000,
+          "currency": "BYN"
+        },
+        "priceVersion": 1,
+        "version": 1,
+        "status": "OPEN",
+        "accommodations": [],
+        "transports": []
+      }
+    },
+    {
+      "check": "Staff reads draft version",
+      "passed": true,
+      "detail": {
+        "id": "648b7531-954a-435f-8e39-ce4ebe561c47",
+        "direction": {
+          "id": "00000000-0000-0000-0000-000000000101",
+          "country": "Беларусь",
+          "city": "Брест",
+          "description": "Культурные поездки по Беларуси",
+          "isActive": true
+        },
+        "title": "ЛР4: выходные в Бресте",
+        "description": "Демонстрационный тур",
+        "durationDays": 2,
+        "status": "DRAFT",
+        "version": 2,
+        "createdByEmployeeId": "00000000-0000-0000-0000-000000000003",
+        "schedules": [
+          {
+            "id": "cecfb5e8-1091-413b-b1ed-1c4db43cca8e",
+            "tourId": "648b7531-954a-435f-8e39-ce4ebe561c47",
+            "startsAt": "2026-12-10T06:00:00Z",
+            "endsAt": "2026-12-12T06:00:00Z",
+            "capacity": 12,
+            "reservedSeats": 0,
+            "availableSeats": 12,
+            "price": {
+              "amountMinor": 70000,
+              "currency": "BYN"
+            },
+            "priceVersion": 1,
+            "version": 1,
+            "status": "OPEN",
+            "accommodations": [],
+            "transports": []
+          }
+        ]
+      }
+    },
+    {
+      "check": "Publish draft",
+      "passed": true,
+      "detail": {
+        "id": "648b7531-954a-435f-8e39-ce4ebe561c47",
+        "direction": {
+          "id": "00000000-0000-0000-0000-000000000101",
+          "country": "Беларусь",
+          "city": "Брест",
+          "description": "Культурные поездки по Беларуси",
+          "isActive": true
+        },
+        "title": "ЛР4: выходные в Бресте",
+        "description": "Демонстрационный тур",
+        "durationDays": 2,
+        "status": "PUBLISHED",
+        "version": 3,
+        "createdByEmployeeId": "00000000-0000-0000-0000-000000000003",
+        "schedules": [
+          {
+            "id": "cecfb5e8-1091-413b-b1ed-1c4db43cca8e",
+            "tourId": "648b7531-954a-435f-8e39-ce4ebe561c47",
+            "startsAt": "2026-12-10T06:00:00Z",
+            "endsAt": "2026-12-12T06:00:00Z",
+            "capacity": 12,
+            "reservedSeats": 0,
+            "availableSeats": 12,
+            "price": {
+              "amountMinor": 70000,
+              "currency": "BYN"
+            },
+            "priceVersion": 1,
+            "version": 1,
+            "status": "OPEN",
+            "accommodations": [],
+            "transports": []
+          }
+        ]
+      }
+    },
+    {
+      "check": "Stale version rejected",
+      "passed": true,
+      "detail": {
+        "code": "CONFLICT",
+        "message": "Version has changed; reload object"
+      }
+    },
+    {
+      "check": "Tour stored in tour_db",
+      "passed": true,
+      "detail": "version=3"
+    },
+    {
+      "check": "Offset-equivalent dates are accepted",
+      "passed": true,
+      "detail": {
+        "id": "00000000-0000-0000-0000-000000000301",
+        "tourId": "00000000-0000-0000-0000-000000000201",
+        "startsAt": "2026-12-01T05:00:00Z",
+        "endsAt": "2026-12-03T05:00:00Z",
+        "capacity": 10,
+        "reservedSeats": 3,
+        "availableSeats": 7,
+        "price": {
+          "amountMinor": 90000,
+          "currency": "BYN"
+        },
+        "priceVersion": 1,
+        "version": 2,
+        "status": "OPEN",
+        "accommodations": [
+          {
+            "id": "00000000-0000-0000-0000-000000000401",
+            "scheduleId": "00000000-0000-0000-0000-000000000301",
+            "name": "Отель Буг",
+            "address": "Центральная улица, 10",
+            "checkInAt": "2026-12-01T12:00:00Z",
+            "checkOutAt": "2026-12-03T10:00:00Z",
+            "roomType": "STANDARD"
+          },
+          {
+            "id": "00000000-0000-0000-0000-000000000402",
+            "scheduleId": "00000000-0000-0000-0000-000000000301",
+            "name": "Гостевой дом",
+            "address": "Центральная улица, 10",
+            "checkInAt": "2026-12-01T12:00:00Z",
+            "checkOutAt": "2026-12-03T10:00:00Z",
+            "roomType": "STANDARD"
+          }
+        ],
+        "transports": [
+          {
+            "id": "00000000-0000-0000-0000-000000000501",
+            "scheduleId": "00000000-0000-0000-0000-000000000301",
+            "kind": "BUS",
+            "carrier": "TravelBus",
+            "routeNumber": "TR-20",
+            "departureAt": "2026-12-01T05:00:00Z",
+            "arrivalAt": "2026-12-01T09:00:00Z"
+          }
+        ]
+      }
+    },
+    {
+      "check": "Create persistent booking",
+      "passed": true,
+      "detail": {
+        "id": "070965f1-a9f3-47e5-b310-ff04525e9e4d",
+        "clientId": "00000000-0000-0000-0000-000000000001",
+        "scheduleId": "00000000-0000-0000-0000-000000000301",
+        "directionId": "00000000-0000-0000-0000-000000000101",
+        "tourTitle": "История Бреста",
+        "directionName": "Беларусь, Брест",
+        "startsAt": "2026-12-01T05:00:00Z",
+        "travelerCount": 2,
+        "unitPrice": {
+          "amountMinor": 90000,
+          "currency": "BYN"
+        },
+        "total": {
+          "amountMinor": 180000,
+          "currency": "BYN"
+        },
+        "status": "PENDING_PAYMENT",
+        "holdExpiresAt": "2026-10-05T00:15:00Z",
+        "createdAt": "2026-10-05T00:00:00Z",
+        "version": 1,
+        "payments": []
+      }
+    },
+    {
+      "check": "Persistent idempotency",
+      "passed": true,
+      "detail": {
+        "id": "070965f1-a9f3-47e5-b310-ff04525e9e4d",
+        "clientId": "00000000-0000-0000-0000-000000000001",
+        "scheduleId": "00000000-0000-0000-0000-000000000301",
+        "directionId": "00000000-0000-0000-0000-000000000101",
+        "tourTitle": "История Бреста",
+        "directionName": "Беларусь, Брест",
+        "startsAt": "2026-12-01T05:00:00Z",
+        "travelerCount": 2,
+        "unitPrice": {
+          "amountMinor": 90000,
+          "currency": "BYN"
+        },
+        "total": {
+          "amountMinor": 180000,
+          "currency": "BYN"
+        },
+        "status": "PENDING_PAYMENT",
+        "holdExpiresAt": "2026-10-05T00:15:00Z",
+        "createdAt": "2026-10-05T00:00:00Z",
+        "version": 1,
+        "payments": []
+      }
+    },
+    {
+      "check": "Changed payload conflicts",
+      "passed": true,
+      "detail": {
+        "code": "CONFLICT",
+        "message": "Idempotency key reused with different input"
+      }
+    },
+    {
+      "check": "Booking stored once",
+      "passed": true,
+      "detail": "070965f1-a9f3-47e5-b310-ff04525e9e4d"
+    },
+    {
+      "check": "Booking history recorded",
+      "passed": true,
+      "detail": "070965f1-a9f3-47e5-b310-ff04525e9e4d"
+    },
+    {
+      "check": "Idempotency survives restart",
+      "passed": true,
+      "detail": {
+        "id": "070965f1-a9f3-47e5-b310-ff04525e9e4d",
+        "clientId": "00000000-0000-0000-0000-000000000001",
+        "scheduleId": "00000000-0000-0000-0000-000000000301",
+        "directionId": "00000000-0000-0000-0000-000000000101",
+        "tourTitle": "История Бреста",
+        "directionName": "Беларусь, Брест",
+        "startsAt": "2026-12-01T05:00:00Z",
+        "travelerCount": 2,
+        "unitPrice": {
+          "amountMinor": 90000,
+          "currency": "BYN"
+        },
+        "total": {
+          "amountMinor": 180000,
+          "currency": "BYN"
+        },
+        "status": "PENDING_PAYMENT",
+        "holdExpiresAt": "2026-10-05T00:15:00Z",
+        "createdAt": "2026-10-05T00:00:00Z",
+        "version": 1,
+        "payments": []
+      }
+    },
+    {
+      "check": "Cancel after restart",
+      "passed": true,
+      "detail": {
+        "id": "070965f1-a9f3-47e5-b310-ff04525e9e4d",
+        "clientId": "00000000-0000-0000-0000-000000000001",
+        "scheduleId": "00000000-0000-0000-0000-000000000301",
+        "directionId": "00000000-0000-0000-0000-000000000101",
+        "tourTitle": "История Бреста",
+        "directionName": "Беларусь, Брест",
+        "startsAt": "2026-12-01T05:00:00Z",
+        "travelerCount": 2,
+        "unitPrice": {
+          "amountMinor": 90000,
+          "currency": "BYN"
+        },
+        "total": {
+          "amountMinor": 180000,
+          "currency": "BYN"
+        },
+        "status": "CANCELLED",
+        "holdExpiresAt": null,
+        "createdAt": "2026-10-05T00:00:00Z",
+        "version": 2,
+        "payments": []
+      }
+    },
+    {
+      "check": "Local stub seats restored",
+      "passed": true,
+      "detail": {
+        "reservedSeats": 3
+      }
+    },
+    {
+      "check": "Cancellation audit stores reason and actor",
+      "passed": true,
+      "detail": "reason + authenticated actor"
+    },
+    {
+      "check": "Foreign owner forbidden",
+      "passed": true,
+      "detail": {
+        "message": "Booking belongs to another client",
+        "code": "FORBIDDEN"
+      }
+    },
+    {
+      "check": "Insufficient seats rejected",
+      "passed": true,
+      "detail": {
+        "message": "Not enough seats",
+        "code": "INSUFFICIENT_SEATS"
+      }
+    },
+    {
+      "check": "Active payment conflict",
+      "passed": true,
+      "detail": {
+        "message": "Active payment already exists",
+        "code": "CONFLICT"
+      }
+    },
+    {
+      "check": "Start payment",
+      "passed": true,
+      "detail": {
+        "id": "fa5ec6bc-9015-487f-8550-7c2c7d87d7d4",
+        "bookingId": "00000000-0000-0000-0000-000000000607",
+        "amount": {
+          "amountMinor": 50000,
+          "currency": "BYN"
+        },
+        "status": "PENDING",
+        "paymentUrl": "https://payments.example.invalid/demo/fa5ec6bc-9015-487f-8550-7c2c7d87d7d4",
+        "createdAt": "2026-10-05T00:00:00Z"
+      }
+    },
+    {
+      "check": "Payment retry returns original",
+      "passed": true,
+      "detail": {
+        "id": "fa5ec6bc-9015-487f-8550-7c2c7d87d7d4",
+        "bookingId": "00000000-0000-0000-0000-000000000607",
+        "amount": {
+          "amountMinor": 50000,
+          "currency": "BYN"
+        },
+        "status": "PENDING",
+        "paymentUrl": "https://payments.example.invalid/demo/fa5ec6bc-9015-487f-8550-7c2c7d87d7d4",
+        "createdAt": "2026-10-05T00:00:00Z"
+      }
+    },
+    {
+      "check": "Payment stored",
+      "passed": true,
+      "detail": "fa5ec6bc-9015-487f-8550-7c2c7d87d7d4"
+    },
+    {
+      "check": "Payment retry survives restart",
+      "passed": true,
+      "detail": {
+        "id": "fa5ec6bc-9015-487f-8550-7c2c7d87d7d4",
+        "bookingId": "00000000-0000-0000-0000-000000000607",
+        "amount": {
+          "amountMinor": 50000,
+          "currency": "BYN"
+        },
+        "status": "PENDING",
+        "paymentUrl": "https://payments.example.invalid/demo/fa5ec6bc-9015-487f-8550-7c2c7d87d7d4",
+        "createdAt": "2026-10-05T00:00:00Z"
+      }
+    },
+    {
+      "check": "Created payment is readable",
+      "passed": true,
+      "detail": [
+        {
+          "id": "fa5ec6bc-9015-487f-8550-7c2c7d87d7d4",
+          "bookingId": "00000000-0000-0000-0000-000000000607",
+          "amount": {
+            "amountMinor": 50000,
+            "currency": "BYN"
+          },
+          "status": "PENDING",
+          "paymentUrl": "https://payments.example.invalid/demo/fa5ec6bc-9015-487f-8550-7c2c7d87d7d4",
+          "createdAt": "2026-10-05T00:00:00Z"
+        }
+      ]
+    },
+    {
+      "check": "Historical booking completes on clean data",
+      "passed": true,
+      "detail": {
+        "id": "00000000-0000-0000-0000-000000000606",
+        "clientId": "00000000-0000-0000-0000-000000000002",
+        "scheduleId": "00000000-0000-0000-0000-000000000307",
+        "directionId": "00000000-0000-0000-0000-000000000101",
+        "tourTitle": "История Бреста — октябрьская поездка",
+        "directionName": "Беларусь, Брест",
+        "startsAt": "2026-10-01T05:00:00Z",
+        "travelerCount": 2,
+        "unitPrice": {
+          "amountMinor": 90000,
+          "currency": "BYN"
+        },
+        "total": {
+          "amountMinor": 180000,
+          "currency": "BYN"
+        },
+        "status": "COMPLETED",
+        "holdExpiresAt": null,
+        "createdAt": "2026-09-01T12:00:00Z",
+        "version": 2,
+        "payments": []
+      }
+    },
+    {
+      "check": "Completion history stores reason and actor",
+      "passed": true,
+      "detail": "completion audit"
+    },
+    {
+      "check": "GraphQL mutation works without remote services",
+      "passed": true,
+      "detail": {
+        "id": "a804dbc8-64f0-4a0e-b80c-44e57fd1e4d7",
+        "status": "PENDING_PAYMENT",
+        "total": {
+          "amountMinor": "180000"
+        }
+      }
+    },
+    {
+      "check": "Filter sort and aggregation agree",
+      "passed": true,
+      "detail": {
+        "myBookings": {
+          "totalCount": 2,
+          "items": [
+            {
+              "id": "a804dbc8-64f0-4a0e-b80c-44e57fd1e4d7",
+              "total": {
+                "amountMinor": "180000"
+              }
+            },
+            {
+              "id": "00000000-0000-0000-0000-000000000604",
+              "total": {
+                "amountMinor": "90000"
+              }
+            }
+          ]
+        },
+        "bookingSummary": {
+          "count": 2,
+          "pending": 2,
+          "total": {
+            "amountMinor": "270000"
+          }
+        }
+      }
+    },
+    {
+      "check": "Gateway isolation after six services stop",
+      "passed": true,
+      "detail": {
+        "booking": {
+          "status": "PENDING_PAYMENT",
+          "total": {
+            "amountMinor": "180000"
+          }
+        }
+      }
+    },
+    {
+      "check": "Gateway cancels in isolation",
+      "passed": true,
+      "detail": {
+        "cancelBooking": {
+          "id": "a804dbc8-64f0-4a0e-b80c-44e57fd1e4d7",
+          "status": "CANCELLED",
+          "version": "2"
+        }
+      }
+    },
+    {
+      "check": "Repeatable GraphQL verification script",
+      "passed": true,
+      "detail": "PASS 01-create-draft\nPASS 02-client-cannot-see-draft\nPASS 03-create-schedule\nPASS 04-read-draft-version\nPASS 05-publish\nPASS 06-create-booking\nPASS 07-idempotent-retry\nPASS 08-key-payload-conflict\nPASS 09-insufficient-seats\nPASS 10-read-filter-sort-summary\nPASS 11-cancel\nPASS 12-seats-restored\n12/12 PASS\n"
+    },
+    {
+      "check": "Database roles are isolated",
+      "passed": true,
+      "detail": "user_app cannot connect to tour_db"
+    }
+  ],
+  "passed": 50,
+  "total": 50
+}

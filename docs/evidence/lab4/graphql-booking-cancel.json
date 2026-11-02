@@ -1,0 +1,21 @@
+{
+  "request": {
+    "port": 8080,
+    "path": "/graphql",
+    "body": {
+      "query": "mutation{cancelBooking(input:{bookingId:\"a804dbc8-64f0-4a0e-b80c-44e57fd1e4d7\",reason:\"Планы изменились\"},idempotencyKey:\"http-cancel\"){id status version}}"
+    },
+    "demoToken": "demo-client",
+    "idempotencyKey": null
+  },
+  "httpStatus": 200,
+  "response": {
+    "data": {
+      "cancelBooking": {
+        "id": "a804dbc8-64f0-4a0e-b80c-44e57fd1e4d7",
+        "status": "CANCELLED",
+        "version": "2"
+      }
+    }
+  }
+}

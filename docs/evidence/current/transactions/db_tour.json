@@ -1,0 +1,101 @@
+{
+  "capturedAt": "2026-10-19T05:27:40.370026+00:00",
+  "request": {
+    "method": "GET",
+    "url": "http://127.0.0.1:8092/internal/v1/tours/00000000-0000-0000-0000-000000000201",
+    "headers": {},
+    "body": null
+  },
+  "response": {
+    "status": 200,
+    "headers": {
+      "Content-Type": "application/json",
+      "Transfer-Encoding": "chunked",
+      "Date": "Mon, 19 Oct 2026 05:27:40 GMT",
+      "Connection": "close"
+    },
+    "body": {
+      "id": "00000000-0000-0000-0000-000000000201",
+      "direction": {
+        "id": "00000000-0000-0000-0000-000000000101",
+        "country": "Беларусь",
+        "city": "Брест",
+        "description": "Культурные поездки по Беларуси",
+        "isActive": true
+      },
+      "title": "История Бреста",
+      "description": "Музеи и исторические памятники",
+      "durationDays": 2,
+      "status": "PUBLISHED",
+      "version": 1,
+      "createdByEmployeeId": "00000000-0000-0000-0000-000000000003",
+      "schedules": [
+        {
+          "id": "00000000-0000-0000-0000-000000000301",
+          "tourId": "00000000-0000-0000-0000-000000000201",
+          "startsAt": "2026-12-01T05:00:00Z",
+          "endsAt": "2026-12-03T05:00:00Z",
+          "capacity": 10,
+          "reservedSeats": 3,
+          "availableSeats": 7,
+          "price": {
+            "amountMinor": 90000,
+            "currency": "BYN"
+          },
+          "priceVersion": 1,
+          "version": 1,
+          "status": "OPEN",
+          "accommodations": [
+            {
+              "id": "00000000-0000-0000-0000-000000000401",
+              "scheduleId": "00000000-0000-0000-0000-000000000301",
+              "name": "Отель Буг",
+              "address": "Центральная улица, 10",
+              "checkInAt": "2026-12-01T12:00:00Z",
+              "checkOutAt": "2026-12-03T10:00:00Z",
+              "roomType": "STANDARD"
+            },
+            {
+              "id": "00000000-0000-0000-0000-000000000402",
+              "scheduleId": "00000000-0000-0000-0000-000000000301",
+              "name": "Гостевой дом",
+              "address": "Центральная улица, 10",
+              "checkInAt": "2026-12-01T12:00:00Z",
+              "checkOutAt": "2026-12-03T10:00:00Z",
+              "roomType": "STANDARD"
+            }
+          ],
+          "transports": [
+            {
+              "id": "00000000-0000-0000-0000-000000000501",
+              "scheduleId": "00000000-0000-0000-0000-000000000301",
+              "kind": "BUS",
+              "carrier": "TravelBus",
+              "routeNumber": "TR-20",
+              "departureAt": "2026-12-01T05:00:00Z",
+              "arrivalAt": "2026-12-01T09:00:00Z"
+            }
+          ]
+        },
+        {
+          "id": "00000000-0000-0000-0000-000000000302",
+          "tourId": "00000000-0000-0000-0000-000000000201",
+          "startsAt": "2027-01-10T05:00:00Z",
+          "endsAt": "2027-01-12T05:00:00Z",
+          "capacity": 10,
+          "reservedSeats": 1,
+          "availableSeats": 9,
+          "price": {
+            "amountMinor": 50000,
+            "currency": "BYN"
+          },
+          "priceVersion": 1,
+          "version": 1,
+          "status": "OPEN",
+          "accommodations": [],
+          "transports": []
+        }
+      ]
+    }
+  }
+}

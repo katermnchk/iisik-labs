@@ -1,0 +1,367 @@
+{
+  "info": {
+    "name": "ИИСиК ЛР4 — вариант 20",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "description": "Перед первым запуском коллекции перезапустите GraphQL для чистых данных. Выполняйте папки и запросы сверху вниз: переменные bookingId, tourId, tourVersion заполняются автоматически скриптами Tests. Оплата использует отдельную новую бронь; отменённая бронь не оплачивается. Бронь 606 подтверждена и поездка уже прошла относительно фиксированного времени, поэтому её можно завершить. Повторите createBooking/createPayment до последующих действий, чтобы показать идемпотентность."
+  },
+  "variable": [
+    {
+      "key": "baseUrl",
+      "value": "http://localhost:8080"
+    },
+    {
+      "key": "bookingId",
+      "value": ""
+    },
+    {
+      "key": "tourId",
+      "value": ""
+    },
+    {
+      "key": "tourVersion",
+      "value": "2"
+    },
+    {
+      "key": "scheduleId",
+      "value": ""
+    },
+    {
+      "key": "scheduleVersion",
+      "value": "1"
+    }
+  ],
+  "item": [
+    {
+      "name": "1 Бронирование и отмена",
+      "item": [
+        {
+          "name": "01-createBooking",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer demo-client"
+              }
+            ],
+            "url": "{{baseUrl}}/graphql",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"query\": \"mutation CreateBooking { createBooking(input:{scheduleId:\\\"00000000-0000-0000-0000-000000000301\\\",travelerCount:2,expectedPriceVersion:\\\"1\\\"},idempotencyKey:\\\"defense-create-1\\\"){id status version total{amountMinor currency}} }\",\n  \"variables\": {}\n}"
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "const b=pm.response.json().data?.createBooking;if(b)pm.collectionVariables.set(\"bookingId\",b.id);"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "02-myBookings",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer demo-client"
+              }
+            ],
+            "url": "{{baseUrl}}/graphql",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"query\": \"query MyBookings { myBookings(page:{page:0,size:20},filter:{status:PENDING_PAYMENT},sort:{field:TOTAL,direction:DESC}){totalCount items{id status total{amountMinor}}} bookingSummary(filter:{status:PENDING_PAYMENT}){count pending confirmed cancelled total{amountMinor currency}} }\",\n  \"variables\": {}\n}"
+            }
+          }
+        },
+        {
+          "name": "03-cancelBooking",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer demo-client"
+              }
+            ],
+            "url": "{{baseUrl}}/graphql",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"query\": \"mutation CancelBooking($bookingId:ID!) { cancelBooking(input:{bookingId:$bookingId,reason:\\\"Изменение планов\\\"},idempotencyKey:\\\"defense-cancel-1\\\"){id status version} }\",\n  \"variables\": {\n    \"bookingId\": \"{{bookingId}}\"\n  }\n}"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "2 Отдельная бронь и начало оплаты",
+      "item": [
+        {
+          "name": "Новая отдельная бронь для оплаты",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer demo-client"
+              }
+            ],
+            "url": "{{baseUrl}}/graphql",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"query\": \"mutation CreateBooking { createBooking(input:{scheduleId:\\\"00000000-0000-0000-0000-000000000301\\\",travelerCount:1,expectedPriceVersion:\\\"1\\\"},idempotencyKey:\\\"defense-pay-book-1\\\"){id status version total{amountMinor currency}} }\",\n  \"variables\": {}\n}"
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "const b=pm.response.json().data?.createBooking;if(b)pm.collectionVariables.set(\"bookingId\",b.id);"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "04-createPayment",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer demo-client"
+              }
+            ],
+            "url": "{{baseUrl}}/graphql",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"query\": \"mutation CreatePayment($bookingId:ID!) { createPayment(input:{bookingId:$bookingId},idempotencyKey:\\\"defense-payment-1\\\"){id status paymentUrl amount{amountMinor currency}} }\",\n  \"variables\": {\n    \"bookingId\": \"{{bookingId}}\"\n  }\n}"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "3 Тур сотрудника",
+      "item": [
+        {
+          "name": "05-createTour",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer demo-employee"
+              }
+            ],
+            "url": "{{baseUrl}}/graphql",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"query\": \"mutation CreateTour { createTour(input:{directionId:\\\"00000000-0000-0000-0000-000000000101\\\",title:\\\"Выходные в Бресте\\\",description:\\\"Поездка по музеям\\\",durationDays:2}){id status version} }\",\n  \"variables\": {}\n}"
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "const t=pm.response.json().data?.createTour;if(t){pm.collectionVariables.set(\"tourId\",t.id);pm.collectionVariables.set(\"tourVersion\",t.version);}"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "06-createSchedule",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer demo-employee"
+              }
+            ],
+            "url": "{{baseUrl}}/graphql",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"query\": \"mutation CreateSchedule($tourId:ID!) { createSchedule(input:{tourId:$tourId,startsAt:\\\"2026-12-10T06:00:00Z\\\",endsAt:\\\"2026-12-12T06:00:00Z\\\",capacity:12,basePriceMinor:\\\"70000\\\"}){id version priceVersion availableSeats} }\",\n  \"variables\": {\n    \"tourId\": \"{{tourId}}\"\n  }\n}"
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "const s=pm.response.json().data?.createSchedule;if(s){pm.collectionVariables.set(\"scheduleId\",s.id);pm.collectionVariables.set(\"scheduleVersion\",s.version);}"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "Изменить цену выезда с проверкой версии",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer demo-employee"
+              }
+            ],
+            "url": "{{baseUrl}}/graphql",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"query\": \"mutation UpdatePrice($scheduleId:ID!,$version:Long!){updateSchedule(input:{id:$scheduleId,basePriceMinor:\\\"71000\\\",expectedVersion:$version}){id version priceVersion price{amountMinor}}}\",\n  \"variables\": {\n    \"scheduleId\": \"{{scheduleId}}\",\n    \"version\": \"{{scheduleVersion}}\"\n  }\n}"
+            }
+          }
+        },
+        {
+          "name": "09-readTour",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer demo-employee"
+              }
+            ],
+            "url": "{{baseUrl}}/graphql",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"query\": \"query ReadTour($tourId:ID!) { tour(id:$tourId){id title status version schedules{id version priceVersion availableSeats}} }\",\n  \"variables\": {\n    \"tourId\": \"{{tourId}}\"\n  }\n}"
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "const t=pm.response.json().data?.tour;if(t)pm.collectionVariables.set(\"tourVersion\",t.version);"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "07-publishTour",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer demo-employee"
+              }
+            ],
+            "url": "{{baseUrl}}/graphql",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"query\": \"mutation PublishTour($tourId:ID!,$version:Long!) { updateTour(input:{id:$tourId,status:PUBLISHED,expectedVersion:$version}){id status version schedules{id availableSeats}} }\",\n  \"variables\": {\n    \"tourId\": \"{{tourId}}\",\n    \"version\": \"{{tourVersion}}\"\n  }\n}"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "4 Завершение состоявшейся поездки",
+      "item": [
+        {
+          "name": "Завершить подтверждённую поездку 606",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer demo-employee"
+              }
+            ],
+            "url": "{{baseUrl}}/graphql",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"query\": \"mutation{changeBookingStatus(input:{bookingId:\\\"00000000-0000-0000-0000-000000000606\\\",targetStatus:COMPLETED,reason:\\\"Поездка завершена\\\",expectedVersion:\\\"1\\\"}){id status version}}\"\n}"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "5 Профиль сотрудника",
+      "item": [
+        {
+          "name": "08-updateEmployee",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer demo-admin"
+              }
+            ],
+            "url": "{{baseUrl}}/graphql",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"query\": \"mutation UpdateEmployee { updateUser(input:{userId:\\\"00000000-0000-0000-0000-000000000002\\\",role:EMPLOYEE,position:\\\"Менеджер туров\\\"}){id role{code} employeeProfile{userId position}} }\",\n  \"variables\": {}\n}"
+            }
+          }
+        }
+      ]
+    }
+  ]
+}

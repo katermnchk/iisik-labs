@@ -19,6 +19,20 @@ public class PaymentReadService implements PaymentClient {
     this.payments = payments;
   }
 
+  public List<Payment> all() {
+    return payments.findAll().stream()
+        .map(
+            p ->
+                new Payment(
+                    p.getId().toString(),
+                    p.getBookingId().toString(),
+                    new Money(p.getAmountMinor(), p.getCurrency()),
+                    PaymentStatus.valueOf(p.getStatus()),
+                    p.getPaymentUrl(),
+                    p.getCreatedAt()))
+        .toList();
+  }
+
   public List<Payment> payments(ListPaymentsRequest r) {
     r.bookingIds().forEach(ReadSupport::id);
     return payments

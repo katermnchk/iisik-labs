@@ -1,0 +1,6 @@
+-- Additional clean demo scenarios: 606 can be completed, 607 can start payment.
+INSERT INTO tours (id,direction_id,title,description,duration_days,status,created_by_employee_id,version) VALUES ('00000000-0000-0000-0000-000000000205','00000000-0000-0000-0000-000000000101','История Бреста — октябрьская поездка','Завершившийся выезд для демонстрации завершения брони',2,'PUBLISHED','00000000-0000-0000-0000-000000000003',1);
+INSERT INTO tour_schedules (id,tour_id,starts_at,ends_at,capacity,reserved_seats,base_price_minor,currency,price_version,version,status) VALUES ('00000000-0000-0000-0000-000000000307','00000000-0000-0000-0000-000000000205','2026-10-01T05:00:00Z','2026-10-03T05:00:00Z',10,2,90000,'BYN',1,1,'CLOSED');
+UPDATE tour_schedules SET reserved_seats=reserved_seats+1 WHERE id='00000000-0000-0000-0000-000000000302';
+INSERT INTO seat_holds (booking_id,schedule_id,seats,status,expires_at,price_version,created_at) VALUES ('00000000-0000-0000-0000-000000000606','00000000-0000-0000-0000-000000000307',2,'CONFIRMED','2026-09-01T12:15:00Z',1,'2026-09-01T12:00:00Z');
+INSERT INTO seat_holds (booking_id,schedule_id,seats,status,expires_at,price_version,created_at) VALUES ('00000000-0000-0000-0000-000000000607','00000000-0000-0000-0000-000000000302',1,'HELD','2026-10-05T00:10:00Z',1,'2026-10-04T23:55:00Z');

@@ -15,11 +15,12 @@ enum TourSortField { STARTS_AT PRICE DURATION POPULARITY }
 enum SortDirection { ASC DESC }
 
 type Query {
+ bookingSummary(filter: BookingFilter): BookingSummary!
  me: User!
  tours(filter: TourFilter, sort: TourSort, page: PageInput!): TourConnection!
  tour(id: ID!): Tour
  booking(id: ID!): Booking
- myBookings(page: PageInput!): BookingConnection!
+ myBookings(page: PageInput!, filter: BookingFilter, sort: BookingSort): BookingConnection!
  notifications(page: PageInput!): NotificationConnection!
  directions(activeOnly: Boolean = true): [Direction!]!
  salesAnalytics(filter: AnalyticsFilter!): SalesAnalytics!
@@ -47,3 +48,36 @@ input PageInput { page: Int! = 0, size: Int! = 20 }
 input TourFilter { directionId: ID, from: Date, to: Date, minPrice: Long, maxPrice: Long, onlyAvailable: Boolean = true }
 input TourSort { field: TourSortField! = STARTS_AT, direction: SortDirection! = ASC }
 input AnalyticsFilter { from: DateTime!, to: DateTime! }
+
+enum BookingSortField { CREATED_AT TOTAL STARTS_AT }
+input BookingFilter { status: BookingStatus, from: DateTime, to: DateTime }
+input BookingSort { field: BookingSortField! = CREATED_AT, direction: SortDirection! = DESC }
+type BookingSummary { count: Int!, pending: Int!, confirmed: Int!, cancelled: Int!, total: Money! }
+input UpdateUserInput { userId: ID!, role: RoleCode, status: UserStatus, firstName: String, lastName: String, position: String, phone: String }
+input CreateTourInput { directionId: ID!, title: String!, description: String!, durationDays: Int! }
+input UpdateTourInput { id: ID!, title: String, description: String, durationDays: Int, status: TourStatus, expectedVersion: Long! }
+input CreateScheduleInput { tourId: ID!, startsAt: DateTime!, endsAt: DateTime!, capacity: Int!, basePriceMinor: Long! }
+input UpdateScheduleInput { id: ID!, startsAt: DateTime, endsAt: DateTime, capacity: Int, basePriceMinor: Long, status: ScheduleStatus, expectedVersion: Long! }
+input CreateBookingInput { scheduleId: ID!, travelerCount: Int!, expectedPriceVersion: Long! }
+input CancelBookingInput { bookingId: ID!, reason: String! }
+input CreatePaymentInput { bookingId: ID! }
+input ChangeBookingStatusInput { bookingId: ID!, targetStatus: BookingStatus!, reason: String!, expectedVersion: Long! }
+type Mutation {
+  confirmPayment(paymentId: ID!): Payment!
+  register(input: RegisterInput!): AuthPayload!
+  authenticate(input: AuthenticateInput!): AuthPayload!
+  logout: Boolean!
+ createTour(input: CreateTourInput!): Tour!
+ updateTour(input: UpdateTourInput!): Tour!
+ createSchedule(input: CreateScheduleInput!): TourSchedule!
+ updateSchedule(input: UpdateScheduleInput!): TourSchedule!
+ createBooking(input: CreateBookingInput!, idempotencyKey: String!): Booking!
+ cancelBooking(input: CancelBookingInput!, idempotencyKey: String!): Booking!
+ createPayment(input: CreatePaymentInput!, idempotencyKey: String!): Payment!
+ changeBookingStatus(input: ChangeBookingStatusInput!): Booking!
+ updateUser(input: UpdateUserInput!): User!
+}
+
+input RegisterInput { email: String!, password: String!, firstName: String!, lastName: String!, phone: String! }
+input AuthenticateInput { email: String!, password: String! }
+type AuthPayload { accessToken: String!, user: User! }

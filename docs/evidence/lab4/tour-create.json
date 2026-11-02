@@ -1,0 +1,32 @@
+{
+  "request": {
+    "port": 8092,
+    "path": "/internal/v1/commands/createTour",
+    "body": {
+      "directionId": "00000000-0000-0000-0000-000000000101",
+      "title": "ЛР4: выходные в Бресте",
+      "description": "Демонстрационный тур",
+      "durationDays": 2
+    },
+    "demoToken": "demo-employee",
+    "idempotencyKey": null
+  },
+  "httpStatus": 200,
+  "response": {
+    "id": "648b7531-954a-435f-8e39-ce4ebe561c47",
+    "direction": {
+      "id": "00000000-0000-0000-0000-000000000101",
+      "country": "Беларусь",
+      "city": "Брест",
+      "description": "Культурные поездки по Беларуси",
+      "isActive": true
+    },
+    "title": "ЛР4: выходные в Бресте",
+    "description": "Демонстрационный тур",
+    "durationDays": 2,
+    "status": "DRAFT",
+    "version": 1,
+    "createdByEmployeeId": "00000000-0000-0000-0000-000000000003",
+    "schedules": []
+  }
+}

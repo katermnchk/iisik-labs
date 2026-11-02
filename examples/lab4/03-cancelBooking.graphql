@@ -1,0 +1,1 @@
+mutation CancelBooking($bookingId:ID!) { cancelBooking(input:{bookingId:$bookingId,reason:"Изменение планов"},idempotencyKey:"defense-cancel-1"){id status version} }

@@ -1,8 +1,10 @@
-target/
-*.log
+**/target/
 .env
 .idea/
-.superpowers/
+*.log
+
 .DS_Store
 __pycache__/
 *.pyc
+*.docx
+*.pdf

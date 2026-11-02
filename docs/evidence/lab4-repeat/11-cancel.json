@@ -1,0 +1,10 @@
+{
+  "query": "mutation{cancelBooking(input:{bookingId:\"7c0eb3c6-041d-4d52-8f4e-96418bcbf079\",reason:\"Проверка отмены\"},idempotencyKey:\"24a1e4bd-69d9-477d-ad6a-20d8b87043e7-cancel\"){status}}",
+  "response": {
+    "data": {
+      "cancelBooking": {
+        "status": "CANCELLED"
+      }
+    }
+  }
+}

@@ -1,0 +1,17 @@
+{
+  "runner": "Newman",
+  "version": "6.2.3",
+  "date": "2026-11-02T09:12:15.461Z",
+  "requests": {
+    "total": 25,
+    "pending": 0,
+    "failed": 0
+  },
+  "assertions": {
+    "total": 64,
+    "pending": 0,
+    "failed": 0
+  },
+  "failures": [],
+  "elapsedMs": 1970
+}

@@ -1,0 +1,44 @@
+[
+  {
+    "module": "graphql-api",
+    "sha256": "1ad777c4bd852f0c4bd8bea37163b64555b610ec63ad611ee8921327d5929a1c",
+    "bytes": 30422990,
+    "resourcesMatchSource": true
+  },
+  {
+    "module": "user-service",
+    "sha256": "bd8e4d99513764b16785760be3583a9517b96a369365513b1e1ef59356ca9e33",
+    "bytes": 56342597,
+    "resourcesMatchSource": true
+  },
+  {
+    "module": "tour-service",
+    "sha256": "c07c2bbf08f673b71fde4fd8c2059a4dede1608e87afb43241045648d8e77a1f",
+    "bytes": 56357802,
+    "resourcesMatchSource": true
+  },
+  {
+    "module": "booking-service",
+    "sha256": "fa30f1fc278a09849d6422231d63d0e843218567199f77e1387e4eddf23a9b3c",
+    "bytes": 56350632,
+    "resourcesMatchSource": true
+  },
+  {
+    "module": "payment-service",
+    "sha256": "3499dcdff9c2fde9c5488b2f450ea8308b1b982f5c1c04691a49e1f3f60107d9",
+    "bytes": 56342899,
+    "resourcesMatchSource": true
+  },
+  {
+    "module": "notification-service",
+    "sha256": "f196f836e805bc6b4f3d1366d164fa019fa83ed1dd0efdc267559194841850d3",
+    "bytes": 56296668,
+    "resourcesMatchSource": true
+  },
+  {
+    "module": "analytics-service",
+    "sha256": "c545e48875f44c4ecc57851e19ba00edfedec1be614bc6bde19f01142aa8b512",
+    "bytes": 56306416,
+    "resourcesMatchSource": true
+  }
+]

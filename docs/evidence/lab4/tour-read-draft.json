@@ -1,0 +1,46 @@
+{
+  "request": {
+    "port": 8092,
+    "path": "/internal/v1/tours/648b7531-954a-435f-8e39-ce4ebe561c47",
+    "body": null,
+    "demoToken": "demo-employee",
+    "idempotencyKey": null
+  },
+  "httpStatus": 200,
+  "response": {
+    "id": "648b7531-954a-435f-8e39-ce4ebe561c47",
+    "direction": {
+      "id": "00000000-0000-0000-0000-000000000101",
+      "country": "Беларусь",
+      "city": "Брест",
+      "description": "Культурные поездки по Беларуси",
+      "isActive": true
+    },
+    "title": "ЛР4: выходные в Бресте",
+    "description": "Демонстрационный тур",
+    "durationDays": 2,
+    "status": "DRAFT",
+    "version": 2,
+    "createdByEmployeeId": "00000000-0000-0000-0000-000000000003",
+    "schedules": [
+      {
+        "id": "cecfb5e8-1091-413b-b1ed-1c4db43cca8e",
+        "tourId": "648b7531-954a-435f-8e39-ce4ebe561c47",
+        "startsAt": "2026-12-10T06:00:00Z",
+        "endsAt": "2026-12-12T06:00:00Z",
+        "capacity": 12,
+        "reservedSeats": 0,
+        "availableSeats": 12,
+        "price": {
+          "amountMinor": 70000,
+          "currency": "BYN"
+        },
+        "priceVersion": 1,
+        "version": 1,
+        "status": "OPEN",
+        "accommodations": [],
+        "transports": []
+      }
+    ]
+  }
+}

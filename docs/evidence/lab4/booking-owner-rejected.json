@@ -1,0 +1,17 @@
+{
+  "request": {
+    "port": 8093,
+    "path": "/internal/v1/commands/cancelBooking",
+    "body": {
+      "bookingId": "070965f1-a9f3-47e5-b310-ff04525e9e4d",
+      "reason": "Чужая бронь"
+    },
+    "demoToken": "demo-client2",
+    "idempotencyKey": "db-foreign"
+  },
+  "httpStatus": 403,
+  "response": {
+    "message": "Booking belongs to another client",
+    "code": "FORBIDDEN"
+  }
+}

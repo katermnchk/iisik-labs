@@ -1,0 +1,1 @@
+mutation CreatePayment($bookingId:ID!) { createPayment(input:{bookingId:$bookingId},idempotencyKey:"defense-payment-1"){id status paymentUrl amount{amountMinor currency}} }

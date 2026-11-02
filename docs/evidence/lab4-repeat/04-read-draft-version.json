@@ -1,0 +1,11 @@
+{
+  "query": "{tour(id:\"30861528-1869-4955-8593-1e3c21eb8213\"){version status}}",
+  "response": {
+    "data": {
+      "tour": {
+        "version": "2",
+        "status": "DRAFT"
+      }
+    }
+  }
+}

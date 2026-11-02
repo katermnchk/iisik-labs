@@ -1,0 +1,16 @@
+{
+  "request": {
+    "port": 8094,
+    "path": "/internal/v1/commands/createPayment",
+    "body": {
+      "bookingId": "00000000-0000-0000-0000-000000000604"
+    },
+    "demoToken": "demo-client",
+    "idempotencyKey": "db-pay-conflict"
+  },
+  "httpStatus": 409,
+  "response": {
+    "message": "Active payment already exists",
+    "code": "CONFLICT"
+  }
+}

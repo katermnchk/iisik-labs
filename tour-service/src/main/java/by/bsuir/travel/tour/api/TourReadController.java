@@ -17,8 +17,14 @@ public class TourReadController {
   }
 
   @GetMapping("/tours/{id}")
-  public Tour tour(@PathVariable String id) {
-    return service.tour(new GetTourRequest(id, RoleCode.CLIENT));
+  public Tour tour(
+      @PathVariable String id,
+      @RequestHeader(value = "Authorization", required = false) String token) {
+    RoleCode role =
+        "Bearer demo-admin".equals(token)
+            ? RoleCode.ADMIN
+            : "Bearer demo-employee".equals(token) ? RoleCode.EMPLOYEE : RoleCode.CLIENT;
+    return service.tour(new GetTourRequest(id, role));
   }
 
   @GetMapping("/directions")

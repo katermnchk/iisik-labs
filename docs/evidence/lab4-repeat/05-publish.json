@@ -1,0 +1,10 @@
+{
+  "query": "mutation{updateTour(input:{id:\"30861528-1869-4955-8593-1e3c21eb8213\",status:PUBLISHED,expectedVersion:\"2\"}){status}}",
+  "response": {
+    "data": {
+      "updateTour": {
+        "status": "PUBLISHED"
+      }
+    }
+  }
+}

@@ -1,0 +1,57 @@
+{
+  "capturedAt": "2026-10-19T05:27:43.614181+00:00",
+  "request": {
+    "method": "POST",
+    "url": "http://127.0.0.1:8080/graphql",
+    "headers": {
+      "Content-Type": "application/json",
+      "Authorization": "Bearer demo-admin"
+    },
+    "body": {
+      "query": "{salesAnalytics(filter:{from:\"2026-10-01T00:00:00Z\",to:\"2026-10-05T00:00:00Z\"}){grossSales{amountMinor currency} refunded{amountMinor currency} netSales{amountMinor currency} occupancy directions{directionId directionName confirmedTourists rank} asOf}}"
+    }
+  },
+  "response": {
+    "status": 200,
+    "headers": {
+      "Content-Type": "application/json",
+      "Transfer-Encoding": "chunked",
+      "Date": "Mon, 19 Oct 2026 05:27:43 GMT",
+      "Connection": "close"
+    },
+    "body": {
+      "data": {
+        "salesAnalytics": {
+          "grossSales": {
+            "amountMinor": "280000",
+            "currency": "BYN"
+          },
+          "refunded": {
+            "amountMinor": "100000",
+            "currency": "BYN"
+          },
+          "netSales": {
+            "amountMinor": "180000",
+            "currency": "BYN"
+          },
+          "occupancy": 0.2,
+          "directions": [
+            {
+              "directionId": "00000000-0000-0000-0000-000000000101",
+              "directionName": "Беларусь, Брест",
+              "confirmedTourists": 2,
+              "rank": 1
+            },
+            {
+              "directionId": "00000000-0000-0000-0000-000000000102",
+              "directionName": "Турция, Анталья",
+              "confirmedTourists": 0,
+              "rank": 2
+            }
+          ],
+          "asOf": "2026-10-05T00:00:00.000Z"
+        }
+      }
+    }
+  }
+}
