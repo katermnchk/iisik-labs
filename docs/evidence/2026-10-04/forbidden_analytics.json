@@ -1,0 +1,21 @@
+{
+  "errors": [
+    {
+      "message": "Operation is not permitted for this role",
+      "locations": [
+        {
+          "line": 1,
+          "column": 2
+        }
+      ],
+      "path": [
+        "salesAnalytics"
+      ],
+      "extensions": {
+        "code": "FORBIDDEN",
+        "classification": "DataFetchingException"
+      }
+    }
+  ],
+  "data": null
+}

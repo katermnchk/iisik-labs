@@ -1,0 +1,11 @@
+{
+  "pages": 20,
+  "allPagesVisuallyInspected": true,
+  "longDashesInDocx": 0,
+  "reportTablesMatchSchema": true,
+  "currentVerification": {
+    "junit": 42,
+    "httpAll": 34,
+    "httpGatewayOnly": 25
+  }
+}

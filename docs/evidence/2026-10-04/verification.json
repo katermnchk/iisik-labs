@@ -1,0 +1,62 @@
+[
+  {
+    "name": "me",
+    "result": "PASS"
+  },
+  {
+    "name": "tour_nested",
+    "result": "PASS"
+  },
+  {
+    "name": "same_schedule_filter",
+    "result": "PASS"
+  },
+  {
+    "name": "booking_payments",
+    "result": "PASS"
+  },
+  {
+    "name": "not_found",
+    "result": "PASS"
+  },
+  {
+    "name": "foreign_booking",
+    "result": "PASS"
+  },
+  {
+    "name": "sales",
+    "result": "PASS"
+  },
+  {
+    "name": "forbidden_analytics",
+    "result": "PASS"
+  },
+  {
+    "name": "db_user",
+    "result": "PASS"
+  },
+  {
+    "name": "db_tour",
+    "result": "PASS"
+  },
+  {
+    "name": "db_booking",
+    "result": "PASS"
+  },
+  {
+    "name": "db_payment",
+    "result": "PASS"
+  },
+  {
+    "name": "db_notification",
+    "result": "PASS"
+  },
+  {
+    "name": "db_analytics",
+    "result": "PASS"
+  },
+  {
+    "name": "db_mock_parity",
+    "result": "PASS"
+  }
+]

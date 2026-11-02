@@ -1,0 +1,62 @@
+{
+  "capturedAt": "2026-10-05T17:09:17.438503+00:00",
+  "request": {
+    "method": "POST",
+    "url": "http://127.0.0.1:8080/graphql",
+    "headers": {
+      "Content-Type": "application/json",
+      "Authorization": "Bearer demo-client"
+    },
+    "body": {
+      "query": "{myBookings(page:{page:0,size:20}){items{id payments{id bookingId}}}}"
+    }
+  },
+  "response": {
+    "status": 200,
+    "headers": {
+      "Content-Type": "application/json",
+      "Transfer-Encoding": "chunked",
+      "Date": "Mon, 05 Oct 2026 17:09:17 GMT",
+      "Connection": "close"
+    },
+    "body": {
+      "data": {
+        "myBookings": {
+          "items": [
+            {
+              "id": "00000000-0000-0000-0000-000000000604",
+              "payments": [
+                {
+                  "id": "00000000-0000-0000-0000-000000000703",
+                  "bookingId": "00000000-0000-0000-0000-000000000604"
+                },
+                {
+                  "id": "00000000-0000-0000-0000-000000000704",
+                  "bookingId": "00000000-0000-0000-0000-000000000604"
+                }
+              ]
+            },
+            {
+              "id": "00000000-0000-0000-0000-000000000601",
+              "payments": [
+                {
+                  "id": "00000000-0000-0000-0000-000000000701",
+                  "bookingId": "00000000-0000-0000-0000-000000000601"
+                }
+              ]
+            },
+            {
+              "id": "00000000-0000-0000-0000-000000000603",
+              "payments": [
+                {
+                  "id": "00000000-0000-0000-0000-000000000702",
+                  "bookingId": "00000000-0000-0000-0000-000000000603"
+                }
+              ]
+            }
+          ]
+        }
+      }
+    }
+  }
+}

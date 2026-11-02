@@ -1,0 +1,124 @@
+services:
+  postgres:
+    image: postgres:16.15
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: local_demo_admin
+    ports:
+      - "${POSTGRES_PORT:-6543}:5432"
+    volumes:
+      - travel_postgres:/var/lib/postgresql/data
+      - ./docker/init:/docker-entrypoint-initdb.d:ro
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres"]
+      interval: 5s
+      timeout: 3s
+      retries: 20
+  user-service:
+    build:
+      context: .
+      args:
+        MODULE: user-service
+    profiles: [full]
+    environment:
+      SERVER_ADDRESS: 0.0.0.0
+      DB_URL: jdbc:postgresql://postgres:5432/user_db
+      DB_USER: user_app
+      DB_PASSWORD: user_demo
+    ports:
+      - "8091:8091"
+    depends_on:
+      postgres:
+        condition: service_healthy
+  tour-service:
+    build:
+      context: .
+      args:
+        MODULE: tour-service
+    profiles: [full]
+    environment:
+      SERVER_ADDRESS: 0.0.0.0
+      DB_URL: jdbc:postgresql://postgres:5432/tour_db
+      DB_USER: tour_app
+      DB_PASSWORD: tour_demo
+    ports:
+      - "8092:8092"
+    depends_on:
+      postgres:
+        condition: service_healthy
+  booking-service:
+    build:
+      context: .
+      args:
+        MODULE: booking-service
+    profiles: [full]
+    environment:
+      SERVER_ADDRESS: 0.0.0.0
+      DB_URL: jdbc:postgresql://postgres:5432/booking_db
+      DB_USER: booking_app
+      DB_PASSWORD: booking_demo
+    ports:
+      - "8093:8093"
+    depends_on:
+      postgres:
+        condition: service_healthy
+  payment-service:
+    build:
+      context: .
+      args:
+        MODULE: payment-service
+    profiles: [full]
+    environment:
+      SERVER_ADDRESS: 0.0.0.0
+      DB_URL: jdbc:postgresql://postgres:5432/payment_db
+      DB_USER: payment_app
+      DB_PASSWORD: payment_demo
+    ports:
+      - "8094:8094"
+    depends_on:
+      postgres:
+        condition: service_healthy
+  notification-service:
+    build:
+      context: .
+      args:
+        MODULE: notification-service
+    profiles: [full]
+    environment:
+      SERVER_ADDRESS: 0.0.0.0
+      DB_URL: jdbc:postgresql://postgres:5432/notification_db
+      DB_USER: notification_app
+      DB_PASSWORD: notification_demo
+    ports:
+      - "8095:8095"
+    depends_on:
+      postgres:
+        condition: service_healthy
+  analytics-service:
+    build:
+      context: .
+      args:
+        MODULE: analytics-service
+    profiles: [full]
+    environment:
+      SERVER_ADDRESS: 0.0.0.0
+      DB_URL: jdbc:postgresql://postgres:5432/analytics_db
+      DB_USER: analytics_app
+      DB_PASSWORD: analytics_demo
+    ports:
+      - "8096:8096"
+    depends_on:
+      postgres:
+        condition: service_healthy
+  graphql-api:
+    build:
+      context: .
+      args:
+        MODULE: graphql-api
+    profiles: [full]
+    environment:
+      SERVER_ADDRESS: 0.0.0.0
+    ports:
+      - "8080:8080"
+volumes:
+  travel_postgres:

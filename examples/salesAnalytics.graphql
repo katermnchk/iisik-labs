@@ -1,0 +1,1 @@
+{salesAnalytics(filter:{from:"2026-10-01T00:00:00Z",to:"2026-10-05T00:00:00Z"}){grossSales{amountMinor currency} refunded{amountMinor currency} netSales{amountMinor currency} occupancy directions{directionName confirmedTourists rank} asOf}}

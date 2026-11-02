@@ -1,0 +1,39 @@
+{
+  "capturedAt": "2026-10-05T17:09:17.293343+00:00",
+  "request": {
+    "method": "POST",
+    "url": "http://127.0.0.1:8080/graphql",
+    "headers": {
+      "Content-Type": "application/json",
+      "Authorization": "Bearer demo-client"
+    },
+    "body": {
+      "query": "{tours(page:{page:0,size:20},filter:{maxPrice:\"9223372036854775808\"}){totalCount}}"
+    }
+  },
+  "response": {
+    "status": 200,
+    "headers": {
+      "Content-Type": "application/json",
+      "Transfer-Encoding": "chunked",
+      "Date": "Mon, 05 Oct 2026 17:09:17 GMT",
+      "Connection": "close"
+    },
+    "body": {
+      "errors": [
+        {
+          "message": "Validation error (WrongType@[tours]) : argument 'filter.maxPrice' with value 'StringValue{value='9223372036854775808'}' is not a valid 'Long' - Invalid Long literal",
+          "locations": [
+            {
+              "line": 1,
+              "column": 30
+            }
+          ],
+          "extensions": {
+            "classification": "ValidationError"
+          }
+        }
+      ]
+    }
+  }
+}

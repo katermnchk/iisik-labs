@@ -1,0 +1,10 @@
+{
+  "errors": [
+    {
+      "extensions": {
+        "code": "FORBIDDEN"
+      },
+      "message": "User is blocked"
+    }
+  ]
+}

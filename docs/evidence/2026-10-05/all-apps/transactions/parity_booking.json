@@ -1,0 +1,64 @@
+{
+  "capturedAt": "2026-10-05T07:33:03.571957+00:00",
+  "request": {
+    "method": "POST",
+    "url": "http://127.0.0.1:8080/graphql",
+    "headers": {
+      "Content-Type": "application/json",
+      "Authorization": "Bearer demo-client"
+    },
+    "body": {
+      "query": "{myBookings(page:{page:0,size:20}){items{id total{amountMinor currency} status version} totalCount page{page size hasNext}}}"
+    }
+  },
+  "response": {
+    "status": 200,
+    "headers": {
+      "Content-Type": "application/json",
+      "Transfer-Encoding": "chunked",
+      "Date": "Mon, 05 Oct 2026 07:33:03 GMT",
+      "Connection": "close"
+    },
+    "body": {
+      "data": {
+        "myBookings": {
+          "items": [
+            {
+              "id": "00000000-0000-0000-0000-000000000604",
+              "total": {
+                "amountMinor": "90000",
+                "currency": "BYN"
+              },
+              "status": "PENDING_PAYMENT",
+              "version": "1"
+            },
+            {
+              "id": "00000000-0000-0000-0000-000000000601",
+              "total": {
+                "amountMinor": "180000",
+                "currency": "BYN"
+              },
+              "status": "CONFIRMED",
+              "version": "1"
+            },
+            {
+              "id": "00000000-0000-0000-0000-000000000603",
+              "total": {
+                "amountMinor": "100000",
+                "currency": "BYN"
+              },
+              "status": "CANCELLED",
+              "version": "1"
+            }
+          ],
+          "totalCount": 3,
+          "page": {
+            "page": 0,
+            "size": 20,
+            "hasNext": false
+          }
+        }
+      }
+    }
+  }
+}

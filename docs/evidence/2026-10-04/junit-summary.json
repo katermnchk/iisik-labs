@@ -1,0 +1,23 @@
+[
+  {
+    "name": "by.bsuir.travel.gateway.FutureSchemaTest",
+    "tests": "1",
+    "failures": "0",
+    "errors": "0",
+    "skipped": "0"
+  },
+  {
+    "name": "by.bsuir.travel.gateway.GatewayTest",
+    "tests": "20",
+    "failures": "0",
+    "errors": "0",
+    "skipped": "0"
+  },
+  {
+    "name": "by.bsuir.travel.contracts.PageInputTest",
+    "tests": "2",
+    "failures": "0",
+    "errors": "0",
+    "skipped": "0"
+  }
+]

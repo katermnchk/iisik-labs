@@ -1,0 +1,39 @@
+{
+  "capturedAt": "2026-11-02T18:08:39.934787+00:00",
+  "request": {
+    "method": "GET",
+    "url": "http://127.0.0.1:8295/internal/v1/notifications?userId=00000000-0000-0000-0000-000000000001",
+    "headers": {},
+    "body": null
+  },
+  "response": {
+    "status": 200,
+    "headers": {
+      "Content-Type": "application/json",
+      "Transfer-Encoding": "chunked",
+      "Date": "Mon, 02 Nov 2026 18:08:39 GMT",
+      "Connection": "close"
+    },
+    "body": {
+      "items": [
+        {
+          "id": "00000000-0000-0000-0000-000000000801",
+          "userId": "00000000-0000-0000-0000-000000000001",
+          "bookingId": "00000000-0000-0000-0000-000000000601",
+          "kind": "BOOKING_STATUS",
+          "title": "Поездка подтверждена",
+          "body": "Бронирование поездки в Брест подтверждено.",
+          "status": "SENT",
+          "createdAt": "2026-10-04T12:02:00Z"
+        }
+      ],
+      "totalCount": 1,
+      "page": {
+        "page": 0,
+        "size": 20,
+        "hasNext": false
+      },
+      "popularityAsOf": null
+    }
+  }
+}

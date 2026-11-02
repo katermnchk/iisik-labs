@@ -1,0 +1,251 @@
+syntax = "proto3";
+
+package travel.v1;
+
+option java_package = "by.bsuir.travel.proto.v1";
+
+option java_multiple_files = true;
+
+import "google/protobuf/timestamp.proto";
+
+message DateValue { int32 year = 1; int32 month = 2; int32 day = 3; }
+
+enum RoleCode { ROLE_CODE_UNSPECIFIED = 0; ROLE_CODE_CLIENT = 1; ROLE_CODE_EMPLOYEE = 2; ROLE_CODE_ADMIN = 3; }
+
+enum UserStatus { USER_STATUS_UNSPECIFIED = 0; USER_STATUS_ACTIVE = 1; USER_STATUS_BLOCKED = 2; }
+
+enum TourStatus { TOUR_STATUS_UNSPECIFIED = 0; TOUR_STATUS_DRAFT = 1; TOUR_STATUS_PUBLISHED = 2; TOUR_STATUS_ARCHIVED = 3; }
+
+enum ScheduleStatus { SCHEDULE_STATUS_UNSPECIFIED = 0; SCHEDULE_STATUS_OPEN = 1; SCHEDULE_STATUS_CLOSED = 2; SCHEDULE_STATUS_CANCELLED = 3; }
+
+enum TransportKind { TRANSPORT_KIND_UNSPECIFIED = 0; TRANSPORT_KIND_AIR = 1; TRANSPORT_KIND_RAIL = 2; TRANSPORT_KIND_BUS = 3; TRANSPORT_KIND_OTHER = 4; }
+
+enum BookingStatus { BOOKING_STATUS_UNSPECIFIED = 0; BOOKING_STATUS_RESERVING = 1; BOOKING_STATUS_PENDING_PAYMENT = 2; BOOKING_STATUS_CONFIRMED = 3; BOOKING_STATUS_EXPIRED = 4; BOOKING_STATUS_CANCELLING = 5; BOOKING_STATUS_REFUND_PENDING = 6; BOOKING_STATUS_CANCELLED = 7; BOOKING_STATUS_COMPLETED = 8; BOOKING_STATUS_REJECTED = 9; }
+
+enum PaymentStatus { PAYMENT_STATUS_UNSPECIFIED = 0; PAYMENT_STATUS_PENDING = 1; PAYMENT_STATUS_SUCCEEDED = 2; PAYMENT_STATUS_FAILED = 3; PAYMENT_STATUS_REFUND_PENDING = 4; PAYMENT_STATUS_REFUNDED = 5; }
+
+enum RefundStatus { REFUND_STATUS_UNSPECIFIED = 0; REFUND_STATUS_PENDING = 1; REFUND_STATUS_SUCCEEDED = 2; REFUND_STATUS_FAILED = 3; }
+
+enum NotificationKind { NOTIFICATION_KIND_UNSPECIFIED = 0; NOTIFICATION_KIND_WELCOME = 1; NOTIFICATION_KIND_BOOKING_STATUS = 2; NOTIFICATION_KIND_TOUR_CHANGE = 3; NOTIFICATION_KIND_PAYMENT_STATUS = 4; }
+
+enum DeliveryStatus { DELIVERY_STATUS_UNSPECIFIED = 0; DELIVERY_STATUS_PENDING = 1; DELIVERY_STATUS_SENT = 2; DELIVERY_STATUS_FAILED = 3; }
+
+enum TourSortField { TOUR_SORT_FIELD_UNSPECIFIED = 0; TOUR_SORT_FIELD_STARTS_AT = 1; TOUR_SORT_FIELD_PRICE = 2; TOUR_SORT_FIELD_DURATION = 3; TOUR_SORT_FIELD_POPULARITY = 4; }
+
+enum SortDirection { SORT_DIRECTION_UNSPECIFIED = 0; SORT_DIRECTION_ASC = 1; SORT_DIRECTION_DESC = 2; }
+
+message Money { int64 amount_minor = 1; string currency = 2; }
+
+message Role { RoleCode code = 1; string name = 2; }
+
+message ClientProfile { string user_id = 1; string phone = 2; }
+
+message EmployeeProfile { string user_id = 1; string position = 2; }
+
+message User { string id = 1; Role role = 2; string email = 3; string first_name = 4; string last_name = 5; UserStatus status = 6; ClientProfile client_profile = 7; EmployeeProfile employee_profile = 8; }
+
+message Principal { string user_id = 1; RoleCode role = 2; UserStatus status = 3; string email = 4; string client_id = 5; string employee_id = 6; }
+
+message Direction { string id = 1; string country = 2; string city = 3; string description = 4; bool is_active = 5; }
+
+message Accommodation { string id = 1; string schedule_id = 2; string name = 3; string address = 4; google.protobuf.Timestamp check_in_at = 5; google.protobuf.Timestamp check_out_at = 6; string room_type = 7; }
+
+message Transport { string id = 1; string schedule_id = 2; TransportKind kind = 3; string carrier = 4; string route_number = 5; google.protobuf.Timestamp departure_at = 6; google.protobuf.Timestamp arrival_at = 7; }
+
+message TourSchedule { string id = 1; string tour_id = 2; google.protobuf.Timestamp starts_at = 3; google.protobuf.Timestamp ends_at = 4; int32 capacity = 5; int32 reserved_seats = 6; int32 available_seats = 7; Money price = 8; int64 price_version = 9; int64 version = 10; ScheduleStatus status = 11; repeated Accommodation accommodations = 12; repeated Transport transports = 13; }
+
+message Tour { string id = 1; Direction direction = 2; string title = 3; string description = 4; int32 duration_days = 5; TourStatus status = 6; int64 version = 7; string created_by_employee_id = 8; repeated TourSchedule schedules = 9; }
+
+message Payment { string id = 1; string booking_id = 2; Money amount = 3; PaymentStatus status = 4; string payment_url = 5; google.protobuf.Timestamp created_at = 6; }
+
+message Booking { string id = 1; string client_id = 2; string schedule_id = 3; string direction_id = 4; string tour_title = 5; string direction_name = 6; google.protobuf.Timestamp starts_at = 7; int32 traveler_count = 8; Money unit_price = 9; Money total = 10; BookingStatus status = 11; google.protobuf.Timestamp hold_expires_at = 12; google.protobuf.Timestamp created_at = 13; int64 version = 14; repeated Payment payments = 15; }
+
+message Notification { string id = 1; string user_id = 2; string booking_id = 3; NotificationKind kind = 4; string title = 5; string body = 6; DeliveryStatus status = 7; google.protobuf.Timestamp created_at = 8; }
+
+message PageInfo { int32 page = 1; int32 size = 2; bool has_next = 3; }
+
+message TourFilter { string direction_id = 1; DateValue from = 2; DateValue to = 3; optional int64 min_price = 4; optional int64 max_price = 5; optional bool only_available = 6; }
+
+message TourSort { TourSortField field = 1; SortDirection direction = 2; }
+
+message AnalyticsFilter { google.protobuf.Timestamp from = 1; google.protobuf.Timestamp to = 2; }
+
+message DirectionPopularity { string direction_id = 1; string direction_name = 2; int32 confirmed_tourists = 3; int32 rank = 4; }
+
+message SalesAnalytics { Money gross_sales = 1; Money refunded = 2; Money net_sales = 3; double occupancy = 4; repeated DirectionPopularity directions = 5; google.protobuf.Timestamp as_of = 6; }
+
+message GetPrincipalRequest { string access_token = 1; }
+
+message GetUserRequest { string user_id = 1; }
+
+message ListDirectionsRequest { bool active_only = 1; }
+
+message ListToursRequest { TourFilter filter = 1; TourSort sort = 2; PageInput page = 3; repeated DirectionPopularity popularity = 4; google.protobuf.Timestamp popularity_as_of = 5; }
+
+message GetTourRequest { string tour_id = 1; RoleCode viewer_role = 2; }
+
+message GetBookingRequest { string booking_id = 1; }
+
+message ListBookingsRequest { string client_id = 1; PageInput page = 2; }
+
+message ListPaymentsRequest { repeated string booking_ids = 1; }
+
+message ListNotificationsRequest { string user_id = 1; PageInput page = 2; }
+
+message PageInput { int32 page = 1; int32 size = 2; }
+
+message TourConnection { repeated Tour items = 1; int32 total_count = 2; PageInfo page = 3; google.protobuf.Timestamp popularity_as_of = 4; }
+
+message BookingConnection { repeated Booking items = 1; int32 total_count = 2; PageInfo page = 3; }
+
+message NotificationConnection { repeated Notification items = 1; int32 total_count = 2; PageInfo page = 3; }
+
+message GetPrincipalResponse { Principal principal = 1; }
+
+message GetUserResponse { User user = 1; }
+
+message GetClientProfileRequest { string client_id = 1; }
+
+message GetClientProfileResponse { User user = 1; }
+
+message CreateUserRequest { string email = 1; string password = 2; string first_name = 3; string last_name = 4; string phone = 5; }
+
+message AuthResponse { string access_token = 1; User user = 2; }
+
+message AuthenticateRequest { string email = 1; string password = 2; }
+
+message EmployeeProfileInput { string position = 1; }
+
+message ClientProfileInput { string phone = 1; }
+
+message UpdateUserRequest { string user_id = 1; optional RoleCode role = 2; optional UserStatus status = 3; optional string first_name = 4; optional string last_name = 5; EmployeeProfileInput employee_profile = 6; ClientProfileInput client_profile = 7; }
+
+message GetTourResponse { Tour tour = 1; }
+
+message ListDirectionsResponse { repeated Direction directions = 1; }
+
+message CreateTourRequest { string direction_id = 1; string title = 2; string description = 3; int32 duration_days = 4; string created_by_employee_id = 5; }
+
+message UpdateTourRequest { string tour_id = 1; optional string title = 2; optional string description = 3; optional int32 duration_days = 4; optional TourStatus status = 5; int64 expected_version = 6; }
+
+message CreateScheduleRequest { string tour_id = 1; google.protobuf.Timestamp starts_at = 2; google.protobuf.Timestamp ends_at = 3; int32 capacity = 4; Money price = 5; }
+
+message ScheduleResponse { TourSchedule schedule = 1; }
+
+message UpdateScheduleRequest { string schedule_id = 1; google.protobuf.Timestamp starts_at = 2; google.protobuf.Timestamp ends_at = 3; optional int32 capacity = 4; Money price = 5; optional ScheduleStatus status = 6; int64 expected_version = 7; }
+
+message AddAccommodationRequest { string schedule_id = 1; string name = 2; string address = 3; google.protobuf.Timestamp check_in_at = 4; google.protobuf.Timestamp check_out_at = 5; string room_type = 6; }
+
+message AccommodationResponse { Accommodation accommodation = 1; }
+
+message AddTransportRequest { string schedule_id = 1; TransportKind kind = 2; string carrier = 3; string route_number = 4; google.protobuf.Timestamp departure_at = 5; google.protobuf.Timestamp arrival_at = 6; }
+
+message TransportResponse { Transport transport = 1; }
+
+message UpsertDirectionRequest { optional string direction_id = 1; string country = 2; string city = 3; string description = 4; bool is_active = 5; }
+
+message DirectionResponse { Direction direction = 1; }
+
+message ReserveSeatsRequest { string booking_id = 1; string schedule_id = 2; int32 seats = 3; int64 expected_price_version = 4; }
+
+message ReserveSeatsResponse { string booking_id = 1; string schedule_id = 2; int32 seats = 3; Money unit_price = 4; Money total = 5; google.protobuf.Timestamp expires_at = 6; int64 price_version = 7; string tour_id = 8; string direction_id = 9; string tour_title = 10; string direction_name = 11; google.protobuf.Timestamp starts_at = 12; }
+
+message ConfirmReservationRequest { string booking_id = 1; }
+
+message ReservationResponse { string booking_id = 1; string schedule_id = 2; int32 seats = 3; string status = 4; }
+
+message ReleaseReservationRequest { string booking_id = 1; string reason = 2; }
+
+message BookingResponse { Booking booking = 1; }
+
+message ListScheduleRecipientsRequest { string schedule_id = 1; }
+
+message ListScheduleRecipientsResponse { repeated string user_ids = 1; }
+
+message CreateBookingRequest { string client_id = 1; string schedule_id = 2; int32 traveler_count = 3; int64 expected_price_version = 4; string idempotency_key = 5; }
+
+message CancelBookingRequest { string booking_id = 1; string user_id = 2; string reason = 3; string idempotency_key = 4; }
+
+message ChangeBookingStatusRequest { string booking_id = 1; string user_id = 2; BookingStatus target_status = 3; string reason = 4; int64 expected_version = 5; }
+
+message PaymentContextRequest { string booking_id = 1; string user_id = 2; }
+
+message PaymentContextResponse { string booking_id = 1; string client_id = 2; string schedule_id = 3; string direction_id = 4; Money total = 5; BookingStatus booking_status = 6; google.protobuf.Timestamp hold_expires_at = 7; }
+
+message PaymentOutcome { PaymentStatus status = 1; Money paid_amount = 2; }
+
+message ApplyPaymentResultRequest { string payment_id = 1; string booking_id = 2; string provider_event_id = 3; PaymentOutcome outcome = 4; }
+
+message ApplyRefundResultRequest { string refund_id = 1; string payment_id = 2; string booking_id = 3; RefundStatus status = 4; Money total_refunded = 5; }
+
+message ListPaymentsResponse { repeated Payment payments = 1; }
+
+message CreatePaymentRequest { string booking_id = 1; string user_id = 2; string idempotency_key = 3; }
+
+message PaymentResponse { Payment payment = 1; }
+
+message Refund { string refund_id = 1; string payment_id = 2; Money amount = 3; RefundStatus status = 4; optional string provider_refund_id = 5; google.protobuf.Timestamp created_at = 6; }
+
+message RequestRefundRequest { string payment_id = 1; string booking_id = 2; Money amount = 3; string idempotency_key = 4; string reason = 5; }
+
+message RefundResponse { Refund refund = 1; }
+
+message GetSalesAnalyticsRequest { AnalyticsFilter filter = 1; }
+
+message SalesAnalyticsResponse { SalesAnalytics analytics = 1; }
+
+message GetPopularityRequest { google.protobuf.Timestamp from = 1; google.protobuf.Timestamp to = 2; }
+
+message GetPopularityResponse { repeated DirectionPopularity directions = 1; string snapshot_id = 2; google.protobuf.Timestamp as_of = 3; }
+
+service UserService {
+ rpc GetPrincipal(GetPrincipalRequest) returns (GetPrincipalResponse);
+ rpc GetUser(GetUserRequest) returns (GetUserResponse);
+ rpc GetClientProfile(GetClientProfileRequest) returns (GetClientProfileResponse);
+ rpc CreateUser(CreateUserRequest) returns (AuthResponse);
+ rpc Authenticate(AuthenticateRequest) returns (AuthResponse);
+ rpc UpdateUser(UpdateUserRequest) returns (GetUserResponse);
+}
+
+service TourService {
+ rpc ListTours(ListToursRequest) returns (TourConnection);
+ rpc GetTour(GetTourRequest) returns (GetTourResponse);
+ rpc ListDirections(ListDirectionsRequest) returns (ListDirectionsResponse);
+ rpc CreateTour(CreateTourRequest) returns (GetTourResponse);
+ rpc UpdateTour(UpdateTourRequest) returns (GetTourResponse);
+ rpc CreateSchedule(CreateScheduleRequest) returns (ScheduleResponse);
+ rpc UpdateSchedule(UpdateScheduleRequest) returns (ScheduleResponse);
+ rpc AddAccommodation(AddAccommodationRequest) returns (AccommodationResponse);
+ rpc AddTransport(AddTransportRequest) returns (TransportResponse);
+ rpc UpsertDirection(UpsertDirectionRequest) returns (DirectionResponse);
+ rpc ReserveSeats(ReserveSeatsRequest) returns (ReserveSeatsResponse);
+ rpc ConfirmReservation(ConfirmReservationRequest) returns (ReservationResponse);
+ rpc ReleaseReservation(ReleaseReservationRequest) returns (ReservationResponse);
+}
+
+service BookingService {
+ rpc GetBooking(GetBookingRequest) returns (BookingResponse);
+ rpc ListClientBookings(ListBookingsRequest) returns (BookingConnection);
+ rpc ListScheduleRecipients(ListScheduleRecipientsRequest) returns (ListScheduleRecipientsResponse);
+ rpc CreateBooking(CreateBookingRequest) returns (BookingResponse);
+ rpc CancelBooking(CancelBookingRequest) returns (BookingResponse);
+ rpc ChangeBookingStatus(ChangeBookingStatusRequest) returns (BookingResponse);
+ rpc GetPaymentContext(PaymentContextRequest) returns (PaymentContextResponse);
+ rpc ApplyPaymentResult(ApplyPaymentResultRequest) returns (BookingResponse);
+ rpc ApplyRefundResult(ApplyRefundResultRequest) returns (BookingResponse);
+}
+
+service PaymentService {
+ rpc ListBookingPayments(ListPaymentsRequest) returns (ListPaymentsResponse);
+ rpc CreatePayment(CreatePaymentRequest) returns (PaymentResponse);
+ rpc RequestRefund(RequestRefundRequest) returns (RefundResponse);
+}
+
+service NotificationService {
+ rpc ListUserNotifications(ListNotificationsRequest) returns (NotificationConnection);
+}
+
+service AnalyticsService {
+ rpc GetSalesAnalytics(GetSalesAnalyticsRequest) returns (SalesAnalyticsResponse);
+ rpc GetPopularity(GetPopularityRequest) returns (GetPopularityResponse);
+}

@@ -1,0 +1,67 @@
+[
+  {
+    "database": "user_db",
+    "tables": [
+      "clients",
+      "employees",
+      "flyway_schema_history",
+      "outbox_events",
+      "roles",
+      "users"
+    ]
+  },
+  {
+    "database": "tour_db",
+    "tables": [
+      "accommodations",
+      "directions",
+      "flyway_schema_history",
+      "outbox_events",
+      "seat_holds",
+      "tour_schedules",
+      "tours",
+      "transports"
+    ]
+  },
+  {
+    "database": "booking_db",
+    "tables": [
+      "booking_status_history",
+      "bookings",
+      "flyway_schema_history",
+      "idempotency_keys",
+      "outbox_events",
+      "processed_events"
+    ]
+  },
+  {
+    "database": "payment_db",
+    "tables": [
+      "flyway_schema_history",
+      "outbox_events",
+      "payment_callbacks",
+      "payments",
+      "refunds"
+    ]
+  },
+  {
+    "database": "notification_db",
+    "tables": [
+      "flyway_schema_history",
+      "notification_deliveries",
+      "notifications",
+      "processed_events"
+    ]
+  },
+  {
+    "database": "analytics_db",
+    "tables": [
+      "direction_catalog_projection",
+      "direction_popularity_daily",
+      "flyway_schema_history",
+      "processed_events",
+      "sales_facts",
+      "schedule_load_facts"
+    ]
+  }
+]

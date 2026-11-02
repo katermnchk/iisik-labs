@@ -1,0 +1,46 @@
+{
+  "capturedAt": "2026-10-05T07:33:02.957472+00:00",
+  "request": {
+    "method": "POST",
+    "url": "http://127.0.0.1:8080/graphql",
+    "headers": {
+      "Content-Type": "application/json",
+      "Authorization": "Bearer demo-client"
+    },
+    "body": {
+      "query": "{tour(id:\"bad\"){id}}"
+    }
+  },
+  "response": {
+    "status": 200,
+    "headers": {
+      "Content-Type": "application/json",
+      "Transfer-Encoding": "chunked",
+      "Date": "Mon, 05 Oct 2026 07:33:02 GMT",
+      "Connection": "close"
+    },
+    "body": {
+      "errors": [
+        {
+          "message": "Invalid UUID",
+          "locations": [
+            {
+              "line": 1,
+              "column": 2
+            }
+          ],
+          "path": [
+            "tour"
+          ],
+          "extensions": {
+            "code": "BAD_REQUEST",
+            "classification": "DataFetchingException"
+          }
+        }
+      ],
+      "data": {
+        "tour": null
+      }
+    }
+  }
+}

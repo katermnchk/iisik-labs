@@ -1,0 +1,3 @@
+libprotoc 25.5
+descriptor compilation: exit 0
+RPC methods: 34

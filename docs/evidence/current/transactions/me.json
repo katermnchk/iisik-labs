@@ -1,0 +1,37 @@
+{
+  "capturedAt": "2026-10-05T17:09:16.505435+00:00",
+  "request": {
+    "method": "POST",
+    "url": "http://127.0.0.1:8080/graphql",
+    "headers": {
+      "Content-Type": "application/json",
+      "Authorization": "Bearer demo-client"
+    },
+    "body": {
+      "query": "{me{id role{code} firstName clientProfile{phone}}}"
+    }
+  },
+  "response": {
+    "status": 200,
+    "headers": {
+      "Content-Type": "application/json",
+      "Transfer-Encoding": "chunked",
+      "Date": "Mon, 05 Oct 2026 17:09:16 GMT",
+      "Connection": "close"
+    },
+    "body": {
+      "data": {
+        "me": {
+          "id": "00000000-0000-0000-0000-000000000001",
+          "role": {
+            "code": "CLIENT"
+          },
+          "firstName": "Екатерина",
+          "clientProfile": {
+            "phone": "+375290000001"
+          }
+        }
+      }
+    }
+  }
+}

@@ -1,0 +1,34 @@
+[
+  {
+    "name": "me",
+    "result": "PASS"
+  },
+  {
+    "name": "tour_nested",
+    "result": "PASS"
+  },
+  {
+    "name": "same_schedule_filter",
+    "result": "PASS"
+  },
+  {
+    "name": "booking_payments",
+    "result": "PASS"
+  },
+  {
+    "name": "not_found",
+    "result": "PASS"
+  },
+  {
+    "name": "foreign_booking",
+    "result": "PASS"
+  },
+  {
+    "name": "sales",
+    "result": "PASS"
+  },
+  {
+    "name": "forbidden_analytics",
+    "result": "PASS"
+  }
+]

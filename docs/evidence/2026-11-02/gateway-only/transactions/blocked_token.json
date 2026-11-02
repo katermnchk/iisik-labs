@@ -1,0 +1,33 @@
+{
+  "capturedAt": "2026-11-02T18:09:07.506811+00:00",
+  "request": {
+    "method": "POST",
+    "url": "http://127.0.0.1:8280/graphql",
+    "headers": {
+      "Content-Type": "application/json",
+      "Authorization": "Bearer demo-blocked"
+    },
+    "body": {
+      "query": "{me{id}}"
+    }
+  },
+  "response": {
+    "status": 403,
+    "headers": {
+      "Content-Type": "application/json",
+      "Content-Length": "76",
+      "Date": "Mon, 02 Nov 2026 18:09:07 GMT",
+      "Connection": "close"
+    },
+    "body": {
+      "errors": [
+        {
+          "message": "User is blocked",
+          "extensions": {
+            "code": "FORBIDDEN"
+          }
+        }
+      ]
+    }
+  }
+}

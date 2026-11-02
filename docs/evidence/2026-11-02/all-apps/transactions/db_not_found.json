@@ -1,0 +1,22 @@
+{
+  "capturedAt": "2026-11-02T18:08:40.657897+00:00",
+  "request": {
+    "method": "GET",
+    "url": "http://127.0.0.1:8292/internal/v1/tours/00000000-0000-0000-0000-000000000999",
+    "headers": {},
+    "body": null
+  },
+  "response": {
+    "status": 404,
+    "headers": {
+      "Content-Type": "application/json",
+      "Transfer-Encoding": "chunked",
+      "Date": "Mon, 02 Nov 2026 18:08:40 GMT",
+      "Connection": "close"
+    },
+    "body": {
+      "code": "NOT_FOUND",
+      "message": "Object not found"
+    }
+  }
+}

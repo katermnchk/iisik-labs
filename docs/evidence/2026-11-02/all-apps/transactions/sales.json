@@ -1,0 +1,38 @@
+{
+  "capturedAt": "2026-11-02T18:08:38.412139+00:00",
+  "request": {
+    "method": "POST",
+    "url": "http://127.0.0.1:8280/graphql",
+    "headers": {
+      "Content-Type": "application/json",
+      "Authorization": "Bearer demo-admin"
+    },
+    "body": {
+      "query": "{salesAnalytics(filter:{from:\"2026-10-01T00:00:00Z\",to:\"2026-10-05T00:00:00Z\"}){grossSales{amountMinor} refunded{amountMinor} netSales{amountMinor}}}"
+    }
+  },
+  "response": {
+    "status": 200,
+    "headers": {
+      "Content-Type": "application/json",
+      "Transfer-Encoding": "chunked",
+      "Date": "Mon, 02 Nov 2026 18:08:38 GMT",
+      "Connection": "close"
+    },
+    "body": {
+      "data": {
+        "salesAnalytics": {
+          "grossSales": {
+            "amountMinor": "280000"
+          },
+          "refunded": {
+            "amountMinor": "100000"
+          },
+          "netSales": {
+            "amountMinor": "180000"
+          }
+        }
+      }
+    }
+  }
+}

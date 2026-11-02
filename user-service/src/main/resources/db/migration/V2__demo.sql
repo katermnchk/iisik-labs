@@ -1,0 +1,12 @@
+INSERT INTO roles (id,code,name) VALUES ('00000000-0000-0000-0000-000000000011','CLIENT','Клиент');
+INSERT INTO roles (id,code,name) VALUES ('00000000-0000-0000-0000-000000000012','EMPLOYEE','Сотрудник');
+INSERT INTO roles (id,code,name) VALUES ('00000000-0000-0000-0000-000000000013','ADMIN','Администратор');
+INSERT INTO users (id,role_id,email,password_hash,first_name,last_name,status,created_at,updated_at) VALUES ('00000000-0000-0000-0000-000000000001','00000000-0000-0000-0000-000000000011','user1@example.test','{demo}login-not-implemented','Екатерина','Ременчик','ACTIVE','2026-10-04T12:00:00Z','2026-10-04T12:00:00Z');
+INSERT INTO clients (user_id,phone) VALUES ('00000000-0000-0000-0000-000000000001','+375290000001');
+INSERT INTO users (id,role_id,email,password_hash,first_name,last_name,status,created_at,updated_at) VALUES ('00000000-0000-0000-0000-000000000002','00000000-0000-0000-0000-000000000011','user2@example.test','{demo}login-not-implemented','Анна','Иванова','ACTIVE','2026-10-04T12:00:00Z','2026-10-04T12:00:00Z');
+INSERT INTO clients (user_id,phone) VALUES ('00000000-0000-0000-0000-000000000002','+375290000002');
+INSERT INTO users (id,role_id,email,password_hash,first_name,last_name,status,created_at,updated_at) VALUES ('00000000-0000-0000-0000-000000000003','00000000-0000-0000-0000-000000000012','user3@example.test','{demo}login-not-implemented','Мария','Петрова','ACTIVE','2026-10-04T12:00:00Z','2026-10-04T12:00:00Z');
+INSERT INTO employees (user_id,position) VALUES ('00000000-0000-0000-0000-000000000003','Менеджер туров');
+INSERT INTO users (id,role_id,email,password_hash,first_name,last_name,status,created_at,updated_at) VALUES ('00000000-0000-0000-0000-000000000004','00000000-0000-0000-0000-000000000013','user4@example.test','{demo}login-not-implemented','Ольга','Смирнова','ACTIVE','2026-10-04T12:00:00Z','2026-10-04T12:00:00Z');
+INSERT INTO users (id,role_id,email,password_hash,first_name,last_name,status,created_at,updated_at) VALUES ('00000000-0000-0000-0000-000000000005','00000000-0000-0000-0000-000000000011','user5@example.test','{demo}login-not-implemented','Иван','Сидоров','BLOCKED','2026-10-04T12:00:00Z','2026-10-04T12:00:00Z');
+INSERT INTO clients (user_id,phone) VALUES ('00000000-0000-0000-0000-000000000005','+375290000005');

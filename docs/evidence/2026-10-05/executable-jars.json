@@ -1,0 +1,37 @@
+[
+  {
+    "module": "graphql-api",
+    "executableJar": true,
+    "sizeBytes": 30365405
+  },
+  {
+    "module": "user-service",
+    "executableJar": true,
+    "sizeBytes": 56280418
+  },
+  {
+    "module": "tour-service",
+    "executableJar": true,
+    "sizeBytes": 56293042
+  },
+  {
+    "module": "booking-service",
+    "executableJar": true,
+    "sizeBytes": 56283544
+  },
+  {
+    "module": "payment-service",
+    "executableJar": true,
+    "sizeBytes": 56278994
+  },
+  {
+    "module": "notification-service",
+    "executableJar": true,
+    "sizeBytes": 56277627
+  },
+  {
+    "module": "analytics-service",
+    "executableJar": true,
+    "sizeBytes": 56286712
+  }
+]

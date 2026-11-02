@@ -1,0 +1,33 @@
+{
+  "capturedAt": "2026-10-05T17:09:17.057685+00:00",
+  "request": {
+    "method": "POST",
+    "url": "http://127.0.0.1:8080/graphql",
+    "headers": {
+      "Content-Type": "application/json",
+      "Authorization": "Bearer wrong"
+    },
+    "body": {
+      "query": "{me{id}}"
+    }
+  },
+  "response": {
+    "status": 401,
+    "headers": {
+      "Content-Type": "application/json",
+      "Content-Length": "85",
+      "Date": "Mon, 05 Oct 2026 17:09:17 GMT",
+      "Connection": "close"
+    },
+    "body": {
+      "errors": [
+        {
+          "extensions": {
+            "code": "UNAUTHENTICATED"
+          },
+          "message": "Unknown demo token"
+        }
+      ]
+    }
+  }
+}

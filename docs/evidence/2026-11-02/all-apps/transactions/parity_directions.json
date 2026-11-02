@@ -1,0 +1,50 @@
+{
+  "capturedAt": "2026-11-02T18:08:40.634457+00:00",
+  "request": {
+    "method": "POST",
+    "url": "http://127.0.0.1:8280/graphql",
+    "headers": {
+      "Content-Type": "application/json",
+      "Authorization": "Bearer demo-client"
+    },
+    "body": {
+      "query": "{directions(activeOnly:false){id country city description isActive}}"
+    }
+  },
+  "response": {
+    "status": 200,
+    "headers": {
+      "Content-Type": "application/json",
+      "Transfer-Encoding": "chunked",
+      "Date": "Mon, 02 Nov 2026 18:08:40 GMT",
+      "Connection": "close"
+    },
+    "body": {
+      "data": {
+        "directions": [
+          {
+            "id": "00000000-0000-0000-0000-000000000101",
+            "country": "Беларусь",
+            "city": "Брест",
+            "description": "Культурные поездки по Беларуси",
+            "isActive": true
+          },
+          {
+            "id": "00000000-0000-0000-0000-000000000102",
+            "country": "Турция",
+            "city": "Анталья",
+            "description": "Морской отдых",
+            "isActive": true
+          },
+          {
+            "id": "00000000-0000-0000-0000-000000000103",
+            "country": "Грузия",
+            "city": "Тбилиси",
+            "description": "Исторические маршруты",
+            "isActive": false
+          }
+        ]
+      }
+    }
+  }
+}

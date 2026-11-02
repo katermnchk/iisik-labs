@@ -1,0 +1,79 @@
+[
+  {
+    "id": "00000000-0000-0000-0000-000000000001",
+    "role": {
+      "code": "CLIENT",
+      "name": "Клиент"
+    },
+    "email": "user1@example.test",
+    "firstName": "Екатерина",
+    "lastName": "Ременчик",
+    "status": "ACTIVE",
+    "clientProfile": {
+      "userId": "00000000-0000-0000-0000-000000000001",
+      "phone": "+375290000001"
+    },
+    "employeeProfile": null
+  },
+  {
+    "id": "00000000-0000-0000-0000-000000000002",
+    "role": {
+      "code": "CLIENT",
+      "name": "Клиент"
+    },
+    "email": "user2@example.test",
+    "firstName": "Анна",
+    "lastName": "Иванова",
+    "status": "ACTIVE",
+    "clientProfile": {
+      "userId": "00000000-0000-0000-0000-000000000002",
+      "phone": "+375290000002"
+    },
+    "employeeProfile": null
+  },
+  {
+    "id": "00000000-0000-0000-0000-000000000003",
+    "role": {
+      "code": "EMPLOYEE",
+      "name": "Сотрудник"
+    },
+    "email": "user3@example.test",
+    "firstName": "Мария",
+    "lastName": "Петрова",
+    "status": "ACTIVE",
+    "clientProfile": null,
+    "employeeProfile": {
+      "userId": "00000000-0000-0000-0000-000000000003",
+      "position": "Менеджер туров"
+    }
+  },
+  {
+    "id": "00000000-0000-0000-0000-000000000004",
+    "role": {
+      "code": "ADMIN",
+      "name": "Администратор"
+    },
+    "email": "user4@example.test",
+    "firstName": "Ольга",
+    "lastName": "Смирнова",
+    "status": "ACTIVE",
+    "clientProfile": null,
+    "employeeProfile": null
+  },
+  {
+    "id": "00000000-0000-0000-0000-000000000005",
+    "role": {
+      "code": "CLIENT",
+      "name": "Клиент"
+    },
+    "email": "user5@example.test",
+    "firstName": "Иван",
+    "lastName": "Сидоров",
+    "status": "BLOCKED",
+    "clientProfile": {
+      "userId": "00000000-0000-0000-0000-000000000005",
+      "phone": "+375290000005"
+    },
+    "employeeProfile": null
+  }
+]

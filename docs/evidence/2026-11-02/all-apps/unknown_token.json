@@ -1,0 +1,10 @@
+{
+  "errors": [
+    {
+      "message": "Unknown demo token",
+      "extensions": {
+        "code": "UNAUTHENTICATED"
+      }
+    }
+  ]
+}

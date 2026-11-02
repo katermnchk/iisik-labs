@@ -1,0 +1,3 @@
+PASS: user_app cannot CONNECT to tour_db
+psql: error: connection to server at "127.0.0.1", port 6543 failed: FATAL:  permission denied for database "tour_db"
+DETAIL:  User does not have CONNECT privilege.

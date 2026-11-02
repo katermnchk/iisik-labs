@@ -1,0 +1,1 @@
+{myBookings(page:{page:0,size:20}){totalCount items{id tourTitle travelerCount status payments{id status}}}}

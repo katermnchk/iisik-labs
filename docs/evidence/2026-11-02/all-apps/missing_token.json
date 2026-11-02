@@ -1,0 +1,10 @@
+{
+  "errors": [
+    {
+      "message": "Bearer demo token is required",
+      "extensions": {
+        "code": "UNAUTHENTICATED"
+      }
+    }
+  ]
+}

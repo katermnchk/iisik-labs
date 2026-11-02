@@ -1,0 +1,11 @@
+{
+  "data": {
+    "tours": {
+      "items": [],
+      "totalCount": 2,
+      "page": {
+        "hasNext": false
+      }
+    }
+  }
+}

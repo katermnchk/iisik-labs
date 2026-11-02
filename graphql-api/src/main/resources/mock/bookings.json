@@ -1,0 +1,117 @@
+[
+  {
+    "id": "00000000-0000-0000-0000-000000000601",
+    "clientId": "00000000-0000-0000-0000-000000000001",
+    "scheduleId": "00000000-0000-0000-0000-000000000301",
+    "directionId": "00000000-0000-0000-0000-000000000101",
+    "tourTitle": "История Бреста",
+    "directionName": "Беларусь, Брест",
+    "startsAt": "2026-12-01T05:00:00Z",
+    "travelerCount": 2,
+    "unitPrice": {
+      "amountMinor": 90000,
+      "currency": "BYN"
+    },
+    "total": {
+      "amountMinor": 180000,
+      "currency": "BYN"
+    },
+    "status": "CONFIRMED",
+    "holdExpiresAt": null,
+    "createdAt": "2026-10-04T12:00:00Z",
+    "version": 1,
+    "payments": []
+  },
+  {
+    "id": "00000000-0000-0000-0000-000000000602",
+    "clientId": "00000000-0000-0000-0000-000000000002",
+    "scheduleId": "00000000-0000-0000-0000-000000000303",
+    "directionId": "00000000-0000-0000-0000-000000000102",
+    "tourTitle": "Отдых в Анталье",
+    "directionName": "Турция, Анталья",
+    "startsAt": "2026-12-05T05:00:00Z",
+    "travelerCount": 4,
+    "unitPrice": {
+      "amountMinor": 250000,
+      "currency": "BYN"
+    },
+    "total": {
+      "amountMinor": 1000000,
+      "currency": "BYN"
+    },
+    "status": "CONFIRMED",
+    "holdExpiresAt": null,
+    "createdAt": "2026-09-30T12:00:00Z",
+    "version": 1,
+    "payments": []
+  },
+  {
+    "id": "00000000-0000-0000-0000-000000000603",
+    "clientId": "00000000-0000-0000-0000-000000000001",
+    "scheduleId": "00000000-0000-0000-0000-000000000302",
+    "directionId": "00000000-0000-0000-0000-000000000101",
+    "tourTitle": "История Бреста",
+    "directionName": "Беларусь, Брест",
+    "startsAt": "2027-01-10T05:00:00Z",
+    "travelerCount": 2,
+    "unitPrice": {
+      "amountMinor": 50000,
+      "currency": "BYN"
+    },
+    "total": {
+      "amountMinor": 100000,
+      "currency": "BYN"
+    },
+    "status": "CANCELLED",
+    "holdExpiresAt": null,
+    "createdAt": "2026-10-04T12:00:00Z",
+    "version": 1,
+    "payments": []
+  },
+  {
+    "id": "00000000-0000-0000-0000-000000000604",
+    "clientId": "00000000-0000-0000-0000-000000000001",
+    "scheduleId": "00000000-0000-0000-0000-000000000301",
+    "directionId": "00000000-0000-0000-0000-000000000101",
+    "tourTitle": "История Бреста",
+    "directionName": "Беларусь, Брест",
+    "startsAt": "2026-12-01T05:00:00Z",
+    "travelerCount": 1,
+    "unitPrice": {
+      "amountMinor": 90000,
+      "currency": "BYN"
+    },
+    "total": {
+      "amountMinor": 90000,
+      "currency": "BYN"
+    },
+    "status": "PENDING_PAYMENT",
+    "holdExpiresAt": "2026-10-05T00:05:00Z",
+    "createdAt": "2026-10-04T23:50:00Z",
+    "version": 1,
+    "payments": []
+  },
+  {
+    "id": "00000000-0000-0000-0000-000000000605",
+    "clientId": "00000000-0000-0000-0000-000000000002",
+    "scheduleId": "00000000-0000-0000-0000-000000000304",
+    "directionId": "00000000-0000-0000-0000-000000000102",
+    "tourTitle": "Отдых в Анталье",
+    "directionName": "Турция, Анталья",
+    "startsAt": "2026-12-15T05:00:00Z",
+    "travelerCount": 10,
+    "unitPrice": {
+      "amountMinor": 220000,
+      "currency": "BYN"
+    },
+    "total": {
+      "amountMinor": 2200000,
+      "currency": "BYN"
+    },
+    "status": "CONFIRMED",
+    "holdExpiresAt": null,
+    "createdAt": "2026-09-29T12:00:00Z",
+    "version": 1,
+    "payments": []
+  }
+]

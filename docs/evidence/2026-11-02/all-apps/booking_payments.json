@@ -1,0 +1,21 @@
+{
+  "data": {
+    "booking": {
+      "id": "00000000-0000-0000-0000-000000000604",
+      "payments": [
+        {
+          "status": "FAILED",
+          "amount": {
+            "amountMinor": "90000"
+          }
+        },
+        {
+          "status": "PENDING",
+          "amount": {
+            "amountMinor": "90000"
+          }
+        }
+      ]
+    }
+  }
+}

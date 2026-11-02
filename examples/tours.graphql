@@ -1,0 +1,1 @@
+{tours(page:{page:0,size:20},sort:{field:PRICE,direction:ASC}){totalCount page{page size hasNext} items{id title durationDays schedules{id startsAt availableSeats price{amountMinor currency}}}}}

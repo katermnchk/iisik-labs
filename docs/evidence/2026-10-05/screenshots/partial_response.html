@@ -1,0 +1,33 @@
+<!doctype html><html lang="ru"><meta charset="utf-8"><title>Частичный ответ при NOT_FOUND</title><style>body{margin:0;padding:24px;background:#f7f9fb;color:#152536;font:22px Arial,sans-serif}h1{font-size:30px;margin:0 0 10px}small{font-size:18px;color:#4d5964}header{border-bottom:2px solid #9aa8b4;padding-bottom:16px}main{display:grid;grid-template-columns:1fr 1.1fr;gap:20px;margin-top:20px}section{background:white;border:1px solid #c9d3de;padding:18px;border-radius:6px;overflow:hidden}h2{font-size:24px;margin:0 0 12px}pre{white-space:pre-wrap;overflow-wrap:anywhere;font:20px/1.4 'DejaVu Sans Mono',monospace;margin:0}table{width:100%;border-collapse:collapse;margin-top:20px}td,th{text-align:left;border:1px solid #bcc9d4;padding:12px;font-size:21px}.ok{color:#136d45;font-weight:bold}</style><header><h1>Частичный ответ при NOT_FOUND</h1><small>Просмотр сохранённого HTTP-запроса • 2026-10-05T07:33:02.869636+00:00</small></header><main><section><h2>Запрос</h2><pre>POST http://127.0.0.1:8080/graphql
+
+Content-Type: application/json
+Authorization: Bearer demo-client
+
+{
+  &quot;query&quot;: &quot;{me{id} tour(id:\&quot;00000000-0000-0000-0000-000000000999\&quot;){id}}&quot;
+}</pre></section><section><h2>Ответ: HTTP 200</h2><pre>{
+  &quot;errors&quot;: [
+    {
+      &quot;message&quot;: &quot;Object not found&quot;,
+      &quot;locations&quot;: [
+        {
+          &quot;line&quot;: 1,
+          &quot;column&quot;: 9
+        }
+      ],
+      &quot;path&quot;: [
+        &quot;tour&quot;
+      ],
+      &quot;extensions&quot;: {
+        &quot;code&quot;: &quot;NOT_FOUND&quot;,
+        &quot;classification&quot;: &quot;DataFetchingException&quot;
+      }
+    }
+  ],
+  &quot;data&quot;: {
+    &quot;me&quot;: {
+      &quot;id&quot;: &quot;00000000-0000-0000-0000-000000000001&quot;
+    },
+    &quot;tour&quot;: null
+  }
+}</pre></section></main></html>

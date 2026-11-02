@@ -1,0 +1,16 @@
+{
+  "id": "00000000-0000-0000-0000-000000000003",
+  "role": {
+    "code": "EMPLOYEE",
+    "name": "Сотрудник"
+  },
+  "email": "user3@example.test",
+  "firstName": "Мария",
+  "lastName": "Петрова",
+  "status": "ACTIVE",
+  "clientProfile": null,
+  "employeeProfile": {
+    "userId": "00000000-0000-0000-0000-000000000003",
+    "position": "Менеджер туров"
+  }
+}

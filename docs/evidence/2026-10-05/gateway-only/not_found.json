@@ -1,0 +1,23 @@
+{
+  "errors": [
+    {
+      "message": "Object not found",
+      "locations": [
+        {
+          "line": 1,
+          "column": 2
+        }
+      ],
+      "path": [
+        "tour"
+      ],
+      "extensions": {
+        "code": "NOT_FOUND",
+        "classification": "DataFetchingException"
+      }
+    }
+  ],
+  "data": {
+    "tour": null
+  }
+}

@@ -1,0 +1,30 @@
+[
+  {
+    "port": 8080,
+    "status": "UP"
+  },
+  {
+    "port": 8091,
+    "status": "UP"
+  },
+  {
+    "port": 8092,
+    "status": "UP"
+  },
+  {
+    "port": 8093,
+    "status": "UP"
+  },
+  {
+    "port": 8094,
+    "status": "UP"
+  },
+  {
+    "port": 8095,
+    "status": "UP"
+  },
+  {
+    "port": 8096,
+    "status": "UP"
+  }
+]

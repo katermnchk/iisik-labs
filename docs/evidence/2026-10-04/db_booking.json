@@ -1,0 +1,23 @@
+{
+  "id": "00000000-0000-0000-0000-000000000601",
+  "clientId": "00000000-0000-0000-0000-000000000001",
+  "scheduleId": "00000000-0000-0000-0000-000000000301",
+  "directionId": "00000000-0000-0000-0000-000000000101",
+  "tourTitle": "История Бреста",
+  "directionName": "Беларусь, Брест",
+  "startsAt": "2026-12-01T05:00:00Z",
+  "travelerCount": 2,
+  "unitPrice": {
+    "amountMinor": 90000,
+    "currency": "BYN"
+  },
+  "total": {
+    "amountMinor": 180000,
+    "currency": "BYN"
+  },
+  "status": "CONFIRMED",
+  "holdExpiresAt": null,
+  "createdAt": "2026-10-04T12:00:00Z",
+  "version": 1,
+  "payments": []
+}

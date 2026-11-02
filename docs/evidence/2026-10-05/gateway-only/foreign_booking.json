@@ -1,0 +1,23 @@
+{
+  "errors": [
+    {
+      "message": "Booking belongs to another client",
+      "locations": [
+        {
+          "line": 1,
+          "column": 2
+        }
+      ],
+      "path": [
+        "booking"
+      ],
+      "extensions": {
+        "code": "FORBIDDEN",
+        "classification": "DataFetchingException"
+      }
+    }
+  ],
+  "data": {
+    "booking": null
+  }
+}

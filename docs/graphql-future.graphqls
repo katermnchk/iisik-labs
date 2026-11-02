@@ -1,0 +1,83 @@
+scalar DateTime
+scalar Date
+scalar Long
+enum RoleCode { CLIENT EMPLOYEE ADMIN }
+enum UserStatus { ACTIVE BLOCKED }
+enum TourStatus { DRAFT PUBLISHED ARCHIVED }
+enum ScheduleStatus { OPEN CLOSED CANCELLED }
+enum TransportKind { AIR RAIL BUS OTHER }
+enum BookingStatus { RESERVING PENDING_PAYMENT CONFIRMED EXPIRED CANCELLING REFUND_PENDING CANCELLED COMPLETED REJECTED }
+enum PaymentStatus { PENDING SUCCEEDED FAILED REFUND_PENDING REFUNDED }
+enum RefundStatus { PENDING SUCCEEDED FAILED }
+enum NotificationKind { WELCOME BOOKING_STATUS TOUR_CHANGE PAYMENT_STATUS }
+enum DeliveryStatus { PENDING SENT FAILED }
+enum TourSortField { STARTS_AT PRICE DURATION POPULARITY }
+enum SortDirection { ASC DESC }
+
+type Query {
+ me: User!
+ tours(filter: TourFilter, sort: TourSort, page: PageInput!): TourConnection!
+ tour(id: ID!): Tour
+ booking(id: ID!): Booking
+ myBookings(page: PageInput!): BookingConnection!
+ notifications(page: PageInput!): NotificationConnection!
+ directions(activeOnly: Boolean = true): [Direction!]!
+ salesAnalytics(filter: AnalyticsFilter!): SalesAnalytics!
+}
+type Money { amountMinor: Long!, currency: String! }
+type Role { code: RoleCode!, name: String! }
+type ClientProfile { userId: ID!, phone: String! }
+type EmployeeProfile { userId: ID!, position: String! }
+type User { id: ID!, role: Role!, email: String!, firstName: String!, lastName: String!, status: UserStatus!, clientProfile: ClientProfile, employeeProfile: EmployeeProfile }
+type Direction { id: ID!, country: String!, city: String!, description: String!, isActive: Boolean! }
+type Tour { id: ID!, direction: Direction!, title: String!, description: String!, durationDays: Int!, status: TourStatus!, version: Long!, schedules: [TourSchedule!]! }
+type TourSchedule { id: ID!, startsAt: DateTime!, endsAt: DateTime!, capacity: Int!, availableSeats: Int!, price: Money!, priceVersion: Long!, version: Long!, status: ScheduleStatus!, accommodations: [Accommodation!]!, transports: [Transport!]! }
+type Accommodation { id: ID!, name: String!, address: String!, checkInAt: DateTime!, checkOutAt: DateTime!, roomType: String! }
+type Transport { id: ID!, kind: TransportKind!, carrier: String!, routeNumber: String!, departureAt: DateTime!, arrivalAt: DateTime! }
+type Booking { id: ID!, scheduleId: ID!, tourTitle: String!, directionName: String!, startsAt: DateTime!, travelerCount: Int!, unitPrice: Money!, total: Money!, status: BookingStatus!, holdExpiresAt: DateTime, createdAt: DateTime!, version: Long!, payments: [Payment!]! }
+type Payment { id: ID!, bookingId: ID!, amount: Money!, status: PaymentStatus!, paymentUrl: String, createdAt: DateTime! }
+type Notification { id: ID!, kind: NotificationKind!, title: String!, body: String!, status: DeliveryStatus!, createdAt: DateTime! }
+type PageInfo { page: Int!, size: Int!, hasNext: Boolean! }
+type TourConnection { items: [Tour!]!, totalCount: Int!, page: PageInfo!, popularityAsOf: DateTime }
+type BookingConnection { items: [Booking!]!, totalCount: Int!, page: PageInfo! }
+type NotificationConnection { items: [Notification!]!, totalCount: Int!, page: PageInfo! }
+type SalesAnalytics { grossSales: Money!, refunded: Money!, netSales: Money!, occupancy: Float!, directions: [DirectionPopularity!]!, asOf: DateTime! }
+type DirectionPopularity { directionId: ID!, directionName: String!, confirmedTourists: Int!, rank: Int! }
+input PageInput { page: Int! = 0, size: Int! = 20 }
+input TourFilter { directionId: ID, from: Date, to: Date, minPrice: Long, maxPrice: Long, onlyAvailable: Boolean = true }
+input TourSort { field: TourSortField! = STARTS_AT, direction: SortDirection! = ASC }
+input AnalyticsFilter { from: DateTime!, to: DateTime! }
+
+type AuthPayload { accessToken: String!, user: User! }
+input RegisterInput { email: String!, password: String!, firstName: String!, lastName: String!, phone: String! }
+input AuthenticateInput { email: String!, password: String! }
+input EmployeeProfileInput { position: String! }
+input ClientProfileInput { phone: String! }
+input UpdateUserInput { userId: ID!, role: RoleCode, status: UserStatus, firstName: String, lastName: String, employeeProfile: EmployeeProfileInput, clientProfile: ClientProfileInput }
+input CreateTourInput { directionId: ID!, title: String!, description: String!, durationDays: Int! }
+input UpdateTourInput { id: ID!, title: String, description: String, durationDays: Int, status: TourStatus, expectedVersion: Long! }
+input CreateScheduleInput { tourId: ID!, startsAt: DateTime!, endsAt: DateTime!, capacity: Int!, basePriceMinor: Long! }
+input UpdateScheduleInput { id: ID!, startsAt: DateTime, endsAt: DateTime, capacity: Int, basePriceMinor: Long, status: ScheduleStatus, expectedVersion: Long! }
+input AccommodationInput { scheduleId: ID!, name: String!, address: String!, checkInAt: DateTime!, checkOutAt: DateTime!, roomType: String! }
+input TransportInput { scheduleId: ID!, kind: TransportKind!, carrier: String!, routeNumber: String!, departureAt: DateTime!, arrivalAt: DateTime! }
+input DirectionInput { id: ID, country: String!, city: String!, description: String!, isActive: Boolean! = true }
+input CreateBookingInput { scheduleId: ID!, travelerCount: Int!, expectedPriceVersion: Long! }
+input CancelBookingInput { bookingId: ID!, reason: String! }
+input CreatePaymentInput { bookingId: ID! }
+input ChangeBookingStatusInput { bookingId: ID!, targetStatus: BookingStatus!, reason: String!, expectedVersion: Long! }
+type Mutation {
+ register(input: RegisterInput!): AuthPayload!
+ authenticate(input: AuthenticateInput!): AuthPayload!
+ updateUser(input: UpdateUserInput!): User!
+ createTour(input: CreateTourInput!): Tour!
+ updateTour(input: UpdateTourInput!): Tour!
+ createSchedule(input: CreateScheduleInput!): TourSchedule!
+ updateSchedule(input: UpdateScheduleInput!): TourSchedule!
+ addAccommodation(input: AccommodationInput!): Accommodation!
+ addTransport(input: TransportInput!): Transport!
+ upsertDirection(input: DirectionInput!): Direction!
+ createBooking(input: CreateBookingInput!, idempotencyKey: String!): Booking!
+ cancelBooking(input: CancelBookingInput!, idempotencyKey: String!): Booking!
+ createPayment(input: CreatePaymentInput!, idempotencyKey: String!): Payment!
+ changeBookingStatus(input: ChangeBookingStatusInput!): Booking!
+}

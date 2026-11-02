@@ -1,0 +1,21 @@
+{
+  "errors": [
+    {
+      "message": "Invalid input",
+      "locations": [
+        {
+          "line": 1,
+          "column": 2
+        }
+      ],
+      "path": [
+        "tours"
+      ],
+      "extensions": {
+        "code": "BAD_REQUEST",
+        "classification": "DataFetchingException"
+      }
+    }
+  ],
+  "data": null
+}

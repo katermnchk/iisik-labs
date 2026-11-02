@@ -1,0 +1,37 @@
+{
+  "items": [
+    {
+      "id": "00000000-0000-0000-0000-000000000604",
+      "total": {
+        "amountMinor": "90000",
+        "currency": "BYN"
+      },
+      "status": "PENDING_PAYMENT",
+      "version": "1"
+    },
+    {
+      "id": "00000000-0000-0000-0000-000000000601",
+      "total": {
+        "amountMinor": "180000",
+        "currency": "BYN"
+      },
+      "status": "CONFIRMED",
+      "version": "1"
+    },
+    {
+      "id": "00000000-0000-0000-0000-000000000603",
+      "total": {
+        "amountMinor": "100000",
+        "currency": "BYN"
+      },
+      "status": "CANCELLED",
+      "version": "1"
+    }
+  ],
+  "totalCount": 3,
+  "page": {
+    "page": 0,
+    "size": 20,
+    "hasNext": false
+  }
+}
