@@ -1,0 +1,1158 @@
+{
+  "allPassed": true,
+  "checks": [
+    {
+      "check": "anonymous Query rejected",
+      "ok": true,
+      "httpStatus": 200,
+      "expectedCode": "UNAUTHENTICATED",
+      "response": {
+        "errors": [
+          {
+            "message": "Authentication required",
+            "locations": [
+              {
+                "line": 1,
+                "column": 2
+              }
+            ],
+            "path": [
+              "me"
+            ],
+            "extensions": {
+              "code": "UNAUTHENTICATED",
+              "classification": "DataFetchingException"
+            }
+          }
+        ],
+        "data": null
+      }
+    },
+    {
+      "check": "anonymous alias rejected",
+      "ok": true,
+      "httpStatus": 200,
+      "expectedCode": "UNAUTHENTICATED",
+      "response": {
+        "errors": [
+          {
+            "message": "Authentication required",
+            "locations": [
+              {
+                "line": 1,
+                "column": 2
+              }
+            ],
+            "path": [
+              "other"
+            ],
+            "extensions": {
+              "code": "UNAUTHENTICATED",
+              "classification": "DataFetchingException"
+            }
+          }
+        ],
+        "data": null
+      }
+    },
+    {
+      "check": "anonymous fragment rejected",
+      "ok": true,
+      "httpStatus": 200,
+      "expectedCode": "UNAUTHENTICATED",
+      "response": {
+        "errors": [
+          {
+            "message": "Authentication required",
+            "locations": [
+              {
+                "line": 1,
+                "column": 45
+              }
+            ],
+            "path": [
+              "me"
+            ],
+            "extensions": {
+              "code": "UNAUTHENTICATED",
+              "classification": "DataFetchingException"
+            }
+          }
+        ],
+        "data": null
+      }
+    },
+    {
+      "check": "fake demo token rejected",
+      "ok": true,
+      "httpStatus": 200,
+      "expectedCode": "UNAUTHENTICATED",
+      "response": {
+        "errors": [
+          {
+            "message": "Invalid or expired JWT",
+            "locations": [
+              {
+                "line": 1,
+                "column": 2
+              }
+            ],
+            "path": [
+              "me"
+            ],
+            "extensions": {
+              "code": "UNAUTHENTICATED",
+              "classification": "DataFetchingException"
+            }
+          }
+        ],
+        "data": null
+      }
+    },
+    {
+      "check": "wrong authorization scheme rejected",
+      "ok": true,
+      "httpStatus": 200,
+      "expectedCode": "UNAUTHENTICATED",
+      "response": {
+        "errors": [
+          {
+            "message": "Bearer token required",
+            "locations": [
+              {
+                "line": 1,
+                "column": 2
+              }
+            ],
+            "path": [
+              "me"
+            ],
+            "extensions": {
+              "code": "UNAUTHENTICATED",
+              "classification": "DataFetchingException"
+            }
+          }
+        ],
+        "data": null
+      }
+    },
+    {
+      "check": "anonymous Mutation rejected",
+      "ok": true,
+      "httpStatus": 200,
+      "expectedCode": "UNAUTHENTICATED",
+      "response": {
+        "errors": [
+          {
+            "message": "Authentication required",
+            "locations": [
+              {
+                "line": 1,
+                "column": 10
+              }
+            ],
+            "path": [
+              "logout"
+            ],
+            "extensions": {
+              "code": "UNAUTHENTICATED",
+              "classification": "DataFetchingException"
+            }
+          }
+        ],
+        "data": null
+      }
+    },
+    {
+      "check": "register creates CLIENT",
+      "ok": true,
+      "httpStatus": 200,
+      "expectedCode": null,
+      "response": {
+        "data": {
+          "register": {
+            "accessToken": "<redacted>",
+            "user": {
+              "id": "1b879d84-6364-4bc2-b0e9-1ca2f17481b4",
+              "email": "review5-4fdb2df3cbf144dbad0a3b4bc9032ee6@example.test",
+              "role": {
+                "code": "CLIENT"
+              }
+            }
+          }
+        }
+      }
+    },
+    {
+      "check": "normalized email and fixed registration role",
+      "ok": true
+    },
+    {
+      "check": "JWT expected claims and lifetime",
+      "ok": true,
+      "issuer": "travel-auth",
+      "audience": "travel-api",
+      "role": "CLIENT",
+      "lifetimeSeconds": 1800
+    },
+    {
+      "check": "Redis session bound to user",
+      "ok": true
+    },
+    {
+      "check": "Redis session has finite TTL",
+      "ok": true,
+      "ttlSeconds": 1799
+    },
+    {
+      "check": "BCrypt hash and completed intent persisted",
+      "ok": true
+    },
+    {
+      "check": "role and client profile persisted in User DB",
+      "ok": true
+    },
+    {
+      "check": "registered user me succeeds",
+      "ok": true,
+      "httpStatus": 200,
+      "expectedCode": null,
+      "response": {
+        "data": {
+          "me": {
+            "id": "1b879d84-6364-4bc2-b0e9-1ca2f17481b4",
+            "email": "review5-4fdb2df3cbf144dbad0a3b4bc9032ee6@example.test",
+            "role": {
+              "code": "CLIENT"
+            },
+            "status": "ACTIVE"
+          }
+        }
+      }
+    },
+    {
+      "check": "duplicate normalized email rejected",
+      "ok": true,
+      "httpStatus": 200,
+      "expectedCode": "CONFLICT",
+      "response": {
+        "errors": [
+          {
+            "message": "Email already registered",
+            "locations": [
+              {
+                "line": 1,
+                "column": 29
+              }
+            ],
+            "path": [
+              "register"
+            ],
+            "extensions": {
+              "code": "CONFLICT",
+              "classification": "DataFetchingException"
+            }
+          }
+        ],
+        "data": null
+      }
+    },
+    {
+      "check": "short registration password rejected",
+      "ok": true,
+      "httpStatus": 200,
+      "expectedCode": "BAD_REQUEST",
+      "response": {
+        "errors": [
+          {
+            "message": "Invalid registration fields",
+            "locations": [
+              {
+                "line": 1,
+                "column": 29
+              }
+            ],
+            "path": [
+              "register"
+            ],
+            "extensions": {
+              "code": "BAD_REQUEST",
+              "classification": "DataFetchingException"
+            }
+          }
+        ],
+        "data": null
+      }
+    },
+    {
+      "check": "BCrypt UTF8 byte limit enforced",
+      "ok": true,
+      "httpStatus": 200,
+      "expectedCode": "BAD_REQUEST",
+      "response": {
+        "errors": [
+          {
+            "message": "Invalid registration fields",
+            "locations": [
+              {
+                "line": 1,
+                "column": 29
+              }
+            ],
+            "path": [
+              "register"
+            ],
+            "extensions": {
+              "code": "BAD_REQUEST",
+              "classification": "DataFetchingException"
+            }
+          }
+        ],
+        "data": null
+      }
+    },
+    {
+      "check": "SDL rejects injected registration role",
+      "ok": true,
+      "httpStatus": 200
+    },
+    {
+      "check": "wrong password rejected",
+      "ok": true,
+      "httpStatus": 200,
+      "expectedCode": "UNAUTHENTICATED",
+      "response": {
+        "errors": [
+          {
+            "message": "Invalid credentials",
+            "locations": [
+              {
+                "line": 1,
+                "column": 33
+              }
+            ],
+            "path": [
+              "authenticate"
+            ],
+            "extensions": {
+              "code": "UNAUTHENTICATED",
+              "classification": "DataFetchingException"
+            }
+          }
+        ],
+        "data": null
+      }
+    },
+    {
+      "check": "unknown account rejected",
+      "ok": true,
+      "httpStatus": 200,
+      "expectedCode": "UNAUTHENTICATED",
+      "response": {
+        "errors": [
+          {
+            "message": "Invalid credentials",
+            "locations": [
+              {
+                "line": 1,
+                "column": 33
+              }
+            ],
+            "path": [
+              "authenticate"
+            ],
+            "extensions": {
+              "code": "UNAUTHENTICATED",
+              "classification": "DataFetchingException"
+            }
+          }
+        ],
+        "data": null
+      }
+    },
+    {
+      "check": "valid login creates second session",
+      "ok": true,
+      "httpStatus": 200,
+      "expectedCode": null,
+      "response": {
+        "data": {
+          "authenticate": {
+            "accessToken": "<redacted>",
+            "user": {
+              "id": "1b879d84-6364-4bc2-b0e9-1ca2f17481b4",
+              "role": {
+                "code": "CLIENT"
+              }
+            }
+          }
+        }
+      }
+    },
+    {
+      "check": "separate login has distinct session",
+      "ok": true
+    },
+    {
+      "check": "tampered signature rejected",
+      "ok": true,
+      "httpStatus": 200,
+      "expectedCode": "UNAUTHENTICATED",
+      "response": {
+        "errors": [
+          {
+            "message": "Invalid or expired JWT",
+            "locations": [
+              {
+                "line": 1,
+                "column": 2
+              }
+            ],
+            "path": [
+              "me"
+            ],
+            "extensions": {
+              "code": "UNAUTHENTICATED",
+              "classification": "DataFetchingException"
+            }
+          }
+        ],
+        "data": null
+      }
+    },
+    {
+      "check": "CLIENT analytics rejected",
+      "ok": true,
+      "httpStatus": 200,
+      "expectedCode": "FORBIDDEN",
+      "response": {
+        "errors": [
+          {
+            "message": "Operation is not permitted for this role",
+            "locations": [
+              {
+                "line": 1,
+                "column": 2
+              }
+            ],
+            "path": [
+              "salesAnalytics"
+            ],
+            "extensions": {
+              "code": "FORBIDDEN",
+              "classification": "DataFetchingException"
+            }
+          }
+        ],
+        "data": null
+      }
+    },
+    {
+      "check": "CLIENT updateUser rejected",
+      "ok": true,
+      "httpStatus": 200,
+      "expectedCode": "FORBIDDEN",
+      "response": {
+        "errors": [
+          {
+            "message": "Operation is not permitted for this role",
+            "locations": [
+              {
+                "line": 1,
+                "column": 31
+              }
+            ],
+            "path": [
+              "updateUser"
+            ],
+            "extensions": {
+              "code": "FORBIDDEN",
+              "classification": "DataFetchingException"
+            }
+          }
+        ],
+        "data": null
+      }
+    },
+    {
+      "check": "CLIENT own bookings succeeds",
+      "ok": true,
+      "httpStatus": 200,
+      "expectedCode": null,
+      "response": {
+        "data": {
+          "myBookings": {
+            "totalCount": 0
+          }
+        }
+      }
+    },
+    {
+      "check": "own notifications succeeds",
+      "ok": true,
+      "httpStatus": 200,
+      "expectedCode": null,
+      "response": {
+        "data": {
+          "notifications": {
+            "totalCount": 1
+          }
+        }
+      }
+    },
+    {
+      "check": "foreign booking and nested payments rejected",
+      "ok": true,
+      "httpStatus": 200,
+      "expectedCode": "FORBIDDEN",
+      "response": {
+        "errors": [
+          {
+            "message": "Booking belongs to another client",
+            "locations": [
+              {
+                "line": 1,
+                "column": 16
+              }
+            ],
+            "path": [
+              "booking"
+            ],
+            "extensions": {
+              "code": "FORBIDDEN",
+              "classification": "DataFetchingException"
+            }
+          }
+        ],
+        "data": {
+          "booking": null
+        }
+      }
+    },
+    {
+      "check": "foreign payment creation rejected",
+      "ok": true,
+      "httpStatus": 200,
+      "expectedCode": "FORBIDDEN",
+      "response": {
+        "errors": [
+          {
+            "message": "Booking belongs to another client",
+            "locations": [
+              {
+                "line": 1,
+                "column": 45
+              }
+            ],
+            "path": [
+              "createPayment"
+            ],
+            "extensions": {
+              "code": "FORBIDDEN",
+              "classification": "DataFetchingException"
+            }
+          }
+        ],
+        "data": null
+      }
+    },
+    {
+      "check": "foreign booking cancellation rejected",
+      "ok": true,
+      "httpStatus": 200,
+      "expectedCode": "FORBIDDEN",
+      "response": {
+        "errors": [
+          {
+            "message": "Booking belongs to another client",
+            "locations": [
+              {
+                "line": 1,
+                "column": 45
+              }
+            ],
+            "path": [
+              "cancelBooking"
+            ],
+            "extensions": {
+              "code": "FORBIDDEN",
+              "classification": "DataFetchingException"
+            }
+          }
+        ],
+        "data": null
+      }
+    },
+    {
+      "check": "ADMIN login",
+      "ok": true,
+      "httpStatus": 200,
+      "expectedCode": null,
+      "response": {
+        "data": {
+          "authenticate": {
+            "accessToken": "<redacted>",
+            "user": {
+              "id": "00000000-0000-0000-0000-000000000004",
+              "role": {
+                "code": "ADMIN"
+              }
+            }
+          }
+        }
+      }
+    },
+    {
+      "check": "ADMIN analytics succeeds",
+      "ok": true,
+      "httpStatus": 200,
+      "expectedCode": null,
+      "response": {
+        "data": {
+          "salesAnalytics": {
+            "occupancy": 0.07172131147540983
+          }
+        }
+      }
+    },
+    {
+      "check": "ADMIN changes role to EMPLOYEE",
+      "ok": true,
+      "httpStatus": 200,
+      "expectedCode": null,
+      "response": {
+        "data": {
+          "updateUser": {
+            "id": "1b879d84-6364-4bc2-b0e9-1ca2f17481b4",
+            "status": "ACTIVE",
+            "role": {
+              "code": "EMPLOYEE"
+            }
+          }
+        }
+      }
+    },
+    {
+      "check": "existing JWT sees current EMPLOYEE role",
+      "ok": true,
+      "httpStatus": 200,
+      "expectedCode": null,
+      "response": {
+        "data": {
+          "me": {
+            "id": "1b879d84-6364-4bc2-b0e9-1ca2f17481b4",
+            "email": "review5-4fdb2df3cbf144dbad0a3b4bc9032ee6@example.test",
+            "role": {
+              "code": "EMPLOYEE"
+            },
+            "status": "ACTIVE"
+          }
+        }
+      }
+    },
+    {
+      "check": "current role overrides stale JWT claim",
+      "ok": true
+    },
+    {
+      "check": "old CLIENT JWT loses client-only access",
+      "ok": true,
+      "httpStatus": 200,
+      "expectedCode": "FORBIDDEN",
+      "response": {
+        "errors": [
+          {
+            "message": "Operation is not permitted for this role",
+            "locations": [
+              {
+                "line": 1,
+                "column": 2
+              }
+            ],
+            "path": [
+              "myBookings"
+            ],
+            "extensions": {
+              "code": "FORBIDDEN",
+              "classification": "DataFetchingException"
+            }
+          }
+        ],
+        "data": null
+      }
+    },
+    {
+      "check": "EMPLOYEE analytics rejected",
+      "ok": true,
+      "httpStatus": 200,
+      "expectedCode": "FORBIDDEN",
+      "response": {
+        "errors": [
+          {
+            "message": "Operation is not permitted for this role",
+            "locations": [
+              {
+                "line": 1,
+                "column": 2
+              }
+            ],
+            "path": [
+              "salesAnalytics"
+            ],
+            "extensions": {
+              "code": "FORBIDDEN",
+              "classification": "DataFetchingException"
+            }
+          }
+        ],
+        "data": null
+      }
+    },
+    {
+      "check": "ADMIN blocks new test user",
+      "ok": true,
+      "httpStatus": 200,
+      "expectedCode": null,
+      "response": {
+        "data": {
+          "updateUser": {
+            "id": "1b879d84-6364-4bc2-b0e9-1ca2f17481b4",
+            "status": "BLOCKED",
+            "role": {
+              "code": "EMPLOYEE"
+            }
+          }
+        }
+      }
+    },
+    {
+      "check": "blocked existing JWT rejected",
+      "ok": true,
+      "httpStatus": 200,
+      "expectedCode": "FORBIDDEN",
+      "response": {
+        "errors": [
+          {
+            "message": "User is blocked",
+            "locations": [
+              {
+                "line": 1,
+                "column": 2
+              }
+            ],
+            "path": [
+              "me"
+            ],
+            "extensions": {
+              "code": "FORBIDDEN",
+              "classification": "DataFetchingException"
+            }
+          }
+        ],
+        "data": null
+      }
+    },
+    {
+      "check": "blocked valid login rejected",
+      "ok": true,
+      "httpStatus": 200,
+      "expectedCode": "FORBIDDEN",
+      "response": {
+        "errors": [
+          {
+            "message": "User is blocked",
+            "locations": [
+              {
+                "line": 1,
+                "column": 33
+              }
+            ],
+            "path": [
+              "authenticate"
+            ],
+            "extensions": {
+              "code": "FORBIDDEN",
+              "classification": "DataFetchingException"
+            }
+          }
+        ],
+        "data": null
+      }
+    },
+    {
+      "check": "ADMIN restores CLIENT and ACTIVE",
+      "ok": true,
+      "httpStatus": 200,
+      "expectedCode": null,
+      "response": {
+        "data": {
+          "updateUser": {
+            "id": "1b879d84-6364-4bc2-b0e9-1ca2f17481b4",
+            "status": "ACTIVE",
+            "role": {
+              "code": "CLIENT"
+            }
+          }
+        }
+      }
+    },
+    {
+      "check": "restored existing JWT usable",
+      "ok": true,
+      "httpStatus": 200,
+      "expectedCode": null,
+      "response": {
+        "data": {
+          "me": {
+            "id": "1b879d84-6364-4bc2-b0e9-1ca2f17481b4",
+            "email": "review5-4fdb2df3cbf144dbad0a3b4bc9032ee6@example.test",
+            "role": {
+              "code": "CLIENT"
+            },
+            "status": "ACTIVE"
+          }
+        }
+      }
+    },
+    {
+      "check": "logout revokes one session",
+      "ok": true,
+      "httpStatus": 200,
+      "expectedCode": null,
+      "response": {
+        "data": {
+          "logout": true
+        }
+      }
+    },
+    {
+      "check": "logout Redis key removed",
+      "ok": true
+    },
+    {
+      "check": "logged-out JWT rejected",
+      "ok": true,
+      "httpStatus": 200,
+      "expectedCode": "UNAUTHENTICATED",
+      "response": {
+        "errors": [
+          {
+            "message": "Session expired; authenticate again",
+            "locations": [
+              {
+                "line": 1,
+                "column": 2
+              }
+            ],
+            "path": [
+              "me"
+            ],
+            "extensions": {
+              "code": "UNAUTHENTICATED",
+              "classification": "DataFetchingException"
+            }
+          }
+        ],
+        "data": null
+      }
+    },
+    {
+      "check": "other active session remains usable",
+      "ok": true,
+      "httpStatus": 200,
+      "expectedCode": null,
+      "response": {
+        "data": {
+          "me": {
+            "id": "1b879d84-6364-4bc2-b0e9-1ca2f17481b4",
+            "email": "review5-4fdb2df3cbf144dbad0a3b4bc9032ee6@example.test",
+            "role": {
+              "code": "CLIENT"
+            },
+            "status": "ACTIVE"
+          }
+        }
+      }
+    },
+    {
+      "check": "session subject mismatch rejected",
+      "ok": true,
+      "httpStatus": 200,
+      "expectedCode": "UNAUTHENTICATED",
+      "response": {
+        "errors": [
+          {
+            "message": "Session expired; authenticate again",
+            "locations": [
+              {
+                "line": 1,
+                "column": 2
+              }
+            ],
+            "path": [
+              "me"
+            ],
+            "extensions": {
+              "code": "UNAUTHENTICATED",
+              "classification": "DataFetchingException"
+            }
+          }
+        ],
+        "data": null
+      }
+    },
+    {
+      "check": "JWT still valid during forced session expiry",
+      "ok": true,
+      "fixture": "Only this new test session TTL shortened to one second"
+    },
+    {
+      "check": "expired Redis session rejects valid JWT",
+      "ok": true,
+      "httpStatus": 200,
+      "expectedCode": "UNAUTHENTICATED",
+      "response": {
+        "errors": [
+          {
+            "message": "Session expired; authenticate again",
+            "locations": [
+              {
+                "line": 1,
+                "column": 2
+              }
+            ],
+            "path": [
+              "me"
+            ],
+            "extensions": {
+              "code": "UNAUTHENTICATED",
+              "classification": "DataFetchingException"
+            }
+          }
+        ],
+        "data": null
+      }
+    },
+    {
+      "check": "re-authentication creates active session",
+      "ok": true,
+      "httpStatus": 200,
+      "expectedCode": null,
+      "response": {
+        "data": {
+          "authenticate": {
+            "accessToken": "<redacted>",
+            "user": {
+              "id": "1b879d84-6364-4bc2-b0e9-1ca2f17481b4",
+              "role": {
+                "code": "CLIENT"
+              }
+            }
+          }
+        }
+      }
+    },
+    {
+      "check": "Redis outage denies protected Query",
+      "ok": true,
+      "httpStatus": 200,
+      "expectedCode": "SERVICE_UNAVAILABLE",
+      "response": {
+        "errors": [
+          {
+            "message": "Session store unavailable",
+            "locations": [
+              {
+                "line": 1,
+                "column": 2
+              }
+            ],
+            "path": [
+              "me"
+            ],
+            "extensions": {
+              "code": "SERVICE_UNAVAILABLE",
+              "classification": "DataFetchingException"
+            }
+          }
+        ],
+        "data": null
+      }
+    },
+    {
+      "check": "Redis outage denies successful credential login",
+      "ok": true,
+      "httpStatus": 200,
+      "expectedCode": "SERVICE_UNAVAILABLE",
+      "response": {
+        "errors": [
+          {
+            "message": "Session store unavailable",
+            "locations": [
+              {
+                "line": 1,
+                "column": 33
+              }
+            ],
+            "path": [
+              "authenticate"
+            ],
+            "extensions": {
+              "code": "SERVICE_UNAVAILABLE",
+              "classification": "DataFetchingException"
+            }
+          }
+        ],
+        "data": null
+      }
+    },
+    {
+      "check": "Redis AOF preserves active session across restart",
+      "ok": true
+    },
+    {
+      "check": "internal HTTP closed 8091 internal",
+      "ok": true,
+      "httpStatus": 404
+    },
+    {
+      "check": "internal HTTP closed 8091 internal;x",
+      "ok": true,
+      "httpStatus": 404
+    },
+    {
+      "check": "internal HTTP closed 8091 %69nternal",
+      "ok": true,
+      "httpStatus": 404
+    },
+    {
+      "check": "internal HTTP closed 8091 internal%3Bx",
+      "ok": true,
+      "httpStatus": 404
+    },
+    {
+      "check": "internal HTTP closed 8092 internal",
+      "ok": true,
+      "httpStatus": 404
+    },
+    {
+      "check": "internal HTTP closed 8092 internal;x",
+      "ok": true,
+      "httpStatus": 404
+    },
+    {
+      "check": "internal HTTP closed 8092 %69nternal",
+      "ok": true,
+      "httpStatus": 404
+    },
+    {
+      "check": "internal HTTP closed 8092 internal%3Bx",
+      "ok": true,
+      "httpStatus": 404
+    },
+    {
+      "check": "internal HTTP closed 8093 internal",
+      "ok": true,
+      "httpStatus": 404
+    },
+    {
+      "check": "internal HTTP closed 8093 internal;x",
+      "ok": true,
+      "httpStatus": 404
+    },
+    {
+      "check": "internal HTTP closed 8093 %69nternal",
+      "ok": true,
+      "httpStatus": 404
+    },
+    {
+      "check": "internal HTTP closed 8093 internal%3Bx",
+      "ok": true,
+      "httpStatus": 404
+    },
+    {
+      "check": "internal HTTP closed 8094 internal",
+      "ok": true,
+      "httpStatus": 404
+    },
+    {
+      "check": "internal HTTP closed 8094 internal;x",
+      "ok": true,
+      "httpStatus": 404
+    },
+    {
+      "check": "internal HTTP closed 8094 %69nternal",
+      "ok": true,
+      "httpStatus": 404
+    },
+    {
+      "check": "internal HTTP closed 8094 internal%3Bx",
+      "ok": true,
+      "httpStatus": 404
+    },
+    {
+      "check": "internal HTTP closed 8095 internal",
+      "ok": true,
+      "httpStatus": 404
+    },
+    {
+      "check": "internal HTTP closed 8095 internal;x",
+      "ok": true,
+      "httpStatus": 404
+    },
+    {
+      "check": "internal HTTP closed 8095 %69nternal",
+      "ok": true,
+      "httpStatus": 404
+    },
+    {
+      "check": "internal HTTP closed 8095 internal%3Bx",
+      "ok": true,
+      "httpStatus": 404
+    },
+    {
+      "check": "internal HTTP closed 8096 internal",
+      "ok": true,
+      "httpStatus": 404
+    },
+    {
+      "check": "internal HTTP closed 8096 internal;x",
+      "ok": true,
+      "httpStatus": 404
+    },
+    {
+      "check": "internal HTTP closed 8096 %69nternal",
+      "ok": true,
+      "httpStatus": 404
+    },
+    {
+      "check": "internal HTTP closed 8096 internal%3Bx",
+      "ok": true,
+      "httpStatus": 404
+    },
+    {
+      "check": "cleanup last test session",
+      "ok": true,
+      "httpStatus": 200,
+      "expectedCode": null,
+      "response": {
+        "data": {
+          "logout": true
+        }
+      }
+    },
+    {
+      "check": "cleanup ADMIN test session",
+      "ok": true,
+      "httpStatus": 200,
+      "expectedCode": null,
+      "response": {
+        "data": {
+          "logout": true
+        }
+      }
+    }
+  ],
+  "userId": "1b879d84-6364-4bc2-b0e9-1ca2f17481b4",
+  "scope": "Real local services, PostgreSQL, Redis. One test-session TTL explicitly shortened; Redis briefly stopped and restored."
+}

@@ -14,7 +14,20 @@ public class TransportConfig {
           jakarta.servlet.http.HttpServletResponse s,
           jakarta.servlet.FilterChain c)
           throws java.io.IOException, jakarta.servlet.ServletException {
-        if (q.getRequestURI().startsWith("/internal/")) {
+        // Use the same decoded, matrix-parameter-free segments as Spring MVC routing.
+        // Raw URI prefixes miss encoded names, matrix parameters and servlet context paths.
+        boolean internal =
+            org.springframework.web.util.ServletRequestPathUtils.parseAndCache(q)
+                .pathWithinApplication()
+                .elements()
+                .stream()
+                .filter(org.springframework.http.server.PathContainer.PathSegment.class::isInstance)
+                .map(org.springframework.http.server.PathContainer.PathSegment.class::cast)
+                .map(org.springframework.http.server.PathContainer.PathSegment::valueToMatch)
+                .findFirst()
+                .filter("internal"::equals)
+                .isPresent();
+        if (internal) {
           s.sendError(404);
           return;
         }
