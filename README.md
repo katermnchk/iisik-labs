@@ -68,6 +68,10 @@ python3 scripts/verify-collection.py
 
 `python3 scripts/verify-lab5-security.py` выполняет 79 проверок JWT, Redis-сессий, ролей, владельца и закрытия внутренних HTTP-путей. Протокол: `docs/evidence/lab5-current/security.json`. Подробности исправленного обхода маршрутов и границы проверок: `docs/review-lab5-current.md`. Сценарий кратковременно останавливает Redis и восстанавливает его через finally; не запускайте его одновременно с демонстрацией.
 
+## Проверка интеграции ЛР6
+
+`python3 scripts/verify-lab6-payment-recovery.py` проверяет обработку действительного PaymentSucceeded при временном отказе Tour и автоматическое восстановление Analytics. Топология и ошибочные сообщения проверяются `verify-kafka-topology.py` и `verify-kafka-errors.py`; общий сценарий проверяется `verify-integration.py`. Итоговые протоколы: `docs/evidence/lab6-current`, детали: `docs/review-lab6-current.md`. Fault-проверки не следует запускать параллельно с ручной демонстрацией.
+
 ## Реализация по лабораторным
 
 | Работа | Основные файлы |

@@ -68,7 +68,7 @@ final class ProtoMapper {
       Message.Builder builder, Descriptors.FieldDescriptor field, Object value) {
     if (value instanceof Enum<?> e) {
       return field.getEnumType().getValues().stream()
-          .filter(v -> v.getName().endsWith("_" + e.name()))
+          .filter(v -> v.getName().equals(enumName(field.getEnumType(), e.name())))
           .findFirst()
           .orElseThrow(() -> new IllegalArgumentException("Unknown enum: " + e));
     }
@@ -173,12 +173,23 @@ final class ProtoMapper {
     if (raw.isEnum()) {
       String name = ((Descriptors.EnumValueDescriptor) value).getName();
       return Arrays.stream(raw.getEnumConstants())
-          .filter(v -> name.endsWith("_" + ((Enum<?>) v).name()))
+          .filter(
+              v ->
+                  name.equals(
+                      enumName(
+                          ((Descriptors.EnumValueDescriptor) value).getType(),
+                          ((Enum<?>) v).name())))
           .findFirst()
           .orElseThrow(
               () -> new IllegalArgumentException("Unspecified or unknown " + raw.getSimpleName()));
     }
     return value instanceof Message nested ? read(nested, type) : value;
+  }
+
+  private static String enumName(Descriptors.EnumDescriptor type, String value) {
+    return type.getName().replaceAll("([a-z0-9])([A-Z])", "$1_$2").toUpperCase(Locale.ROOT)
+        + "_"
+        + value;
   }
 
   private static String fieldName(String name, String message) {

@@ -1,0 +1,919 @@
+[
+  {
+    "check": "anonymous alias blocked",
+    "ok": true,
+    "expectedCode": "UNAUTHENTICATED"
+  },
+  {
+    "check": "anonymous fragment blocked",
+    "ok": true,
+    "expectedCode": "UNAUTHENTICATED"
+  },
+  {
+    "check": "directions gRPC and Redis",
+    "ok": true,
+    "response": {
+      "data": {
+        "directions": [
+          {
+            "id": "00000000-0000-0000-0000-000000000101"
+          },
+          {
+            "id": "00000000-0000-0000-0000-000000000102"
+          }
+        ]
+      }
+    }
+  },
+  {
+    "check": "employee creates tour in PostgreSQL",
+    "ok": true,
+    "response": {
+      "data": {
+        "createTour": {
+          "id": "872108db-cd35-42bc-badb-6c38a81a6447",
+          "version": "1"
+        }
+      }
+    }
+  },
+  {
+    "check": "employee creates schedule",
+    "ok": true,
+    "response": {
+      "data": {
+        "createSchedule": {
+          "id": "ea794e84-5a9e-4cc5-8990-15c4b7a4db60",
+          "priceVersion": "1"
+        }
+      }
+    }
+  },
+  {
+    "check": "read updated tour version",
+    "ok": true,
+    "response": {
+      "data": {
+        "tour": {
+          "version": "2"
+        }
+      }
+    }
+  },
+  {
+    "check": "publish tour",
+    "ok": true,
+    "response": {
+      "data": {
+        "updateTour": {
+          "id": "872108db-cd35-42bc-badb-6c38a81a6447",
+          "status": "PUBLISHED"
+        }
+      }
+    }
+  },
+  {
+    "check": "client cannot create tour",
+    "ok": true,
+    "expectedCode": "FORBIDDEN"
+  },
+  {
+    "check": "create booking through Booking to Tour gRPC",
+    "ok": true,
+    "response": {
+      "data": {
+        "createBooking": {
+          "id": "cda74530-93a5-3d52-b4aa-8bded4a6ef04",
+          "status": "PENDING_PAYMENT",
+          "total": {
+            "amountMinor": "120000"
+          },
+          "version": "1"
+        }
+      }
+    }
+  },
+  {
+    "check": "idempotent booking retry",
+    "ok": true,
+    "response": {
+      "data": {
+        "createBooking": {
+          "id": "cda74530-93a5-3d52-b4aa-8bded4a6ef04",
+          "status": "PENDING_PAYMENT",
+          "total": {
+            "amountMinor": "120000"
+          },
+          "version": "1"
+        }
+      }
+    }
+  },
+  {
+    "check": "foreign booking read forbidden",
+    "ok": true,
+    "expectedCode": "FORBIDDEN"
+  },
+  {
+    "check": "foreign payment forbidden",
+    "ok": true,
+    "expectedCode": "FORBIDDEN"
+  },
+  {
+    "check": "cancel reservation after Tour restart",
+    "ok": true,
+    "response": {
+      "data": {
+        "cancelBooking": {
+          "id": "cda74530-93a5-3d52-b4aa-8bded4a6ef04",
+          "status": "CANCELLED"
+        }
+      }
+    }
+  },
+  {
+    "check": "create booking for payment",
+    "ok": true,
+    "response": {
+      "data": {
+        "createBooking": {
+          "id": "32af1a22-2a5a-387e-bcfa-99f8b473483f",
+          "status": "PENDING_PAYMENT",
+          "total": {
+            "amountMinor": "120000"
+          },
+          "version": "1"
+        }
+      }
+    }
+  },
+  {
+    "check": "payment retrieves actual booking via gRPC",
+    "ok": true,
+    "response": {
+      "data": {
+        "createPayment": {
+          "id": "d40d0dc6-74df-3ca8-97ed-c77a391f2bc1",
+          "status": "PENDING"
+        }
+      }
+    }
+  },
+  {
+    "check": "cancel with admitted payment forbidden",
+    "ok": true,
+    "expectedCode": "CONFLICT"
+  },
+  {
+    "check": "client cannot settle payment",
+    "ok": true,
+    "expectedCode": "FORBIDDEN"
+  },
+  {
+    "check": "employee confirms training payment",
+    "ok": true,
+    "response": {
+      "data": {
+        "confirmPayment": {
+          "id": "d40d0dc6-74df-3ca8-97ed-c77a391f2bc1",
+          "status": "SUCCEEDED"
+        }
+      }
+    }
+  },
+  {
+    "check": "Kafka confirms booking",
+    "ok": true,
+    "response": {
+      "data": {
+        "booking": {
+          "id": "32af1a22-2a5a-387e-bcfa-99f8b473483f",
+          "status": "CONFIRMED",
+          "payments": [
+            {
+              "id": "d40d0dc6-74df-3ca8-97ed-c77a391f2bc1",
+              "status": "SUCCEEDED"
+            }
+          ]
+        }
+      }
+    }
+  },
+  {
+    "check": "Kafka notification projection",
+    "ok": true,
+    "response": {
+      "data": {
+        "notifications": {
+          "totalCount": 106,
+          "items": [
+            {
+              "id": "a1e9c0be-ce99-4340-b7e3-a0fc509c71f8",
+              "title": "Бронирование CONFIRMED",
+              "body": "ЛР567 2bd3cd41"
+            },
+            {
+              "id": "5e1d1e46-f9e8-4148-a8f7-29963a90ccb6",
+              "title": "Платёж SUCCEEDED",
+              "body": "ЛР567 2bd3cd41"
+            },
+            {
+              "id": "ced5548d-25d5-4508-9418-878135ed8df7",
+              "title": "Бронирование PENDING_PAYMENT",
+              "body": "ЛР567 2bd3cd41"
+            },
+            {
+              "id": "fdd3756c-b232-4b23-97d6-348d0773c4a7",
+              "title": "Бронирование CANCELLED",
+              "body": "ЛР567 2bd3cd41"
+            },
+            {
+              "id": "0aa45f4e-aff5-430d-9819-defa748090ed",
+              "title": "Бронирование CANCELLING",
+              "body": "ЛР567 2bd3cd41"
+            },
+            {
+              "id": "92cf7c0e-2663-4055-8c9d-7122645e45e1",
+              "title": "Бронирование PENDING_PAYMENT",
+              "body": "ЛР567 2bd3cd41"
+            },
+            {
+              "id": "8e8e4c14-84e3-4378-a04b-8ccfe907c329",
+              "title": "Бронирование CONFIRMED",
+              "body": "ЛР6 восстановление 60a60615"
+            },
+            {
+              "id": "635a3665-e116-4b05-833f-ff3c038dff95",
+              "title": "Платёж SUCCEEDED",
+              "body": "ЛР6 восстановление 60a60615"
+            },
+            {
+              "id": "1da70314-4234-4267-aea1-9a888ef5c70f",
+              "title": "Бронирование PENDING_PAYMENT",
+              "body": "ЛР6 восстановление 60a60615"
+            },
+            {
+              "id": "b548bc9e-1b65-4e4e-9ffa-9e4b3abc5fe3",
+              "title": "Бронирование CANCELLED",
+              "body": "ЛР4 53d804a8"
+            },
+            {
+              "id": "0cc0e6e9-5bc6-44cb-8864-1bc4b3164142",
+              "title": "Бронирование CANCELLING",
+              "body": "ЛР4 53d804a8"
+            },
+            {
+              "id": "df18d473-c656-49c8-ac06-8ef8def2a9cc",
+              "title": "Бронирование CANCELLED",
+              "body": "ЛР4 c36169d2"
+            },
+            {
+              "id": "d8575400-0311-4a04-adfe-223444ae54e7",
+              "title": "Бронирование CANCELLING",
+              "body": "ЛР4 c36169d2"
+            },
+            {
+              "id": "efd1cda9-e1d3-4244-a352-6bbc90bf3fd1",
+              "title": "Бронирование CANCELLED",
+              "body": "ЛР4 c36169d2"
+            },
+            {
+              "id": "0679e7fe-9227-431e-bfe0-1f8187712547",
+              "title": "Бронирование CANCELLING",
+              "body": "ЛР4 c36169d2"
+            },
+            {
+              "id": "aca2ce4a-ba93-4165-af82-96f706d103e3",
+              "title": "Бронирование PENDING_PAYMENT",
+              "body": "ЛР4 c36169d2"
+            },
+            {
+              "id": "5825859a-5e24-4490-9ade-425acd53ad47",
+              "title": "Бронирование PENDING_PAYMENT",
+              "body": "ЛР4 c36169d2"
+            },
+            {
+              "id": "4bd5de21-5e54-4f4b-a0ba-c3315aa12fc1",
+              "title": "Бронирование COMPLETED",
+              "body": "ЛР4 c36169d2"
+            },
+            {
+              "id": "05a8e24a-41af-4e40-ba54-657ae7f87201",
+              "title": "Бронирование CONFIRMED",
+              "body": "ЛР4 c36169d2"
+            },
+            {
+              "id": "9ccd9205-e8e5-4317-9793-b41b59132c8e",
+              "title": "Платёж SUCCEEDED",
+              "body": "ЛР4 c36169d2"
+            },
+            {
+              "id": "3284b5ba-025e-43c2-b6d6-307fe11b9c22",
+              "title": "Бронирование PENDING_PAYMENT",
+              "body": "ЛР4 c36169d2"
+            },
+            {
+              "id": "2d90df30-0656-4d25-8b94-fb8879ff3945",
+              "title": "Бронирование CANCELLED",
+              "body": "ЛР4 c36169d2"
+            },
+            {
+              "id": "8a0a7753-a749-48f6-b11a-a293c022787b",
+              "title": "Бронирование CANCELLING",
+              "body": "ЛР4 c36169d2"
+            },
+            {
+              "id": "8f91401a-5885-4689-a314-1d6603127a8c",
+              "title": "Бронирование PENDING_PAYMENT",
+              "body": "ЛР4 c36169d2"
+            },
+            {
+              "id": "ff4ae5a8-cdda-48b0-befd-17af23f06faa",
+              "title": "Бронирование CANCELLED",
+              "body": "ЛР4 53d804a8"
+            },
+            {
+              "id": "bc299560-0e79-43fc-811e-f7c826c3f1a9",
+              "title": "Бронирование CANCELLING",
+              "body": "ЛР4 53d804a8"
+            },
+            {
+              "id": "aece9a81-43c0-4dee-a9f7-36fa098ae4e0",
+              "title": "Бронирование PENDING_PAYMENT",
+              "body": "ЛР4 53d804a8"
+            },
+            {
+              "id": "c9b1d631-8ea8-4476-9152-9a484f4d18ae",
+              "title": "Бронирование PENDING_PAYMENT",
+              "body": "ЛР4 53d804a8"
+            },
+            {
+              "id": "869cacbf-45bf-49f2-b0f4-e0da8229a529",
+              "title": "Бронирование COMPLETED",
+              "body": "ЛР4 53d804a8"
+            },
+            {
+              "id": "d62d35b0-108e-406e-a614-6cc9d1f10ac8",
+              "title": "Бронирование CONFIRMED",
+              "body": "ЛР4 53d804a8"
+            },
+            {
+              "id": "d5303e2a-fed3-4c68-a768-70b913e6109b",
+              "title": "Платёж SUCCEEDED",
+              "body": "ЛР4 53d804a8"
+            },
+            {
+              "id": "7109a5d8-22c2-4708-92d1-7904df5b3331",
+              "title": "Бронирование PENDING_PAYMENT",
+              "body": "ЛР4 53d804a8"
+            },
+            {
+              "id": "b0997a34-55c2-4284-8bea-823bdbbb40ff",
+              "title": "Бронирование CANCELLED",
+              "body": "ЛР4 53d804a8"
+            },
+            {
+              "id": "10b24eb0-de7b-4f77-b6b6-1a9125a79f66",
+              "title": "Бронирование CANCELLING",
+              "body": "ЛР4 53d804a8"
+            },
+            {
+              "id": "5f7101e6-df12-4480-bcff-2132fadfda74",
+              "title": "Бронирование PENDING_PAYMENT",
+              "body": "ЛР4 53d804a8"
+            },
+            {
+              "id": "4cf480de-f913-4193-9a36-ec9c7c5ec159",
+              "title": "Бронирование CONFIRMED",
+              "body": "Защита 0c3401d4-df40-42fc-846c-42b3d85e2f8b"
+            },
+            {
+              "id": "675c5054-cf38-4dd4-a834-ce0f51e64ec8",
+              "title": "Платёж SUCCEEDED",
+              "body": "Защита 0c3401d4-df40-42fc-846c-42b3d85e2f8b"
+            },
+            {
+              "id": "a47a48df-1723-4467-bc9c-8806301d6eaf",
+              "title": "Бронирование PENDING_PAYMENT",
+              "body": "Защита 0c3401d4-df40-42fc-846c-42b3d85e2f8b"
+            },
+            {
+              "id": "d60ecb10-d938-49ae-b285-e8409a677321",
+              "title": "Бронирование CONFIRMED",
+              "body": "Защита 6eb2c1d2-717f-4fc0-baca-7a4215f61295"
+            },
+            {
+              "id": "d0ad6326-d1b5-4d2e-bec2-77177281ee71",
+              "title": "Платёж SUCCEEDED",
+              "body": "Защита 6eb2c1d2-717f-4fc0-baca-7a4215f61295"
+            },
+            {
+              "id": "c688adaf-db9d-4043-a04f-4adf7dce716d",
+              "title": "Бронирование PENDING_PAYMENT",
+              "body": "Защита 6eb2c1d2-717f-4fc0-baca-7a4215f61295"
+            },
+            {
+              "id": "78b00b18-ab95-4371-b6cf-ffaf34e1d1be",
+              "title": "Бронирование CANCELLED",
+              "body": "ЛР567 92a26969"
+            },
+            {
+              "id": "cd0e757f-6d55-4708-9530-06ebb1adfde2",
+              "title": "Бронирование CANCELLING",
+              "body": "ЛР567 92a26969"
+            },
+            {
+              "id": "d938bd07-5ca7-4ed7-b5a4-5537178d005b",
+              "title": "Бронирование CONFIRMED",
+              "body": "Защита 77bcdf01-805a-447b-9300-9f209a3bee45"
+            },
+            {
+              "id": "26b40252-4ee4-4bdc-b04a-2d513ccdecf1",
+              "title": "Платёж SUCCEEDED",
+              "body": "Защита 77bcdf01-805a-447b-9300-9f209a3bee45"
+            },
+            {
+              "id": "e8d29668-bd45-4aac-946d-0d3a41af3d1d",
+              "title": "Бронирование PENDING_PAYMENT",
+              "body": "Защита 77bcdf01-805a-447b-9300-9f209a3bee45"
+            },
+            {
+              "id": "9092e411-dda9-4809-9267-8f7abad179a6",
+              "title": "Бронирование CONFIRMED",
+              "body": "ЛР567 7373a197"
+            },
+            {
+              "id": "d94b7545-927d-43d0-97e5-2c384734ef15",
+              "title": "Платёж SUCCEEDED",
+              "body": "ЛР567 7373a197"
+            },
+            {
+              "id": "a474b9e4-0699-4f71-931e-8ca7a7ec16ec",
+              "title": "Бронирование PENDING_PAYMENT",
+              "body": "ЛР567 7373a197"
+            },
+            {
+              "id": "210a93dd-3cfb-471e-b233-94a039bfa957",
+              "title": "Бронирование CONFIRMED",
+              "body": "ЛР567 7373a197"
+            },
+            {
+              "id": "adb09901-bf50-4ab2-ac4f-42f1c78a13d7",
+              "title": "Бронирование PENDING_PAYMENT",
+              "body": "ЛР567 7373a197"
+            },
+            {
+              "id": "28e37bd1-26bb-45ea-a67c-e6498150990f",
+              "title": "Бронирование CANCELLED",
+              "body": "Expiry regression 2e6b6111"
+            },
+            {
+              "id": "a1310975-d8dd-41b1-a439-3bf78d380ab2",
+              "title": "Бронирование CANCELLING",
+              "body": "Expiry regression 2e6b6111"
+            },
+            {
+              "id": "f59b2c85-71ca-454e-a592-01abd9d7aa1f",
+              "title": "Бронирование PENDING_PAYMENT",
+              "body": "Expiry regression 2e6b6111"
+            },
+            {
+              "id": "1c22a90a-c46a-4584-97b3-fc63a909edfc",
+              "title": "Бронирование CANCELLED",
+              "body": "Expiry regression 2e6b6111"
+            },
+            {
+              "id": "ff5dc6b8-078c-4acc-8966-7e5a9b5c4957",
+              "title": "Бронирование CANCELLING",
+              "body": "Expiry regression 2e6b6111"
+            },
+            {
+              "id": "f4c8ad1b-95b6-4e0d-8170-c5f89fda9945",
+              "title": "Бронирование PENDING_PAYMENT",
+              "body": "Expiry regression 2e6b6111"
+            },
+            {
+              "id": "abd0afd3-35c9-4bff-b7e0-89946d41f9b8",
+              "title": "Бронирование CANCELLED",
+              "body": "ЛР567 7373a197"
+            },
+            {
+              "id": "8bcd83ce-c675-4104-b304-e8c9ac22022d",
+              "title": "Бронирование CANCELLING",
+              "body": "ЛР567 7373a197"
+            },
+            {
+              "id": "f25d02cb-117d-4776-9635-ab008e0c91f8",
+              "title": "Бронирование PENDING_PAYMENT",
+              "body": "ЛР567 7373a197"
+            },
+            {
+              "id": "560262c8-4fb9-4d41-a364-f769dc8b70cf",
+              "title": "Бронирование CANCELLED",
+              "body": "ЛР567 7373a197"
+            },
+            {
+              "id": "ba8b86c8-6617-4ca5-a5d6-3002f54760ba",
+              "title": "Бронирование CANCELLING",
+              "body": "ЛР567 7373a197"
+            },
+            {
+              "id": "9f2ff4eb-52a7-47ef-abe8-875707f645f1",
+              "title": "Бронирование PENDING_PAYMENT",
+              "body": "ЛР567 7373a197"
+            },
+            {
+              "id": "a5bc098d-5b20-4237-b02d-59bd7c65657b",
+              "title": "Бронирование CANCELLED",
+              "body": "ЛР567 7373a197"
+            },
+            {
+              "id": "9a556525-70d3-4f7d-a92e-d2d945b2e877",
+              "title": "Бронирование CANCELLING",
+              "body": "ЛР567 7373a197"
+            },
+            {
+              "id": "3794ce3d-3e45-4dc6-b056-e931a3aa518c",
+              "title": "Бронирование PENDING_PAYMENT",
+              "body": "ЛР567 7373a197"
+            },
+            {
+              "id": "b36a7831-6e5f-4b25-a199-c6bdb5de1cd9",
+              "title": "Бронирование CANCELLED",
+              "body": "ЛР567 7373a197"
+            },
+            {
+              "id": "49456aa5-b047-420a-a449-6aa62abc6437",
+              "title": "Бронирование PENDING_PAYMENT",
+              "body": "ЛР567 7373a197"
+            },
+            {
+              "id": "ac08f80d-4f42-4485-a6f6-a1da6b952bfd",
+              "title": "Бронирование CONFIRMED",
+              "body": "ЛР567 7373a197"
+            },
+            {
+              "id": "7f1ff243-24f4-4ece-a8f1-a25d77dc4003",
+              "title": "Платёж SUCCEEDED",
+              "body": "ЛР567 7373a197"
+            },
+            {
+              "id": "d43b0e44-207c-4625-9507-c05138e757c2",
+              "title": "Бронирование PENDING_PAYMENT",
+              "body": "ЛР567 7373a197"
+            },
+            {
+              "id": "30dd94c0-e3b7-45e0-b566-088c0a5d3389",
+              "title": "Бронирование CANCELLED",
+              "body": "ЛР567 7373a197"
+            },
+            {
+              "id": "5cfe25ea-aa98-4356-87ad-82ea5caf7c8c",
+              "title": "Бронирование CANCELLING",
+              "body": "ЛР567 7373a197"
+            },
+            {
+              "id": "fb550a34-928c-4c4d-9137-0b62f930af32",
+              "title": "Бронирование PENDING_PAYMENT",
+              "body": "ЛР567 7373a197"
+            },
+            {
+              "id": "19881f3f-f902-4d04-916e-c818e769dfa6",
+              "title": "Бронирование PENDING_PAYMENT",
+              "body": "ЛР567 92a26969"
+            },
+            {
+              "id": "c283ab78-5bca-4e12-b53d-677b310c9ef5",
+              "title": "Бронирование CONFIRMED",
+              "body": "ЛР567 92a26969"
+            },
+            {
+              "id": "acd85a55-f925-4b08-a40d-2abf78bec3f9",
+              "title": "Платёж SUCCEEDED",
+              "body": "ЛР567 92a26969"
+            },
+            {
+              "id": "f62e5531-0ec9-43e9-aa00-a4d938d768ae",
+              "title": "Бронирование PENDING_PAYMENT",
+              "body": "ЛР567 92a26969"
+            },
+            {
+              "id": "432b36cb-6c10-457d-b3bb-936b59a575e3",
+              "title": "Бронирование CANCELLED",
+              "body": "ЛР567 92a26969"
+            },
+            {
+              "id": "ad172c09-6c3b-4135-8592-c718e666d9bb",
+              "title": "Бронирование CANCELLING",
+              "body": "ЛР567 92a26969"
+            },
+            {
+              "id": "d3272663-fbad-41b9-9ea7-da5a929789e5",
+              "title": "Бронирование PENDING_PAYMENT",
+              "body": "ЛР567 92a26969"
+            },
+            {
+              "id": "9ae90a0a-a3fb-4ace-bb07-d253631bf946",
+              "title": "Бронирование CANCELLED",
+              "body": "ЛР567 7f96c35a"
+            },
+            {
+              "id": "d0def427-da56-4218-8a16-796702c6adb7",
+              "title": "Бронирование CANCELLED",
+              "body": "История Бреста"
+            },
+            {
+              "id": "d503fc83-1856-456e-81a8-1618567827ce",
+              "title": "Бронирование CANCELLING",
+              "body": "ЛР567 7f96c35a"
+            },
+            {
+              "id": "2f307428-d988-45e8-b856-aebf519e10c0",
+              "title": "Бронирование CANCELLING",
+              "body": "История Бреста"
+            },
+            {
+              "id": "b08f2eba-9069-4892-9000-069a182c128b",
+              "title": "Бронирование CONFIRMED",
+              "body": "Поездка ЛР5–7"
+            },
+            {
+              "id": "8f8819df-617a-4c59-9c1f-19b74e967789",
+              "title": "Бронирование PENDING_PAYMENT",
+              "body": "Поездка ЛР5–7"
+            },
+            {
+              "id": "a3d15b18-24c6-4467-88f9-62763541925f",
+              "title": "Бронирование CANCELLED",
+              "body": "ЛР567 5609bd1a"
+            },
+            {
+              "id": "515d5758-b3d5-4111-a30d-eb421796171c",
+              "title": "Бронирование CANCELLING",
+              "body": "ЛР567 5609bd1a"
+            },
+            {
+              "id": "5b546c0c-1384-4dbc-88b0-c4f0cf8ed311",
+              "title": "Бронирование PENDING_PAYMENT",
+              "body": "ЛР567 5609bd1a"
+            },
+            {
+              "id": "ba08f4d7-c997-4a4b-81cc-6ab9cbee930a",
+              "title": "Бронирование CANCELLED",
+              "body": "ЛР567 5609bd1a"
+            },
+            {
+              "id": "24cb841f-a5bc-4ce9-84f6-4a71098636c5",
+              "title": "Бронирование CANCELLING",
+              "body": "ЛР567 5609bd1a"
+            },
+            {
+              "id": "dec73d46-9b30-456a-88a6-1e08b3c1befd",
+              "title": "Бронирование PENDING_PAYMENT",
+              "body": "ЛР567 5609bd1a"
+            },
+            {
+              "id": "c78b3537-8466-4f45-b82e-f73e43fb5fea",
+              "title": "Бронирование CANCELLED",
+              "body": "ЛР567 5609bd1a"
+            },
+            {
+              "id": "67adfccf-608d-4482-9b05-379ff8cc5fe2",
+              "title": "Бронирование CANCELLING",
+              "body": "ЛР567 5609bd1a"
+            },
+            {
+              "id": "a166d9ea-e616-44a9-a0fc-83c0f8cec0c4",
+              "title": "Бронирование PENDING_PAYMENT",
+              "body": "ЛР567 5609bd1a"
+            },
+            {
+              "id": "8f383e59-b636-4213-92f3-aab96b46f4c6",
+              "title": "Бронирование CANCELLED",
+              "body": "ЛР567 5609bd1a"
+            },
+            {
+              "id": "0e5f0e3f-5eb6-43ac-aed1-0911a0eba7bc",
+              "title": "Бронирование PENDING_PAYMENT",
+              "body": "ЛР567 5609bd1a"
+            },
+            {
+              "id": "a0447b35-0fcc-4145-bc34-c8bd66603345",
+              "title": "Бронирование CONFIRMED",
+              "body": "ЛР567 5609bd1a"
+            },
+            {
+              "id": "20fb244b-a59a-44c3-95d0-5fc2ff475b8f",
+              "title": "Бронирование PENDING_PAYMENT",
+              "body": "ЛР567 5609bd1a"
+            }
+          ]
+        }
+      }
+    }
+  },
+  {
+    "check": "Kafka sales analytics projection",
+    "ok": true,
+    "response": {
+      "data": {
+        "salesAnalytics": {
+          "grossSales": {
+            "amountMinor": "5388000"
+          },
+          "netSales": {
+            "amountMinor": "5288000"
+          },
+          "occupancy": 0.06020066889632107
+        }
+      }
+    }
+  },
+  {
+    "check": "booking succeeds while Kafka is unavailable",
+    "ok": true,
+    "response": {
+      "data": {
+        "createBooking": {
+          "id": "2ca0272f-2381-3210-aa54-49a63a9ec6ac",
+          "status": "PENDING_PAYMENT",
+          "total": {
+            "amountMinor": "120000"
+          },
+          "version": "1"
+        }
+      }
+    }
+  },
+  {
+    "check": "outbox delivered after Kafka recovery",
+    "ok": true
+  },
+  {
+    "check": "duplicate Kafka event has one notification",
+    "ok": true
+  },
+  {
+    "check": "admin blocks user",
+    "ok": true,
+    "response": {
+      "data": {
+        "updateUser": {
+          "id": "00000000-0000-0000-0000-000000000002",
+          "status": "BLOCKED"
+        }
+      }
+    }
+  },
+  {
+    "check": "blocked user existing JWT rejected",
+    "ok": true,
+    "expectedCode": "FORBIDDEN"
+  },
+  {
+    "check": "admin restores user",
+    "ok": true,
+    "response": {
+      "data": {
+        "updateUser": {
+          "id": "00000000-0000-0000-0000-000000000002",
+          "status": "ACTIVE"
+        }
+      }
+    }
+  },
+  {
+    "check": "expired Redis session rejects still-valid JWT",
+    "ok": true,
+    "expectedCode": "UNAUTHENTICATED"
+  },
+  {
+    "check": "directions cache first read",
+    "ok": true,
+    "response": {
+      "data": {
+        "directions": [
+          {
+            "id": "00000000-0000-0000-0000-000000000101"
+          },
+          {
+            "id": "00000000-0000-0000-0000-000000000102"
+          }
+        ]
+      }
+    }
+  },
+  {
+    "check": "directions cache second read",
+    "ok": true,
+    "response": {
+      "data": {
+        "directions": [
+          {
+            "id": "00000000-0000-0000-0000-000000000101"
+          },
+          {
+            "id": "00000000-0000-0000-0000-000000000102"
+          }
+        ]
+      }
+    }
+  },
+  {
+    "check": "Redis directions TTL",
+    "ok": true,
+    "ttl": 6
+  },
+  {
+    "check": "Tour unavailable produces bounded service error",
+    "ok": true,
+    "expectedCode": "SERVICE_UNAVAILABLE"
+  },
+  {
+    "check": "unrelated me query remains available",
+    "ok": true,
+    "response": {
+      "data": {
+        "me": {
+          "id": "00000000-0000-0000-0000-000000000001"
+        }
+      }
+    }
+  },
+  {
+    "check": "Redis unavailable fails closed",
+    "ok": true,
+    "expectedCode": "SERVICE_UNAVAILABLE"
+  },
+  {
+    "check": "sessions survive Redis restart through AOF",
+    "ok": true,
+    "response": {
+      "data": {
+        "me": {
+          "id": "00000000-0000-0000-0000-000000000001"
+        }
+      }
+    }
+  },
+  {
+    "check": "interrupted cancellation recovered",
+    "ok": true
+  },
+  {
+    "check": "race setup 0",
+    "ok": true,
+    "response": {
+      "data": {
+        "createBooking": {
+          "id": "57bb8ffd-2baa-3682-bb8a-e2b8c24868e3",
+          "status": "PENDING_PAYMENT",
+          "total": {
+            "amountMinor": "120000"
+          },
+          "version": "1"
+        }
+      }
+    }
+  },
+  {
+    "check": "race setup 1",
+    "ok": true,
+    "response": {
+      "data": {
+        "createBooking": {
+          "id": "4fb59ab4-8603-3631-81b1-68c08035be45",
+          "status": "PENDING_PAYMENT",
+          "total": {
+            "amountMinor": "120000"
+          },
+          "version": "1"
+        }
+      }
+    }
+  },
+  {
+    "check": "race setup 2",
+    "ok": true,
+    "response": {
+      "data": {
+        "createBooking": {
+          "id": "be31ae70-d061-34b7-9f30-bf56320d2643",
+          "status": "PENDING_PAYMENT",
+          "total": {
+            "amountMinor": "120000"
+          },
+          "version": "1"
+        }
+      }
+    }
+  },
+  {
+    "check": "payment/cancellation race serialized in Booking Service",
+    "ok": true
+  },
+  {
+    "check": "interrupted registration resumes same profile identity",
+    "ok": true
+  }
+]

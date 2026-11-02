@@ -188,14 +188,15 @@ public final class BookingBusiness
                         || (filter.status() == null || filter.status() == b.status())
                             && (filter.from() == null || !b.createdAt().isBefore(filter.from()))
                             && (filter.to() == null || b.createdAt().isBefore(filter.to())));
-    var field = sort == null ? BookingSortField.CREATED_AT : sort.field();
+    var field = sort == null || sort.field() == null ? BookingSortField.CREATED_AT : sort.field();
     Comparator<Booking> c =
         switch (field) {
           case CREATED_AT -> Comparator.comparing(Booking::createdAt);
           case TOTAL -> Comparator.comparingLong(b -> b.total().amountMinor());
           case STARTS_AT -> Comparator.comparing(Booking::startsAt);
         };
-    if (sort == null || sort.direction() == SortDirection.DESC) c = c.reversed();
+    if (sort == null || sort.direction() == null || sort.direction() == SortDirection.DESC)
+      c = c.reversed();
     return list.sorted(c.thenComparing(Booking::id)).toList();
   }
 

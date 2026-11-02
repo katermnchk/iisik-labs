@@ -1,0 +1,18 @@
+{
+  "allPassed": true,
+  "date": "2026-11-02",
+  "maven": {
+    "tests": 87,
+    "failures": 0,
+    "errors": 0,
+    "skipped": 0
+  },
+  "integrationChecks": 41,
+  "paymentRecoveryChecks": 8,
+  "malformedDltRoutes": 4,
+  "domainTopics": 4,
+  "partitionsPerTopic": 3,
+  "subscriberDlts": 6,
+  "registeredGrpcMethods": 31,
+  "projectDeclaredGrpcMethods": 43
+}

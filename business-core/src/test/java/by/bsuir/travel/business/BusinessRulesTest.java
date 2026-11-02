@@ -13,6 +13,25 @@ import java.util.function.Supplier;
 import org.junit.jupiter.api.Test;
 
 class BusinessRulesTest {
+  @Test
+  void emptyRpcSortUsesDefaultFields() {
+    var business = bookings(tours(0, 100), store());
+    business.createBooking(new CreateBookingInput(sid, 1, 1), "first", client);
+    assertEquals(
+        business.filtered(client, null, null),
+        business.filtered(client, null, new BookingSort(null, null)));
+  }
+
+  @Test
+  void absentRpcSortDirectionDefaultsToDescending() {
+    var business = bookings(tours(0, 100), store());
+    business.createBooking(new CreateBookingInput(sid, 1, 1), "first", client);
+    business.createBooking(new CreateBookingInput(sid, 2, 1), "second", client);
+    var values = business.filtered(client, null, new BookingSort(BookingSortField.TOTAL, null));
+    assertEquals(200, values.get(0).total().amountMinor());
+    assertEquals(100, values.get(1).total().amountMinor());
+  }
+
   final Clock clock = Clock.fixed(Instant.parse("2026-10-05T00:00:00Z"), ZoneOffset.UTC);
   final OffsetDateTime now = OffsetDateTime.now(clock);
   final String tid = id(201), sid = id(301), did = id(101);
@@ -470,19 +489,35 @@ class BusinessRulesTest {
     var service = bookings(t, data);
     var a = service.createBooking(new CreateBookingInput(sid, 1, 1), "cancel-a", client);
     var b = service.createBooking(new CreateBookingInput(sid, 1, 1), "cancel-b", client);
-    SeatPort offline = new SeatPort() {
-      public Reservation reserve(String id, CreateBookingInput input) { return t.reserve(id, input); }
-      public void release(String id) { throw new DomainException("SERVICE_UNAVAILABLE", "Tour offline"); }
-    };
+    SeatPort offline =
+        new SeatPort() {
+          public Reservation reserve(String id, CreateBookingInput input) {
+            return t.reserve(id, input);
+          }
+
+          public void release(String id) {
+            throw new DomainException("SERVICE_UNAVAILABLE", "Tour offline");
+          }
+        };
     var interrupted = new BookingBusiness(data, offline, id -> List.of(), clock);
     var input = new CancelBookingInput(a.id(), "Original reason");
     code("SERVICE_UNAVAILABLE", () -> interrupted.cancelBooking(input, "shared-cancel", client));
     assertEquals(BookingStatus.CANCELLING, service.get(a.id()).status());
-    code("CONFLICT", () -> service.cancelBooking(new CancelBookingInput(b.id(), "Original reason"), "shared-cancel", client));
-    code("CONFLICT", () -> service.cancelBooking(new CancelBookingInput(a.id(), "Changed reason"), "shared-cancel", client));
+    code(
+        "CONFLICT",
+        () ->
+            service.cancelBooking(
+                new CancelBookingInput(b.id(), "Original reason"), "shared-cancel", client));
+    code(
+        "CONFLICT",
+        () ->
+            service.cancelBooking(
+                new CancelBookingInput(a.id(), "Changed reason"), "shared-cancel", client));
     assertEquals(BookingStatus.PENDING_PAYMENT, service.get(b.id()).status());
-    assertEquals(BookingStatus.CANCELLED, service.cancelBooking(input, "shared-cancel", client).status());
-    assertEquals(BookingStatus.CANCELLED, service.cancelBooking(input, "shared-cancel", client).status());
+    assertEquals(
+        BookingStatus.CANCELLED, service.cancelBooking(input, "shared-cancel", client).status());
+    assertEquals(
+        BookingStatus.CANCELLED, service.cancelBooking(input, "shared-cancel", client).status());
     assertEquals(9, t.schedule(sid).availableSeats());
   }
 }

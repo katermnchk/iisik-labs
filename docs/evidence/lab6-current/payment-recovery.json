@@ -1,0 +1,86 @@
+{
+  "allPassed": true,
+  "checks": [
+    {
+      "check": "catalog already projected before outage",
+      "ok": true
+    },
+    {
+      "check": "payment commits while Tour unavailable",
+      "ok": true
+    },
+    {
+      "check": "independent Booking consumer confirms",
+      "ok": true
+    },
+    {
+      "check": "failed analytics application rolls back inbox and sale",
+      "ok": true
+    },
+    {
+      "check": "analytics catches up automatically after Tour recovery",
+      "ok": true
+    },
+    {
+      "check": "one event applied once by all subscribers",
+      "ok": true
+    },
+    {
+      "check": "sale identity and integer money preserved",
+      "ok": true
+    },
+    {
+      "check": "occupancy seats counted once",
+      "ok": true
+    }
+  ],
+  "event": {
+    "eventId": "7e81279b-3b53-43c8-ad6f-b969a4e0d237",
+    "eventType": "PaymentSucceeded",
+    "schemaVersion": 1,
+    "occurredAt": "2026-11-02T20:27:14.483635+00:00",
+    "aggregateId": "1279aca6-bc2b-375d-a330-2c7c9a821a08",
+    "aggregateVersion": 1,
+    "correlationId": "ea19a899-2875-4cd4-8bc1-9d5f3f437e9b",
+    "payload": {
+      "booking": {
+        "id": "a89942a1-9c22-3382-a616-80d2683730ec",
+        "total": {
+          "currency": "BYN",
+          "amountMinor": 240000
+        },
+        "status": "PENDING_PAYMENT",
+        "version": 1,
+        "clientId": "00000000-0000-0000-0000-000000000001",
+        "payments": [],
+        "startsAt": "2030-06-01T10:00:00Z",
+        "createdAt": "2026-11-02T20:27:13.524727Z",
+        "tourTitle": "ЛР6 восстановление c8ce689c",
+        "unitPrice": {
+          "currency": "BYN",
+          "amountMinor": 120000
+        },
+        "scheduleId": "89640c71-e7dc-47cf-99eb-28ed06ea9c11",
+        "directionId": "00000000-0000-0000-0000-000000000101",
+        "directionName": "Беларусь, Брест",
+        "holdExpiresAt": "2026-11-02T20:42:13.524727Z",
+        "travelerCount": 2
+      },
+      "payment": {
+        "id": "1279aca6-bc2b-375d-a330-2c7c9a821a08",
+        "amount": {
+          "currency": "BYN",
+          "amountMinor": 240000
+        },
+        "status": "SUCCEEDED",
+        "bookingId": "a89942a1-9c22-3382-a616-80d2683730ec",
+        "createdAt": "2026-11-02T20:27:13.597031Z",
+        "paymentUrl": "https://payments.example.invalid/demo/1279aca6-bc2b-375d-a330-2c7c9a821a08"
+      }
+    }
+  },
+  "bookingId": "a89942a1-9c22-3382-a616-80d2683730ec",
+  "tourId": "71ba5aee-bffe-4818-b0de-ce71afb83881",
+  "scheduleId": "89640c71-e7dc-47cf-99eb-28ed06ea9c11",
+  "observedBeforeFix": false
+}

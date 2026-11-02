@@ -1,5 +1,5 @@
 """Capture one actual payment trace and its committed data, without credentials."""
-import pathlib,json,subprocess,time,xml.etree.ElementTree as ET,shutil
+import pathlib,json,subprocess,time,xml.etree.ElementTree as ET,shutil,os,datetime
 root=pathlib.Path(__file__).resolve().parents[1];out=root/'docs/evidence/labs567'
 def cmd(*args):
  p=subprocess.run(['docker','compose',*args],cwd=root,text=True,capture_output=True,timeout=40);assert p.returncode==0,p.stderr;return p.stdout.strip()
@@ -21,7 +21,8 @@ state={
 (out/'scenario-trace.json').write_text(json.dumps(state,ensure_ascii=False,indent=2))
 suites=[ET.parse(p).getroot() for p in root.glob('*/target/surefire-reports/TEST-*.xml')]
 collection=json.loads((out/'collection.json').read_text())
-summary={'date':'2026-11-02','maven':{key:sum(int(s.get(key,'0')) for s in suites) for key in ['tests','failures','errors','skipped']},'integrationChecks':len(json.loads((out/'integration.json').read_text())),'securityChecks':len(json.loads((out/'security.json').read_text())),'postman':{'collectionSteps':len(json.loads((root/'examples/labs567.postman_collection.json').read_text())['item']),'runner':collection['runner'],'version':collection['version'],'httpRequests':collection['requests']['total'],'assertions':collection['assertions']['total'],'failures':len(collection['failures'])},'kafka':{'domainTopics':4,'partitionsPerTopic':3,'subscriberDlts':6},'additionalEvidence':['kafka-topology.json','kafka-errors.json','hold-expiry.json','paid-expiry-fence.json','analytics-cache.json','roles.json','recovery.json','scenario-trace.json']}
+summary={'date':datetime.datetime.now(datetime.timezone.utc).date().isoformat(),'maven':{key:sum(int(s.get(key,'0')) for s in suites) for key in ['tests','failures','errors','skipped']},'integrationChecks':len(json.loads((out/'integration.json').read_text())),'securityChecks':len(json.loads((out/'security.json').read_text())),'postman':{'collectionSteps':len(json.loads((root/'examples/labs567.postman_collection.json').read_text())['item']),'runner':collection['runner'],'version':collection['version'],'httpRequests':collection['requests']['total'],'assertions':collection['assertions']['total'],'failures':len(collection['failures'])},'kafka':{'domainTopics':4,'partitionsPerTopic':3,'subscriberDlts':6},'additionalEvidence':['kafka-topology.json','kafka-errors.json','hold-expiry.json','paid-expiry-fence.json','analytics-cache.json','roles.json','recovery.json','scenario-trace.json']}
 (out/'summary.json').write_text(json.dumps(summary,ensure_ascii=False,indent=2))
-shutil.copy2('/Users/katar/outputs/iisik-review/verify.log',out/'maven-verify.log')
+if log_path := os.environ.get('MAVEN_VERIFY_LOG'):
+ shutil.copy2(log_path,out/'maven-verify.log')
 print('Captured real trace',cid,'lines',len(trace),'Maven tests',summary['maven']['tests'])

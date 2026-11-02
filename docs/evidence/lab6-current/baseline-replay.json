@@ -1,0 +1,6 @@
+{
+  "check": "Explicit replay restored the valid event already sent to DLT before the fix",
+  "ok": true,
+  "eventId": "635a3665-e116-4b05-833f-ff3c038dff95",
+  "salesFactsAfterReplay": 1
+}

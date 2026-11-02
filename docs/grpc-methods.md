@@ -17,6 +17,15 @@
 
 ## Пример удержания мест
 
+В текущем runtime зарегистрирован 31 метод из 43 объявлений проектной схемы. Не зарегистрированы следующие 12 методов; они не используются текущим GraphQL и возвращают UNIMPLEMENTED:
+
+- UserService: GetClientProfile, CreateUser, Authenticate.
+- TourService: AddAccommodation, AddTransport, UpsertDirection, ConfirmReservation.
+- BookingService: ListScheduleRecipients, GetPaymentContext, ApplyPaymentResult, ApplyRefundResult.
+- PaymentService: RequestRefund.
+
+Отдельный Auth Service выполняет регистрацию и вход. Подтверждение оплаты приходит в Booking через Kafka, а не через проектный ApplyPaymentResult. Неиспользуемые объявления не считаются работающими RPC.
+
 `ReserveSeatsRequest` содержит booking_id, schedule_id, seats и expected_price_version. Ответ `ReserveSeatsResponse` содержит типизированный снимок удержания/цены/выезда. Booking сохраняет его в собственной БД. Повтор ReserveSeats с тем же booking_id использует постоянную запись `rpc_reservations`; ReleaseReservation возвращает места идемпотентно.
 
 UUID передаются строками канонического формата. Время — google.protobuf.Timestamp; деньги — целочисленная сумма и код валюты. Optional/message поля сохраняют присутствие, repeated представляют пустую коллекцию при отсутствии элементов. Principal/actor передаётся типизированным полем команды внутри доверенного контура.

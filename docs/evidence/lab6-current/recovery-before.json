@@ -1,0 +1,78 @@
+{
+  "allPassed": true,
+  "checks": [
+    {
+      "check": "catalog already projected before outage",
+      "ok": true
+    },
+    {
+      "check": "payment commits while Tour unavailable",
+      "ok": true
+    },
+    {
+      "check": "independent Booking consumer confirms",
+      "ok": true
+    },
+    {
+      "check": "failed analytics application rolls back inbox and sale",
+      "ok": true
+    },
+    {
+      "check": "BEFORE valid event remains unprojected after Tour recovery",
+      "ok": true
+    },
+    {
+      "check": "BEFORE valid event diverted into analytics DLT",
+      "ok": true
+    }
+  ],
+  "event": {
+    "eventId": "635a3665-e116-4b05-833f-ff3c038dff95",
+    "eventType": "PaymentSucceeded",
+    "schemaVersion": 1,
+    "occurredAt": "2026-11-02T20:20:06.181189+00:00",
+    "aggregateId": "676ff6f4-1c45-3b47-8007-c7d05beedc78",
+    "aggregateVersion": 1,
+    "correlationId": "fee84da7-b525-4c98-872b-43f9e29a83ff",
+    "payload": {
+      "booking": {
+        "id": "5982149d-467d-3df7-8822-aab68274c39a",
+        "total": {
+          "currency": "BYN",
+          "amountMinor": 240000
+        },
+        "status": "PENDING_PAYMENT",
+        "version": 1,
+        "clientId": "00000000-0000-0000-0000-000000000001",
+        "payments": [],
+        "startsAt": "2030-06-01T10:00:00Z",
+        "createdAt": "2026-11-02T20:20:04.957648Z",
+        "tourTitle": "ЛР6 восстановление 60a60615",
+        "unitPrice": {
+          "currency": "BYN",
+          "amountMinor": 120000
+        },
+        "scheduleId": "1aa499e5-97a2-48c4-8281-5831944ff654",
+        "directionId": "00000000-0000-0000-0000-000000000101",
+        "directionName": "Беларусь, Брест",
+        "holdExpiresAt": "2026-11-02T20:35:04.957648Z",
+        "travelerCount": 2
+      },
+      "payment": {
+        "id": "676ff6f4-1c45-3b47-8007-c7d05beedc78",
+        "amount": {
+          "currency": "BYN",
+          "amountMinor": 240000
+        },
+        "status": "SUCCEEDED",
+        "bookingId": "5982149d-467d-3df7-8822-aab68274c39a",
+        "createdAt": "2026-11-02T20:20:05.277644Z",
+        "paymentUrl": "https://payments.example.invalid/demo/676ff6f4-1c45-3b47-8007-c7d05beedc78"
+      }
+    }
+  },
+  "bookingId": "5982149d-467d-3df7-8822-aab68274c39a",
+  "tourId": "c28c6822-6c17-494b-893f-9a7817c3e8fd",
+  "scheduleId": "1aa499e5-97a2-48c4-8281-5831944ff654",
+  "observedBeforeFix": true
+}

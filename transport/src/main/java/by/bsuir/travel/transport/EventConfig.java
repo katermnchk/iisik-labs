@@ -113,7 +113,19 @@ public class EventConfig {
                     record.partition()));
     recoverer.setFailIfSendResultIsError(true);
     recoverer.setWaitForSendResultTimeout(Duration.ofSeconds(12));
-    f.setCommonErrorHandler(new DefaultErrorHandler(recoverer, new FixedBackOff(500, 2)));
+    var errors = new DefaultErrorHandler(recoverer, new FixedBackOff(500, 2));
+    errors.setBackOffFunction(
+        (record, error) -> {
+          // A valid event must not be abandoned because its RPC dependency is temporarily down.
+          // Keep the offset pending; malformed data still has a finite retry budget and a DLT.
+          for (Throwable cause = error; cause != null; cause = cause.getCause()) {
+            if (cause instanceof by.bsuir.travel.contracts.DomainException domain
+                && "SERVICE_UNAVAILABLE".equals(domain.getCode()))
+              return new FixedBackOff(1000, FixedBackOff.UNLIMITED_ATTEMPTS);
+          }
+          return new FixedBackOff(500, 2);
+        });
+    f.setCommonErrorHandler(errors);
     f.setConcurrency(3);
     f.getContainerProperties().setDeliveryAttemptHeader(true);
     f.getContainerProperties().setAckMode(ContainerProperties.AckMode.RECORD);
